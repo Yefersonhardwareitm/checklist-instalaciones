@@ -364,6 +364,14 @@ canvas{width:100%!important;height:100%!important;}
 .mfl-body{display:none;border-top:1px solid var(--border);max-height:320px;overflow-y:auto;}
 .mfl-body.open{display:block;}
 .mfl-phase-lbl{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:8px 14px 2px;background:rgba(255,255,255,0.02);}
+/* PROGRESO GENERAL PISOS */
+.floors-overall-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.fob-label{font-size:12px;color:var(--text3);min-width:160px;}
+.fob-bar-wrap{flex:1;min-width:160px;}
+.fob-bar-track{height:10px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-bottom:6px;}
+.fob-bar-fill{height:100%;border-radius:99px;transition:width 0.5s ease;}
+.fob-stats{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+.fob-pct{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;min-width:70px;text-align:right;}
 </style>
 </head>
 <body>
@@ -437,21 +445,20 @@ canvas{width:100%!important;height:100%!important;}
         </div>
       </div>
       <div class="proj-inner-tabs">
-        <button class="proj-inner-tab active" onclick="switchProjTab('checklist')">✅ Checklist</button>
+        <button class="proj-inner-tab active" onclick="switchProjTab('checklist')">📋 Tareas</button>
         <button class="proj-inner-tab" onclick="switchProjTab('pisos')">🏢 Pisos</button>
         <button class="proj-inner-tab" onclick="switchProjTab('compras')">🛒 Compras</button>
       </div>
     </div>
 
-    <!-- CHECKLIST TAB -->
+    <!-- TAREAS TAB -->
     <div id="proj-tab-checklist">
-      <div class="global-progress">
-        <div class="gp-label">Avance del proyecto</div>
-        <div class="gp-bar-wrap">
-          <div class="gp-bar-track"><div class="gp-bar-fill" id="gp-fill" style="width:0%"></div></div>
-          <div class="gp-stats"><span id="gp-done">0 completadas</span><span id="gp-total">0 total</span></div>
+      <div id="tareas-header" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
+        <div style="flex:1">
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px;">📋 Lista de tareas del proyecto</div>
+          <div style="font-size:12px;color:var(--text3);">Activa o desactiva las tareas que aplican. El avance se registra en la pestaña <strong style="color:var(--accent)">🏢 Pisos</strong></div>
         </div>
-        <div class="gp-pct" id="gp-pct">0%</div>
+        <div id="tareas-count" style="font-family:'DM Mono',monospace;font-size:13px;color:var(--text3);white-space:nowrap;"></div>
       </div>
       <div class="phases-container" id="phases-container"></div>
     </div>
@@ -813,7 +820,9 @@ function countEnabled(proj){
 }
 
 function renderProjectDetail(p){
-  updateGlobalBar(p);
+  const{total,done}=countEnabled(p);
+  const el=document.getElementById('tareas-count');
+  if(el)el.textContent=total+' tareas habilitadas';
   const container=document.getElementById('phases-container');
   const openP={};container.querySelectorAll('.phase-body.open').forEach(b=>{openP[b.dataset.pid]=true;});
   container.innerHTML='';
@@ -879,11 +888,10 @@ function renderProjectDetail(p){
 }
 
 function updateGlobalBar(p){
-  const{total,done}=countEnabled(p);const pct=total?Math.round(done/total*100):0;
-  document.getElementById('gp-fill').style.width=pct+'%';
-  document.getElementById('gp-pct').textContent=pct+'%';
-  document.getElementById('gp-done').textContent=done+' completadas';
-  document.getElementById('gp-total').textContent=total+' total';
+  // La barra global ya no se usa — el progreso está en la pestaña Pisos
+  const{total,done}=countEnabled(p);
+  const el=document.getElementById('tareas-count');
+  if(el)el.textContent=done+'/'+total+' tareas habilitadas';
 }
 
 // ── PURCHASES ──
@@ -1256,6 +1264,12 @@ function saveProject(){
   scheduleSave();closeModal('modal-project');renderDashboard();
 }
 
+function calcOverallFloorProgress(floors,p){
+  let total=0,done=0;
+  (floors||[]).forEach(fl=>{const r=countFloorProgress(fl,p);done+=r.done;total+=r.total;});
+  return{done,total,pct:total?Math.round(done/total*100):0};
+}
+
 // ── MODAL PISOS ──
 function syncModalFloorCount(){
   document.getElementById('modal-floor-count').textContent=modalFloors.length;
@@ -1393,6 +1407,18 @@ function updateFloorProgress(fl,p){
     const fill2=ovCards[idx].querySelector('.floor-ov-bar-fill');
     if(fill2){fill2.style.width=pct2+'%';fill2.style.background=col2;}
   }
+  // Actualizar barra de progreso general
+  const floors=appData.floors[currentProjectId]||[];
+  const{done:td,total:tt,pct:tp}=calcOverallFloorProgress(floors,p);
+  const obFill=document.getElementById('floors-overall-fill');
+  const obPct=document.getElementById('floors-overall-pct');
+  const obDone=document.getElementById('floors-overall-done');
+  const obTotal=document.getElementById('floors-overall-total');
+  const obCol=tp===100?'var(--accent)':tp>50?'var(--blue)':'var(--amber)';
+  if(obFill){obFill.style.width=tp+'%';obFill.style.background=obCol;}
+  if(obPct){obPct.textContent=tp+'%';obPct.style.color=obCol;}
+  if(obDone)obDone.textContent=td+' completadas';
+  if(obTotal)obTotal.textContent=tt+' tareas · '+floors.length+' pisos';
 }
 
 function renderFloors(){
@@ -1426,6 +1452,19 @@ function renderFloors(){
     em.innerHTML='<div class="empty-icon">🏢</div><div class="empty-title">Sin pisos configurados</div><p style="font-size:14px;margin-top:6px">Usa el botón <strong>+</strong> para agregar los pisos del proyecto</p>';
     container.appendChild(em);return;
   }
+
+  // Barra de progreso GENERAL del proyecto
+  const{done:td,total:tt,pct:tp}=calcOverallFloorProgress(floors,p);
+  const overallCol=tp===100?'var(--accent)':tp>50?'var(--blue)':'var(--amber)';
+  const overallBar=document.createElement('div');overallBar.className='floors-overall-bar';
+  overallBar.innerHTML=`
+    <div class="fob-label">📊 Avance general del proyecto</div>
+    <div class="fob-bar-wrap">
+      <div class="fob-bar-track"><div class="fob-bar-fill" id="floors-overall-fill" style="width:${tp}%;background:${overallCol}"></div></div>
+      <div class="fob-stats"><span id="floors-overall-done">${td} completadas</span><span id="floors-overall-total">${tt} tareas · ${floors.length} pisos</span></div>
+    </div>
+    <div class="fob-pct" id="floors-overall-pct" style="color:${overallCol}">${tp}%</div>`;
+  container.appendChild(overallBar);
 
   // Mini-resumen por piso
   const overview=document.createElement('div');overview.className='floors-overview';
