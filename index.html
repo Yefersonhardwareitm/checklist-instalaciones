@@ -789,8 +789,6 @@ function openProject(id){
   if(!appData.floors[id])appData.floors[id]=[];
   document.getElementById('proj-detail-title').textContent=p.name;
   document.getElementById('proj-detail-sub').textContent=p.desc||'';
-  document.getElementById('gp-fill').style.background=p.color||'#C8F060';
-  document.getElementById('gp-pct').style.color=p.color||'#C8F060';
   switchMainTab('project');
   switchProjTab('checklist');
 }
@@ -1408,8 +1406,8 @@ function updateFloorProgress(fl,p){
     if(fill2){fill2.style.width=pct2+'%';fill2.style.background=col2;}
   }
   // Actualizar barra de progreso general
-  const floors=appData.floors[currentProjectId]||[];
-  const{done:td,total:tt,pct:tp}=calcOverallFloorProgress(floors,p);
+  const allFloors=appData.floors[currentProjectId]||[];
+  const{done:td,total:tt,pct:tp}=calcOverallFloorProgress(allFloors,p);
   const obFill=document.getElementById('floors-overall-fill');
   const obPct=document.getElementById('floors-overall-pct');
   const obDone=document.getElementById('floors-overall-done');
