@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NAS — Gestión de Proyectos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E0F0C;--bg2:#161714;--bg3:#1E1F1B;--bg4:#252620;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#F0EDE6;--text2:#9A9890;--text3:#5A5955;
+  --accent:#C8F060;--accent2:#A8D040;--accent-dim:rgba(200,240,96,0.12);
+  --red:#FF6B5B;--amber:#F0B860;--blue:#60A8F0;--teal:#60E0C8;
+  --radius:12px;--radius-sm:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+.hidden{display:none!important;}
+
+/* LOGIN */
+#screen-login{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.login-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 50%,rgba(200,240,96,0.06) 0%,transparent 70%),radial-gradient(ellipse 40% 60% at 80% 30%,rgba(96,168,240,0.04) 0%,transparent 70%);}
+.login-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:48px 48px;}
+.login-box{position:relative;width:100%;max-width:400px;margin:20px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:44px 40px;animation:fadeUp 0.5s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.login-logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:32px;display:flex;align-items:center;gap:8px;}
+.login-logo::before{content:'';display:block;width:8px;height:8px;background:var(--accent);border-radius:50%;}
+.login-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;margin-bottom:6px;}
+.login-sub{font-size:14px;color:var(--text3);margin-bottom:32px;}
+.field-label{font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:8px;display:block;}
+.field-wrap{position:relative;margin-bottom:20px;}
+.field-input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 46px 13px 16px;font-family:'DM Mono',monospace;font-size:15px;color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;letter-spacing:0.12em;}
+.field-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(200,240,96,0.1);}
+.field-input::placeholder{color:var(--text3);letter-spacing:0;font-family:'DM Sans',sans-serif;}
+.toggle-pw{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px;padding:4px;}
+.btn-login{width:100%;background:var(--accent);color:#0E0F0C;border:none;border-radius:var(--radius-sm);padding:14px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.15s,transform 0.1s;margin-top:4px;}
+.btn-login:hover{background:var(--accent2);}
+.btn-login:active{transform:scale(0.98);}
+.login-error{background:rgba(255,107,91,0.1);border:1px solid rgba(255,107,91,0.25);border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;color:var(--red);margin-top:12px;display:none;}
+.login-hint{margin-top:20px;font-size:11px;color:var(--text3);text-align:center;font-family:'DM Mono',monospace;}
+
+/* LOADING */
+#loading-overlay{position:fixed;inset:0;z-index:9999;background:rgba(14,15,12,0.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--text3);font-family:'DM Mono',monospace;}
+
+/* APP SHELL */
+#screen-app{display:none;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(14,15,12,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.topbar-brand{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:8px;}
+.topbar-brand::before{content:'';width:7px;height:7px;background:var(--accent);border-radius:50%;display:block;}
+.sync-status{font-size:11px;font-family:'DM Mono',monospace;color:var(--text3);display:flex;align-items:center;gap:6px;}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);transition:background 0.3s;}
+.sync-dot.syncing{background:var(--amber);animation:pulse 1s infinite;}
+.sync-dot.error{background:var(--red);}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.topbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tb-btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:7px 14px;border-radius:var(--radius-sm);border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;transition:all 0.15s;}
+.tb-btn:hover{background:var(--bg3);color:var(--text);}
+.tb-btn.accent{background:var(--accent);color:#0E0F0C;border-color:transparent;font-weight:700;}
+.tb-btn.accent:hover{background:var(--accent2);}
+
+/* NAV TABS */
+.nav-tabs{display:flex;gap:4px;padding:0 24px;border-bottom:1px solid var(--border);background:var(--bg2);}
+.nav-tab{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;padding:12px 16px;border:none;background:transparent;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;white-space:nowrap;}
+.nav-tab:hover{color:var(--text2);}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+.main{max-width:1200px;margin:0 auto;padding:32px 24px 80px;}
+.page-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.page-sub{font-size:14px;color:var(--text3);margin-bottom:28px;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:32px;}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;}
+.stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
+.stat-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--text);}
+.stat-value.accent{color:var(--accent);}
+.stat-value.blue{color:var(--blue);}
+.stat-value.amber{color:var(--amber);}
+
+/* PROJECTS GRID */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.proj-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
+.proj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--proj-color,var(--accent));}
+.proj-card:hover{border-color:var(--border2);background:var(--bg3);transform:translateY(-2px);}
+.proj-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.proj-icon{width:38px;height:38px;border-radius:10px;background:var(--proj-color-dim,var(--accent-dim));display:flex;align-items:center;justify-content:center;font-size:18px;}
+.proj-menu-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px 8px;font-size:18px;border-radius:6px;transition:background 0.1s;}
+.proj-menu-btn:hover{background:var(--bg4);color:var(--text);}
+.proj-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;}
+.proj-meta{font-size:12px;color:var(--text3);margin-bottom:16px;font-family:'DM Mono',monospace;}
+.proj-bar-track{height:5px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-bottom:6px;}
+.proj-bar-fill{height:100%;border-radius:99px;background:var(--proj-color,var(--accent));transition:width 0.4s ease;}
+.proj-bar-stats{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+.proj-card-add{background:transparent;border:1px dashed var(--border2);border-radius:var(--radius);padding:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:180px;transition:all 0.2s;color:var(--text3);}
+.proj-card-add:hover{border-color:var(--accent);background:var(--accent-dim);color:var(--accent);}
+.proj-card-add-icon{font-size:28px;}
+
+/* PROJECT DETAIL TABS */
+.proj-detail-header{margin-bottom:24px;}
+.back-row{display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+.btn-back{display:flex;align-items:center;gap:6px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 14px;color:var(--text2);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.btn-back:hover{border-color:var(--border2);color:var(--text);background:var(--bg3);}
+.proj-detail-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);flex:1;}
+.proj-detail-sub{font-size:13px;color:var(--text3);font-family:'DM Mono',monospace;}
+.proj-inner-tabs{display:flex;gap:4px;border-bottom:1px solid var(--border);margin-bottom:24px;}
+.proj-inner-tab{font-size:13px;font-weight:500;padding:10px 16px;border:none;background:transparent;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s;font-family:'DM Sans',sans-serif;}
+.proj-inner-tab:hover{color:var(--text2);}
+.proj-inner-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* GLOBAL PROGRESS */
+.global-progress{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.gp-label{font-size:12px;color:var(--text3);min-width:120px;}
+.gp-bar-wrap{flex:1;min-width:160px;}
+.gp-bar-track{height:8px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-bottom:5px;}
+.gp-bar-fill{height:100%;border-radius:99px;transition:width 0.5s ease;}
+.gp-stats{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+.gp-pct{font-family:'Syne',sans-serif;font-size:30px;font-weight:700;min-width:60px;text-align:right;}
+
+/* PHASES */
+.phases-container{display:grid;gap:10px;}
+.phase-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.phase-hdr{display:flex;align-items:center;gap:12px;padding:13px 18px;cursor:pointer;transition:background 0.12s;}
+.phase-hdr:hover{background:var(--bg3);}
+.phase-num{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);min-width:20px;}
+.phase-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;flex:1;}
+.phase-count{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap;}
+.phase-mini-bar-wrap{display:flex;align-items:center;gap:8px;min-width:110px;}
+.phase-mini-bar-track{flex:1;height:5px;background:var(--bg4);border-radius:99px;overflow:hidden;}
+.phase-mini-bar-fill{height:100%;border-radius:99px;transition:width 0.4s ease;}
+.phase-mini-pct{font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);min-width:28px;text-align:right;}
+.phase-chevron{font-size:9px;color:var(--text3);transition:transform 0.2s;}
+.phase-hdr.open .phase-chevron{transform:rotate(90deg);}
+.phase-body{display:none;border-top:1px solid var(--border);}
+.phase-body.open{display:block;}
+.group-section{border-bottom:1px solid rgba(255,255,255,0.04);}
+.group-section:last-child{border-bottom:none;}
+.group-label{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:9px 18px 4px 44px;background:rgba(255,255,255,0.02);}
+.task-row{display:flex;align-items:center;gap:12px;padding:9px 18px 9px 44px;border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:background 0.1s;}
+.task-row:last-child{border-bottom:none;}
+.task-row:hover{background:var(--bg3);}
+.task-cb{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;position:relative;transition:all 0.15s;}
+.task-cb:checked{border-color:var(--accent);background:var(--accent);}
+.task-cb:indeterminate{border-color:var(--amber);background:var(--amber);}
+.task-cb:checked::after,.task-cb:indeterminate::after{content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;border:2px solid #0E0F0C;border-top:none;border-left:none;transform:rotate(45deg);}
+.task-lbl{font-size:13px;color:var(--text);flex:1;}
+.task-lbl.done{text-decoration:line-through;color:var(--text3);}
+.subtask-toggle{font-size:10px;color:var(--text3);background:var(--bg4);border:none;padding:3px 8px;border-radius:4px;cursor:pointer;font-family:'DM Mono',monospace;white-space:nowrap;transition:all 0.1s;}
+.subtask-toggle:hover{background:var(--border2);color:var(--text2);}
+.subtasks-body{display:none;background:rgba(255,255,255,0.02);}
+.subtasks-body.open{display:block;}
+.subtask-row{display:flex;align-items:center;gap:12px;padding:7px 18px 7px 68px;border-bottom:1px solid rgba(255,255,255,0.02);cursor:pointer;transition:background 0.1s;}
+.subtask-row:last-child{border-bottom:none;}
+.subtask-row:hover{background:var(--bg3);}
+.subtask-cb{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--border);flex-shrink:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;position:relative;transition:all 0.15s;}
+.subtask-cb:checked{border-color:var(--accent);background:var(--accent);}
+.subtask-cb:checked::after{content:'';position:absolute;left:3px;top:0;width:4px;height:8px;border:2px solid #0E0F0C;border-top:none;border-left:none;transform:rotate(45deg);}
+.subtask-lbl{font-size:12px;color:var(--text2);}
+.subtask-lbl.done{text-decoration:line-through;color:var(--text3);}
+
+/* ── COMPRAS MODULE ── */
+.purchases-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.cat-tabs{display:flex;gap:6px;flex-wrap:wrap;}
+.cat-tab{font-size:12px;font-weight:500;padding:6px 14px;border-radius:99px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all 0.15s;font-family:'DM Sans',sans-serif;}
+.cat-tab:hover{color:var(--text2);border-color:var(--border2);}
+.cat-tab.active{background:var(--accent);color:#0E0F0C;border-color:transparent;font-weight:700;}
+.cat-tab.mat.active{background:#60A8F0;color:#0E0F0C;}
+.cat-tab.eq.active{background:#E060C8;color:#0E0F0C;}
+.cat-tab.mo.active{background:#F0B860;color:#0E0F0C;}
+
+.purchases-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px;}
+.pur-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;}
+.pur-stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
+.pur-stat-value{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--text);}
+.pur-stat-value.green{color:var(--accent);}
+.pur-stat-value.blue{color:var(--blue);}
+.pur-stat-value.amber{color:var(--amber);}
+
+/* TABLE */
+.table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:16px;}
+.table-scroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;min-width:700px;}
+thead tr{background:var(--bg4);}
+th{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:10px 14px;text-align:left;white-space:nowrap;}
+tbody tr{border-top:1px solid var(--border);transition:background 0.1s;}
+tbody tr:hover{background:var(--bg3);}
+td{font-size:13px;color:var(--text2);padding:10px 14px;vertical-align:middle;}
+td.bold{color:var(--text);font-weight:500;}
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;font-family:'DM Mono',monospace;}
+.badge-mat{background:rgba(96,168,240,0.15);color:var(--blue);}
+.badge-eq{background:rgba(224,96,200,0.15);color:#E060C8;}
+.badge-mo{background:rgba(240,184,96,0.15);color:var(--amber);}
+.badge-pend{background:rgba(240,184,96,0.12);color:var(--amber);}
+.badge-parcial{background:rgba(96,168,240,0.12);color:var(--blue);}
+.badge-entregado{background:rgba(200,240,96,0.12);color:var(--accent);}
+.badge-cancelado{background:rgba(255,107,91,0.12);color:var(--red);}
+.action-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--text3);cursor:pointer;padding:4px 8px;font-size:11px;transition:all 0.1s;font-family:'DM Sans',sans-serif;}
+.action-btn:hover{background:var(--bg4);color:var(--text);border-color:var(--border2);}
+.action-btn.del:hover{background:rgba(255,107,91,0.12);color:var(--red);border-color:rgba(255,107,91,0.3);}
+.empty-table{text-align:center;padding:40px;color:var(--text3);font-size:13px;}
+
+/* COMPARACION */
+.compare-section{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:20px;}
+.compare-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.compare-title::before{content:'';width:4px;height:16px;background:var(--accent);border-radius:2px;display:block;}
+.compare-filter{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
+.compare-filter select,.compare-filter input{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color 0.2s;}
+.compare-filter select:focus,.compare-filter input:focus{border-color:var(--accent);}
+.compare-filter select option{background:var(--bg3);}
+
+/* CHART */
+.chart-container{position:relative;height:220px;margin-bottom:8px;}
+canvas{width:100%!important;height:100%!important;}
+.chart-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+.compare-table-wrap{overflow-x:auto;margin-top:16px;}
+.compare-table{width:100%;border-collapse:collapse;min-width:400px;}
+.compare-table th{font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:8px 12px;text-align:left;background:var(--bg4);}
+.compare-table td{font-size:12px;color:var(--text2);padding:8px 12px;border-top:1px solid var(--border);}
+.compare-table td.item-name{color:var(--text);font-weight:500;}
+.price-up{color:var(--red);}
+.price-down{color:var(--accent);}
+.price-same{color:var(--text3);}
+
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;padding:20px;}
+.modal{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:32px;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;animation:slideUp 0.2s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px;}
+.modal-sub{font-size:13px;color:var(--text3);margin-bottom:24px;}
+.form-row{margin-bottom:16px;}
+.form-label{display:block;font-size:11px;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:7px;}
+.form-input,.form-select,.form-textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color 0.2s;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent);}
+.form-select option{background:var(--bg3);}
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px;}
+.color-row{display:flex;gap:8px;flex-wrap:wrap;}
+.color-opt{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform 0.1s,border-color 0.1s;}
+.color-opt:hover{transform:scale(1.15);}
+.color-opt.selected{border-color:var(--text);transform:scale(1.1);}
+.task-selector{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;max-height:380px;overflow-y:auto;}
+.ts-phase{border-bottom:1px solid var(--border);}
+.ts-phase:last-child{border-bottom:none;}
+.ts-phase-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg4);cursor:pointer;user-select:none;}
+.ts-phase-header:hover{background:rgba(255,255,255,0.04);}
+.ts-phase-check{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;position:relative;transition:all 0.15s;}
+.ts-phase-check:checked{border-color:var(--accent);background:var(--accent);}
+.ts-phase-check:indeterminate{border-color:var(--amber);background:var(--amber);}
+.ts-phase-check:checked::after{content:'';position:absolute;left:4px;top:1px;width:5px;height:9px;border:2px solid #0E0F0C;border-top:none;border-left:none;transform:rotate(45deg);}
+.ts-phase-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;flex:1;}
+.ts-phase-badge{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);background:var(--bg3);padding:2px 7px;border-radius:4px;}
+.ts-chevron{font-size:9px;color:var(--text3);transition:transform 0.2s;}
+.ts-phase-header.open .ts-chevron{transform:rotate(90deg);}
+.ts-phase-body{display:none;padding:4px 0;}
+.ts-phase-body.open{display:block;}
+.ts-task-row{display:flex;align-items:center;gap:10px;padding:7px 14px 7px 44px;cursor:pointer;transition:background 0.1s;}
+.ts-task-row:hover{background:rgba(255,255,255,0.04);}
+.ts-task-check{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;position:relative;transition:all 0.15s;}
+.ts-task-check:checked{border-color:var(--accent);background:var(--accent);}
+.ts-task-check:checked::after{content:'';position:absolute;left:3px;top:0;width:5px;height:9px;border:2px solid #0E0F0C;border-top:none;border-left:none;transform:rotate(45deg);}
+.ts-task-label{font-size:13px;color:var(--text2);flex:1;}
+.ts-subtask-row{display:flex;align-items:center;gap:10px;padding:5px 14px 5px 68px;cursor:pointer;transition:background 0.1s;}
+.ts-subtask-row:hover{background:rgba(255,255,255,0.03);}
+.ts-subtask-check{width:13px;height:13px;border-radius:3px;border:1.5px solid var(--border);flex-shrink:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;position:relative;transition:all 0.15s;}
+.ts-subtask-check:checked{border-color:var(--accent);background:var(--accent);}
+.ts-subtask-check:checked::after{content:'';position:absolute;left:2px;top:-1px;width:4px;height:8px;border:2px solid #0E0F0C;border-top:none;border-left:none;transform:rotate(45deg);}
+.ts-subtask-label{font-size:12px;color:var(--text3);}
+.modal-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;padding-top:20px;border-top:1px solid var(--border);}
+.btn-cancel{padding:10px 20px;border:1px solid var(--border2);border-radius:var(--radius-sm);background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;transition:all 0.15s;}
+.btn-cancel:hover{background:var(--bg3);}
+.btn-save{padding:10px 24px;border:none;border-radius:var(--radius-sm);background:var(--accent);color:#0E0F0C;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background 0.15s;}
+.btn-save:hover{background:var(--accent2);}
+
+.ctx-menu{position:fixed;z-index:300;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:6px;min-width:150px;box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.ctx-item{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:13px;color:var(--text2);cursor:pointer;border-radius:6px;transition:all 0.1s;}
+.ctx-item:hover{background:var(--bg4);color:var(--text);}
+.ctx-item.danger:hover{background:rgba(255,107,91,0.15);color:var(--red);}
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);padding:12px 18px;font-size:13px;color:var(--text);opacity:0;transform:translateY(8px);transition:opacity 0.2s,transform 0.2s;pointer-events:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.4);}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3);}
+.empty-icon{font-size:40px;margin-bottom:12px;opacity:0.4;}
+.empty-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:6px;color:var(--text2);}
+
+@media(max-width:600px){
+  .login-box{padding:32px 24px;}
+  .topbar{padding:0 16px;}
+  .main{padding:20px 16px 60px;}
+  .modal{padding:24px 20px;}
+  .form-row-2,.form-row-3{grid-template-columns:1fr;}
+}
+
+/* ── PISOS ── */
+.floors-config-bar{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;flex-wrap:wrap;}
+.floors-config-info{flex:1;}
+.floors-config-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px;}
+.floors-config-sub{font-size:12px;color:var(--text3);}
+.floors-count-ctrl{display:flex;align-items:center;gap:10px;}
+.floors-count-btn{width:32px;height:32px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;line-height:1;}
+.floors-count-btn:hover{background:var(--bg4);border-color:var(--accent);color:var(--accent);}
+.floors-count-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;min-width:32px;text-align:center;}
+.floors-overview{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-bottom:24px;}
+.floor-ov-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.floor-ov-card:hover{border-color:var(--border2);background:var(--bg3);transform:translateY(-1px);}
+.floor-ov-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.floor-ov-pct{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:2px;}
+.floor-ov-tasks{font-size:10px;color:var(--text3);margin-bottom:6px;}
+.floor-ov-bar{height:3px;background:var(--bg4);border-radius:99px;overflow:hidden;}
+.floor-ov-bar-fill{height:100%;border-radius:99px;transition:width 0.4s;}
+.floors-list{display:grid;gap:10px;}
+.floor-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.floor-hdr{display:flex;align-items:center;gap:12px;padding:13px 18px;cursor:pointer;transition:background 0.12s;user-select:none;}
+.floor-hdr:hover{background:var(--bg3);}
+.floor-badge{font-family:'DM Mono',monospace;font-size:10px;background:var(--bg4);border:1px solid var(--border);color:var(--text3);padding:3px 9px;border-radius:4px;white-space:nowrap;}
+.floor-name-disp{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;flex:1;}
+.floor-prog-wrap{display:flex;align-items:center;gap:8px;min-width:110px;}
+.floor-prog-track{flex:1;height:5px;background:var(--bg4);border-radius:99px;overflow:hidden;}
+.floor-prog-fill{height:100%;border-radius:99px;transition:width 0.4s;}
+.floor-prog-pct{font-size:11px;font-family:'DM Mono',monospace;color:var(--text2);min-width:28px;text-align:right;}
+.floor-task-count{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap;}
+.floor-chevron{font-size:9px;color:var(--text3);transition:transform 0.2s;margin-left:4px;}
+.floor-hdr.open .floor-chevron{transform:rotate(90deg);}
+.floor-body{display:none;border-top:1px solid var(--border);padding:16px 18px;}
+.floor-body.open{display:block;}
+.floor-name-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+.floor-name-edit{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 12px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);outline:none;flex:1;transition:border-color 0.2s;}
+.floor-name-edit:focus{border-color:var(--accent);}
+.floor-tasks-wrap{margin-bottom:12px;}
+.floor-task-row{display:flex;align-items:center;gap:10px;padding:7px 2px;border-bottom:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:background 0.1s;}
+.floor-task-row:last-of-type{border-bottom:none;}
+.floor-task-row:hover{background:rgba(255,255,255,0.02);}
+.floor-task-cb{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--border2);flex-shrink:0;appearance:none;-webkit-appearance:none;background:transparent;cursor:pointer;position:relative;transition:all 0.15s;}
+.floor-task-cb:checked{border-color:var(--accent);background:var(--accent);}
+.floor-task-cb:checked::after{content:'';position:absolute;left:3px;top:0;width:5px;height:9px;border:2px solid #0E0F0C;border-top:none;border-left:none;transform:rotate(45deg);}
+.floor-task-lbl{font-size:13px;color:var(--text2);flex:1;}
+.floor-task-lbl.done{text-decoration:line-through;color:var(--text3);}
+.btn-del-ftask{background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:3px 6px;border-radius:4px;transition:all 0.1s;flex-shrink:0;opacity:0;}
+.floor-task-row:hover .btn-del-ftask{opacity:1;}
+.btn-del-ftask:hover{background:rgba(255,107,91,0.12);color:var(--red);}
+.floor-add-row{display:flex;gap:8px;margin-top:12px;}
+.floor-add-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;color:var(--text);outline:none;font-family:'DM Sans',sans-serif;transition:border-color 0.2s;}
+.floor-add-input:focus{border-color:var(--accent);}
+.btn-add-ftask{padding:8px 16px;background:var(--accent);color:#0E0F0C;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background 0.15s;font-family:'Syne',sans-serif;}
+.btn-add-ftask:hover{background:var(--accent2);}
+.floor-empty-tasks{font-size:12px;color:var(--text3);padding:6px 2px 10px;font-style:italic;}
+</style>
+</head>
+<body>
+
+<div id="loading-overlay" class="hidden">
+  <div class="spinner"></div>
+  <div class="loading-text" id="loading-text">Cargando datos...</div>
+</div>
+
+<div id="screen-login">
+  <div class="login-bg"></div><div class="login-grid"></div>
+  <div class="login-box">
+    <div class="login-logo">NAS · TIC</div>
+    <div class="login-title">Bienvenido de nuevo</div>
+    <div class="login-sub">Gestión de proyectos de instalación</div>
+    <div class="form-row">
+      <label class="field-label">Contraseña</label>
+      <div class="field-wrap">
+        <input type="password" id="pw-input" class="field-input" placeholder="Ingresa tu contraseña">
+        <button class="toggle-pw" onclick="togglePw()" type="button">👁</button>
+      </div>
+    </div>
+    <button class="btn-login" onclick="doLogin()">Ingresar →</button>
+    <div class="login-error" id="login-error">Contraseña incorrecta.</div>
+    <div class="login-hint">Contraseña inicial: <strong>nas2024</strong></div>
+  </div>
+</div>
+
+<div id="screen-app">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="topbar-brand">NAS · TIC</div>
+      <div class="sync-status"><div class="sync-dot" id="sync-dot"></div><span id="sync-text">Sincronizado</span></div>
+    </div>
+    <div class="topbar-right">
+      <button class="tb-btn" onclick="showChangePw()">Contraseña</button>
+      <button class="tb-btn accent" id="btn-new-proj" onclick="openNewProject()">+ Nuevo proyecto</button>
+      <button class="tb-btn" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="switchMainTab('dashboard')">📋 Proyectos</button>
+    <button class="nav-tab" onclick="switchMainTab('compare')">📊 Comparación de precios</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="tab-dashboard" class="main">
+    <div class="page-title">Proyectos</div>
+    <div class="page-sub">Selecciona un proyecto para ver su checklist y compras</div>
+    <div class="stats-row" id="dash-stats"></div>
+    <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:16px;">Todos los proyectos</div>
+    <div class="projects-grid" id="projects-grid"></div>
+  </div>
+
+  <!-- COMPARE GLOBAL -->
+  <div id="tab-compare" class="main hidden">
+    <div class="page-title">Comparación de precios</div>
+    <div class="page-sub">Evolución de precios de ítems entre proyectos</div>
+    <div id="compare-global-content"></div>
+  </div>
+
+  <!-- PROJECT DETAIL -->
+  <div id="tab-project" class="main hidden">
+    <div class="proj-detail-header">
+      <div class="back-row">
+        <button class="btn-back" onclick="showDashboard()">← Volver</button>
+        <div>
+          <div class="proj-detail-title" id="proj-detail-title"></div>
+          <div class="proj-detail-sub" id="proj-detail-sub"></div>
+        </div>
+      </div>
+      <div class="proj-inner-tabs">
+        <button class="proj-inner-tab active" onclick="switchProjTab('checklist')">✅ Checklist</button>
+        <button class="proj-inner-tab" onclick="switchProjTab('pisos')">🏢 Pisos</button>
+        <button class="proj-inner-tab" onclick="switchProjTab('compras')">🛒 Compras</button>
+      </div>
+    </div>
+
+    <!-- CHECKLIST TAB -->
+    <div id="proj-tab-checklist">
+      <div class="global-progress">
+        <div class="gp-label">Avance del proyecto</div>
+        <div class="gp-bar-wrap">
+          <div class="gp-bar-track"><div class="gp-bar-fill" id="gp-fill" style="width:0%"></div></div>
+          <div class="gp-stats"><span id="gp-done">0 completadas</span><span id="gp-total">0 total</span></div>
+        </div>
+        <div class="gp-pct" id="gp-pct">0%</div>
+      </div>
+      <div class="phases-container" id="phases-container"></div>
+    </div>
+
+    <!-- PISOS TAB -->
+    <div id="proj-tab-pisos" class="hidden">
+      <div id="floors-container"></div>
+    </div>
+
+    <!-- COMPRAS TAB -->
+    <div id="proj-tab-compras" class="hidden">
+      <div class="purchases-header">
+        <div class="cat-tabs">
+          <button class="cat-tab active" onclick="filterPurchases('all')">Todas</button>
+          <button class="cat-tab mat" onclick="filterPurchases('Materiales')">📦 Materiales</button>
+          <button class="cat-tab eq" onclick="filterPurchases('Equipos')">🔌 Equipos</button>
+          <button class="cat-tab mo" onclick="filterPurchases('Mano de obra')">👷 Mano de obra</button>
+        </div>
+        <button class="tb-btn accent" onclick="openNewPurchase()">+ Registrar compra</button>
+      </div>
+      <div class="purchases-summary" id="purchases-summary"></div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table id="purchases-table">
+            <thead>
+              <tr>
+                <th>Ítem</th><th>Categoría</th><th>Cant.</th><th>Unidad</th>
+                <th>Precio unit.</th><th>Total</th><th>Proveedor</th>
+                <th>OC #</th><th>Factura</th><th>Estado</th><th>Fecha</th><th></th>
+              </tr>
+            </thead>
+            <tbody id="purchases-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="compare-section">
+        <div class="compare-title">Comparación con otros proyectos</div>
+        <div id="proj-compare-content"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PROYECTO -->
+<div id="modal-project" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" id="modal-proj-title">Nuevo proyecto</div>
+    <div class="modal-sub">Configura el proyecto y selecciona las tareas que aplican</div>
+    <div class="form-row"><label class="form-label">Nombre del proyecto</label><input type="text" id="proj-name-input" class="form-input" placeholder="Ej: Edificio Centro Empresarial"></div>
+    <div class="form-row"><label class="form-label">Descripción (opcional)</label><input type="text" id="proj-desc-input" class="form-input" placeholder="Ej: Calle 15 #8-42, Bogotá"></div>
+    <div class="form-row"><label class="form-label">Color</label><div class="color-row" id="color-picker"></div></div>
+    <div class="form-row">
+      <label class="form-label">Tareas activas <span style="color:var(--text3);font-size:10px;text-transform:none;letter-spacing:0">(activa/desactiva según aplique)</span></label>
+      <div class="task-selector" id="task-selector"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modal-project')">Cancelar</button>
+      <button class="btn-save" onclick="saveProject()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL COMPRA -->
+<div id="modal-purchase" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-title" id="modal-pur-title">Registrar compra</div>
+    <div class="modal-sub">Registra un ítem adquirido para este proyecto</div>
+    <div class="form-row"><label class="form-label">Nombre del ítem</label><input type="text" id="pur-name" class="form-input" placeholder="Ej: Cable UTP Cat6 (caja 305m)"></div>
+    <div class="form-row-2">
+      <div><label class="form-label">Categoría</label>
+        <select id="pur-cat" class="form-select">
+          <option value="Materiales">📦 Materiales</option>
+          <option value="Equipos">🔌 Equipos</option>
+          <option value="Mano de obra">👷 Mano de obra</option>
+        </select>
+      </div>
+      <div><label class="form-label">Proveedor</label><input type="text" id="pur-prov" class="form-input" placeholder="Nombre del proveedor"></div>
+    </div>
+    <div class="form-row-3">
+      <div><label class="form-label">Cantidad</label><input type="number" id="pur-qty" class="form-input" placeholder="1" min="0" step="any"></div>
+      <div><label class="form-label">Unidad</label><input type="text" id="pur-unit" class="form-input" placeholder="und, m, caja..."></div>
+      <div><label class="form-label">Precio unitario ($)</label><input type="number" id="pur-price" class="form-input" placeholder="0" min="0" step="any"></div>
+    </div>
+    <div class="form-row-2">
+      <div><label class="form-label">Número OC</label><input type="text" id="pur-oc" class="form-input" placeholder="OC-001"></div>
+      <div><label class="form-label">Número de factura</label><input type="text" id="pur-invoice" class="form-input" placeholder="FAC-001"></div>
+    </div>
+    <div class="form-row-2">
+      <div><label class="form-label">Estado de entrega</label>
+        <select id="pur-status" class="form-select">
+          <option value="Pendiente">⏳ Pendiente</option>
+          <option value="Parcial">📦 Entrega parcial</option>
+          <option value="Entregado">✅ Entregado</option>
+          <option value="Cancelado">❌ Cancelado</option>
+        </select>
+      </div>
+      <div><label class="form-label">Fecha</label><input type="date" id="pur-date" class="form-input"></div>
+    </div>
+    <div class="form-row"><label class="form-label">Observaciones</label><textarea id="pur-notes" class="form-input" rows="2" placeholder="Notas adicionales..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modal-purchase')">Cancelar</button>
+      <button class="btn-save" onclick="savePurchase()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PW -->
+<div id="modal-pw" class="modal-overlay hidden">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-title">Cambiar contraseña</div>
+    <div class="modal-sub">Se actualizará en todos los dispositivos</div>
+    <div class="form-row"><label class="form-label">Contraseña actual</label><input type="password" id="pw-current" class="form-input"></div>
+    <div class="form-row"><label class="form-label">Nueva contraseña</label><input type="password" id="pw-new" class="form-input"></div>
+    <div class="form-row"><label class="form-label">Confirmar</label><input type="password" id="pw-confirm" class="form-input"></div>
+    <div class="login-error" id="pw-error" style="display:none;margin:0 0 12px"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modal-pw')">Cancelar</button>
+      <button class="btn-save" onclick="changePassword()">Actualizar</button>
+    </div>
+  </div>
+</div>
+
+<div id="ctx-menu" class="ctx-menu hidden">
+  <div class="ctx-item" onclick="ctxEdit()">✏️ Editar proyecto</div>
+  <div class="ctx-item danger" onclick="ctxDelete()">🗑 Eliminar proyecto</div>
+</div>
+<div class="toast" id="toast"><div class="toast-dot"></div><span id="toast-msg"></span></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const BIN_ID='69f6174eaaba88219762b1e0';
+const API_KEY='$2a$10$wG6u5Kgiue9nTE6dkp5lsOpnNeUDsmMs4M/JLTybqbc21PEZVtdyu';
+const BIN_URL='https://api.jsonbin.io/v3/b/'+BIN_ID;
+
+const PHASES=[
+  {id:'p1',num:'1',name:'Levantamiento de Requerimiento',color:'#C8F060',groups:[{id:'g0',label:'',tasks:[
+    {id:'t101',label:'Recepción de solicitud'},{id:'t102',label:'Validación de necesidad'},
+    {id:'t103',label:'Levantamiento en sitio'},{id:'t104',label:'Recopilar información técnica',subtasks:[{id:'s1041',label:'Cantidad de puntos'},{id:'s1042',label:'Equipos'},{id:'s1043',label:'Cobertura'}]},
+    {id:'t105',label:'Registro fotográfico'},{id:'t106',label:'Definición de alcance'}]}]},
+  {id:'p2',num:'2',name:'Diseño y Planeación',color:'#60A8F0',groups:[{id:'g0',label:'',tasks:[
+    {id:'t201',label:'Diseño de plano',subtasks:[{id:'s2011',label:'Red de datos'},{id:'s2012',label:'Tubería'},{id:'s2013',label:'Ubicación de equipos'}]},
+    {id:'t202',label:'Definición de soluciones',subtasks:[{id:'s2021',label:'Red de datos'},{id:'s2022',label:'CCTV'},{id:'s2023',label:'Audio'},{id:'s2024',label:'Alarmas / sensores'}]},
+    {id:'t203',label:'Lista de materiales'},{id:'t204',label:'Lista de equipos'},{id:'t205',label:'Estimación de mano de obra'}]}]},
+  {id:'p3',num:'3',name:'Cotizaciones',color:'#F0B860',groups:[
+    {id:'g1',label:'Mano de obra',tasks:[{id:'t301',label:'Cotización de instalación'},{id:'t302',label:'Validación de proveedor'}]},
+    {id:'g2',label:'Materiales',tasks:[{id:'t303',label:'Solicitud de cotización'},{id:'t304',label:'Comparativo de precios'}]},
+    {id:'g3',label:'Equipos',tasks:[{id:'t305',label:'Solicitud de cotización equipos'},{id:'t306',label:'Evaluación técnica y económica'}]}]},
+  {id:'p4',num:'4',name:'Órdenes de Compra (OC)',color:'#E060C8',groups:[
+    {id:'g1',label:'Flujo por proveedor',tasks:[{id:'t401',label:'Elaboración de orden de compra'},{id:'t402',label:'Firma dirección TIC'},{id:'t403',label:'Firma gerencia'},{id:'t404',label:'Radicación en contabilidad'},{id:'t405',label:'Aprobación / pago'},{id:'t406',label:'Seguimiento a entrega'}]},
+    {id:'g2',label:'Aplicación práctica',tasks:[{id:'t407',label:'OC #1 → Materiales'},{id:'t408',label:'OC #2 → Equipos proveedor A'},{id:'t409',label:'OC #3 → Equipos proveedor B (si aplica)'},{id:'t410',label:'OC #4 → Mano de obra (si es tercerizada)'}]}]},
+  {id:'p5',num:'5',name:'Recepción de Materiales y Equipos',color:'#60E0C8',groups:[{id:'g0',label:'',tasks:[
+    {id:'t501',label:'Verificación contra factura / OC'},{id:'t502',label:'Revisión de estado físico'},{id:'t503',label:'Registro en inventario'},{id:'t504',label:'Almacenamiento temporal'}]}]},
+  {id:'p6',num:'6',name:'Instalación Física',color:'#FF6B5B',groups:[
+    {id:'g1',label:'Infraestructura',tasks:[{id:'t601',label:'Instalación de tubería / canaleta'},{id:'t602',label:'Instalación de soportes TV'},{id:'t603',label:'Instalación de rack'}]},
+    {id:'g2',label:'Cableado',tasks:[{id:'t604',label:'Tendido de cable'},{id:'t605',label:'Organización en rack'},{id:'t606',label:'Instalación de faceplate'},{id:'t607',label:'Marcación de puntos'}]},
+    {id:'g3',label:'Equipos',tasks:[{id:'t608',label:'Instalación de equipos en rack'},{id:'t609',label:'Instalación de cámaras'},{id:'t610',label:'Instalación de DVR/NVR'},{id:'t611',label:'Instalación de access point'},{id:'t612',label:'Instalación de parlantes'},{id:'t613',label:'Instalación consola de sonido'},{id:'t614',label:'Instalación sensores',subtasks:[{id:'s6141',label:'Humo'},{id:'s6142',label:'Estación manual'},{id:'s6143',label:'Sirena estroboscópica'}]}]},
+    {id:'g4',label:'Otros',tasks:[{id:'t615',label:'Red de televisores'}]}]},
+  {id:'p7',num:'7',name:'Configuración',color:'#A060F0',groups:[{id:'g0',label:'',tasks:[
+    {id:'t701',label:'Configuración de red',subtasks:[{id:'s7011',label:'VLAN'},{id:'s7012',label:'IP'},{id:'s7013',label:'Internet'}]},
+    {id:'t702',label:'Configuración de cámaras'},{id:'t703',label:'Configuración DVR/NVR'},{id:'t704',label:'Configuración access point'},
+    {id:'t705',label:'Configuración sensores',subtasks:[{id:'s7051',label:'Humo'},{id:'s7052',label:'Alarmas'}]},
+    {id:'t706',label:'Integración de sistemas (si aplica)'}]}]},
+  {id:'p8',num:'8',name:'Pruebas',color:'#5BE8A0',groups:[{id:'g0',label:'',tasks:[
+    {id:'t801',label:'Prueba de puntos de red'},{id:'t802',label:'Prueba de conectividad'},
+    {id:'t803',label:'Prueba de cámaras',subtasks:[{id:'s8031',label:'Visualización'},{id:'s8032',label:'Grabación'}]},
+    {id:'t804',label:'Prueba de audio'},{id:'t805',label:'Prueba de alarmas y sensores'},{id:'t806',label:'Validación general del sistema'}]}]},
+  {id:'p9',num:'9',name:'Entrega',color:'#F0E060',groups:[{id:'g0',label:'',tasks:[
+    {id:'t901',label:'Validación con usuario final'},{id:'t902',label:'Acta de entrega'},{id:'t903',label:'Capacitación básica (si aplica)'}]}]},
+  {id:'p10',num:'10',name:'Documentación',color:'#F06080',groups:[{id:'g0',label:'',tasks:[
+    {id:'t1001',label:'Actualización de planos'},{id:'t1002',label:'Registro de puntos (marquillado)'},{id:'t1003',label:'Inventario de equipos'},{id:'t1004',label:'Registro fotográfico final'},{id:'t1005',label:'Cierre de solicitud'}]}]}
+];
+
+const COLORS=[
+  {hex:'#C8F060',dim:'rgba(200,240,96,0.12)'},{hex:'#60A8F0',dim:'rgba(96,168,240,0.12)'},
+  {hex:'#F0B860',dim:'rgba(240,184,96,0.12)'},{hex:'#60E0C8',dim:'rgba(96,224,200,0.12)'},
+  {hex:'#E060C8',dim:'rgba(224,96,200,0.12)'},{hex:'#FF6B5B',dim:'rgba(255,107,91,0.12)'},
+  {hex:'#A060F0',dim:'rgba(160,96,240,0.12)'},{hex:'#F06080',dim:'rgba(240,96,128,0.12)'}
+];
+
+let appData={password:'nas2024',projects:[],checklist:{},purchases:{},floors:{}};
+let currentProjectId=null,editingProjectId=null,ctxProjectId=null,selectedColor=COLORS[0],saveTimer=null;
+let enabledTasks={},editingPurchaseId=null,purchaseFilter='all';
+let chartInstance=null;
+
+// ── CLOUD ──
+async function loadFromCloud(){
+  showLoading('Cargando datos...');
+  try{
+    const res=await fetch(BIN_URL+'/latest',{headers:{'X-Master-Key':API_KEY}});
+    if(!res.ok)throw new Error();
+    const data=await res.json();
+    appData=data.record;
+    if(!appData.checklist)appData.checklist={};
+    if(!appData.password)appData.password='nas2024';
+    if(!appData.projects)appData.projects=[];
+    if(!appData.purchases)appData.purchases={};
+    if(!appData.floors)appData.floors={};
+    setSyncStatus('ok');
+    localStorage.setItem('nas_backup',JSON.stringify(appData));
+  }catch(e){
+    setSyncStatus('error');
+    const local=localStorage.getItem('nas_backup');
+    if(local){appData=JSON.parse(local);showToast('Sin conexión — datos locales');}
+  }
+  hideLoading();
+}
+async function saveToCloud(){
+  setSyncStatus('syncing');
+  localStorage.setItem('nas_backup',JSON.stringify(appData));
+  try{
+    const res=await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},body:JSON.stringify(appData)});
+    if(!res.ok)throw new Error();
+    setSyncStatus('ok');
+  }catch(e){setSyncStatus('error');showToast('Sin conexión — guardado localmente');}
+}
+function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveToCloud,800);}
+function setSyncStatus(s){
+  const dot=document.getElementById('sync-dot'),txt=document.getElementById('sync-text');
+  dot.className='sync-dot'+(s==='syncing'?' syncing':s==='error'?' error':'');
+  txt.textContent=s==='syncing'?'Guardando...':s==='error'?'Sin conexión':'Sincronizado';
+}
+function showLoading(m){document.getElementById('loading-text').textContent=m;document.getElementById('loading-overlay').classList.remove('hidden');}
+function hideLoading(){document.getElementById('loading-overlay').classList.add('hidden');}
+
+// ── LOGIN ──
+function doLogin(){
+  const val=document.getElementById('pw-input').value;
+  if(val===appData.password){
+    document.getElementById('screen-login').style.display='none';
+    document.getElementById('screen-app').style.display='block';
+    document.getElementById('login-error').style.display='none';
+    document.getElementById('pw-input').value='';
+    switchMainTab('dashboard');
+  }else{
+    const err=document.getElementById('login-error');err.style.display='block';
+    document.getElementById('pw-input').value='';
+    setTimeout(()=>err.style.display='none',3000);
+  }
+}
+document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+function togglePw(){const i=document.getElementById('pw-input');i.type=i.type==='password'?'text':'password';}
+function doLogout(){document.getElementById('screen-app').style.display='none';document.getElementById('screen-login').style.display='flex';}
+
+// ── CHANGE PW ──
+function showChangePw(){
+  ['pw-current','pw-new','pw-confirm'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pw-error').style.display='none';openModal('modal-pw');
+}
+function changePassword(){
+  const cur=document.getElementById('pw-current').value,nw=document.getElementById('pw-new').value,cf=document.getElementById('pw-confirm').value;
+  if(cur!==appData.password){showPwError('Contraseña actual incorrecta');return;}
+  if(nw.length<4){showPwError('Mínimo 4 caracteres');return;}
+  if(nw!==cf){showPwError('Las contraseñas no coinciden');return;}
+  appData.password=nw;scheduleSave();closeModal('modal-pw');showToast('Contraseña actualizada');
+}
+function showPwError(msg){const e=document.getElementById('pw-error');e.textContent=msg;e.style.display='block';}
+
+// ── MAIN TABS ──
+function switchMainTab(tab){
+  ['dashboard','compare','project'].forEach(t=>{
+    document.getElementById('tab-'+t).classList.toggle('hidden',t!==tab);
+  });
+  document.querySelectorAll('.nav-tab').forEach((b,i)=>{
+    b.classList.toggle('active',['dashboard','compare'].indexOf(tab)===i);
+  });
+  if(tab==='compare')renderGlobalCompare();
+  if(tab==='dashboard')renderDashboard();
+  document.getElementById('btn-new-proj').classList.toggle('hidden',tab==='project');
+}
+
+// ── DASHBOARD ──
+function showDashboard(){switchMainTab('dashboard');}
+function renderDashboard(){
+  let tt=0,td=0,totalSpend=0;
+  appData.projects.forEach(p=>{
+    const{total,done}=countEnabled(p);tt+=total;td+=done;
+    (appData.purchases[p.id]||[]).forEach(pur=>totalSpend+=pur.qty*pur.price);
+  });
+  const gp=tt?Math.round(td/tt*100):0;
+  document.getElementById('dash-stats').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Proyectos</div><div class="stat-value">${appData.projects.length}</div></div>
+    <div class="stat-card"><div class="stat-label">Tareas completadas</div><div class="stat-value accent">${td}/${tt}</div></div>
+    <div class="stat-card"><div class="stat-label">Avance global</div><div class="stat-value accent">${gp}%</div></div>
+    <div class="stat-card"><div class="stat-label">Inversión total</div><div class="stat-value blue">${fmt(totalSpend)}</div></div>`;
+  const grid=document.getElementById('projects-grid');grid.innerHTML='';
+  if(!appData.projects.length){
+    grid.innerHTML=`<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Sin proyectos aún</div></div></div>`;
+  }else{
+    appData.projects.forEach(p=>{
+      const{total,done}=countEnabled(p);
+      const pct=total?Math.round(done/total*100):0;
+      const spend=(appData.purchases[p.id]||[]).reduce((s,i)=>s+i.qty*i.price,0);
+      const card=document.createElement('div');card.className='proj-card';
+      card.style.setProperty('--proj-color',p.color||COLORS[0].hex);
+      card.style.setProperty('--proj-color-dim',p.colorDim||COLORS[0].dim);
+      card.innerHTML=`
+        <div class="proj-card-top"><div class="proj-icon">🏗</div><button class="proj-menu-btn" data-id="${p.id}">⋮</button></div>
+        <div class="proj-name">${p.name}</div>
+        <div class="proj-meta">${p.desc||''}${p.desc?'  ·  ':''}<span style="color:var(--blue)">${fmt(spend)}</span></div>
+        <div class="proj-bar-track"><div class="proj-bar-fill" style="width:${pct}%"></div></div>
+        <div class="proj-bar-stats"><span>${done}/${total} tareas</span><span>${pct}%</span></div>`;
+      card.addEventListener('click',e=>{if(e.target.closest('.proj-menu-btn'))return;openProject(p.id);});
+      card.querySelector('.proj-menu-btn').addEventListener('click',e=>{e.stopPropagation();showCtxMenu(e,p.id);});
+      grid.appendChild(card);
+    });
+  }
+  const add=document.createElement('div');add.className='proj-card-add';
+  add.innerHTML='<div class="proj-card-add-icon">+</div><div>Nuevo proyecto</div>';
+  add.onclick=openNewProject;grid.appendChild(add);
+}
+
+// ── PROJECT ──
+function openProject(id){
+  currentProjectId=id;
+  const p=appData.projects.find(x=>x.id===id);if(!p)return;
+  if(!appData.checklist[id])appData.checklist[id]={};
+  if(!appData.purchases[id])appData.purchases[id]=[];
+  if(!appData.floors[id])appData.floors[id]=[];
+  document.getElementById('proj-detail-title').textContent=p.name;
+  document.getElementById('proj-detail-sub').textContent=p.desc||'';
+  document.getElementById('gp-fill').style.background=p.color||'#C8F060';
+  document.getElementById('gp-pct').style.color=p.color||'#C8F060';
+  switchMainTab('project');
+  switchProjTab('checklist');
+}
+
+function switchProjTab(tab){
+  ['checklist','pisos','compras'].forEach(t=>{
+    document.getElementById('proj-tab-'+t).classList.toggle('hidden',t!==tab);
+  });
+  document.querySelectorAll('.proj-inner-tab').forEach((b,i)=>{
+    b.classList.toggle('active',['checklist','pisos','compras'][i]===tab);
+  });
+  if(tab==='checklist'){const p=appData.projects.find(x=>x.id===currentProjectId);if(p)renderProjectDetail(p);}
+  if(tab==='pisos')renderFloors();
+  if(tab==='compras')renderPurchases();
+}
+
+// ── CHECKLIST RENDER ──
+function countEnabled(proj){
+  let total=0,done=0;
+  const cl=appData.checklist[proj.id]||{},en=proj.enabledTasks||{};
+  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
+    if(en[t.id]===false)return;
+    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]===false)return;total++;if(cl[t.id]&&cl[t.id][st.id])done++;});}
+    else{total++;if(cl[t.id])done++;}
+  })));
+  return{total,done};
+}
+
+function renderProjectDetail(p){
+  updateGlobalBar(p);
+  const container=document.getElementById('phases-container');
+  const openP={};container.querySelectorAll('.phase-body.open').forEach(b=>{openP[b.dataset.pid]=true;});
+  container.innerHTML='';
+  const cl=appData.checklist[p.id]||{},en=p.enabledTasks||{};
+  PHASES.forEach(ph=>{
+    let phT=0,phD=0;
+    ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
+      if(en[t.id]===false)return;
+      if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]===false)return;phT++;if(cl[t.id]&&cl[t.id][st.id])phD++;});}
+      else{phT++;if(cl[t.id])phD++;}
+    }));
+    if(phT===0)return;
+    const pct=Math.round(phD/phT*100);
+    const card=document.createElement('div');card.className='phase-card';
+    const hdr=document.createElement('div');hdr.className='phase-hdr'+(openP[ph.id]?' open':'');
+    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phD}/${phT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${pct}%;background:${ph.color}"></div></div><span class="phase-mini-pct">${pct}%</span></div><span class="phase-chevron">▶</span>`;
+    hdr.addEventListener('click',()=>{const b=card.querySelector('.phase-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
+    const body=document.createElement('div');body.className='phase-body'+(openP[ph.id]?' open':'');body.dataset.pid=ph.id;
+    ph.groups.forEach(gr=>{
+      const eTasks=gr.tasks.filter(t=>en[t.id]!==false);if(!eTasks.length)return;
+      const gs=document.createElement('div');gs.className='group-section';
+      if(gr.label){const gl=document.createElement('div');gl.className='group-label';gl.textContent=gr.label;gs.appendChild(gl);}
+      eTasks.forEach(t=>{
+        const hasSubs=t.subtasks&&t.subtasks.length>0;
+        const eSubs=hasSubs?t.subtasks.filter(st=>en[st.id]!==false):[];
+        if(hasSubs&&!eSubs.length)return;
+        const tRow=document.createElement('div');tRow.className='task-row';
+        if(hasSubs){
+          const dC=eSubs.filter(st=>cl[t.id]&&cl[t.id][st.id]).length;
+          const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';
+          if(dC===eSubs.length&&eSubs.length>0)cb.checked=true;else if(dC>0)cb.indeterminate=true;
+          cb.addEventListener('change',function(e){e.stopPropagation();if(!appData.checklist[p.id][t.id])appData.checklist[p.id][t.id]={};eSubs.forEach(st=>{appData.checklist[p.id][t.id][st.id]=this.checked;});renderProjectDetail(p);scheduleSave();});
+          const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=t.label;
+          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
+          tRow.appendChild(cb);tRow.appendChild(lbl);tRow.appendChild(tog);
+          tRow.addEventListener('click',e=>{if(e.target===cb||e.target===tog)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
+          const subBody=document.createElement('div');subBody.className='subtasks-body';
+          eSubs.forEach(st=>{
+            const stC=cl[t.id]&&cl[t.id][st.id];
+            const stRow=document.createElement('div');stRow.className='subtask-row';
+            stRow.innerHTML=`<input type="checkbox" class="subtask-cb" ${stC?'checked':''}><span class="subtask-lbl${stC?' done':''}">${st.label}</span>`;
+            const stCb=stRow.querySelector('.subtask-cb');
+            stCb.addEventListener('change',function(e){e.stopPropagation();if(!appData.checklist[p.id][t.id])appData.checklist[p.id][t.id]={};appData.checklist[p.id][t.id][st.id]=this.checked;renderProjectDetail(p);scheduleSave();});
+            stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
+            subBody.appendChild(stRow);
+          });
+          gs.appendChild(tRow);gs.appendChild(subBody);
+        }else{
+          const chk=!!cl[t.id];
+          const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';if(chk)cb.checked=true;
+          cb.addEventListener('change',function(e){e.stopPropagation();appData.checklist[p.id][t.id]=this.checked;tRow.querySelector('.task-lbl').className='task-lbl'+(this.checked?' done':'');updateGlobalBar(p);scheduleSave();if(this.checked)showToast('✓ '+t.label);});
+          const lbl=document.createElement('span');lbl.className='task-lbl'+(chk?' done':'');lbl.textContent=t.label;
+          tRow.appendChild(cb);tRow.appendChild(lbl);
+          tRow.addEventListener('click',e=>{if(e.target===cb)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
+          gs.appendChild(tRow);
+        }
+      });
+      body.appendChild(gs);
+    });
+    card.appendChild(hdr);card.appendChild(body);container.appendChild(card);
+  });
+}
+
+function updateGlobalBar(p){
+  const{total,done}=countEnabled(p);const pct=total?Math.round(done/total*100):0;
+  document.getElementById('gp-fill').style.width=pct+'%';
+  document.getElementById('gp-pct').textContent=pct+'%';
+  document.getElementById('gp-done').textContent=done+' completadas';
+  document.getElementById('gp-total').textContent=total+' total';
+}
+
+// ── PURCHASES ──
+function fmt(n){
+  if(!n&&n!==0)return'$0';
+  return'$'+Number(n).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
+function fmtDate(d){if(!d)return'—';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+function statusBadge(s){const map={Pendiente:'pend',Parcial:'parcial',Entregado:'entregado',Cancelado:'cancelado'};return`<span class="badge badge-${map[s]||'pend'}">${s||'Pendiente'}</span>`;}
+function catBadge(c){const map={Materiales:'mat',Equipos:'eq','Mano de obra':'mo'};return`<span class="badge badge-${map[c]||'mat'}">${c}</span>`;}
+
+function filterPurchases(cat){
+  purchaseFilter=cat;
+  document.querySelectorAll('.cat-tab').forEach(b=>{b.classList.toggle('active',b.textContent.includes(cat)||cat==='all'&&b.textContent==='Todas');});
+  renderPurchases();
+}
+
+function renderPurchases(){
+  const p=appData.projects.find(x=>x.id===currentProjectId);if(!p)return;
+  const purs=appData.purchases[p.id]||[];
+  const filtered=purchaseFilter==='all'?purs:purs.filter(i=>i.cat===purchaseFilter);
+
+  // Summary
+  const total=filtered.reduce((s,i)=>s+i.qty*i.price,0);
+  const mats=purs.filter(i=>i.cat==='Materiales').reduce((s,i)=>s+i.qty*i.price,0);
+  const eqs=purs.filter(i=>i.cat==='Equipos').reduce((s,i)=>s+i.qty*i.price,0);
+  const mos=purs.filter(i=>i.cat==='Mano de obra').reduce((s,i)=>s+i.qty*i.price,0);
+  document.getElementById('purchases-summary').innerHTML=`
+    <div class="pur-stat"><div class="pur-stat-label">Total proyecto</div><div class="pur-stat-value green">${fmt(mats+eqs+mos)}</div></div>
+    <div class="pur-stat"><div class="pur-stat-label">📦 Materiales</div><div class="pur-stat-value">${fmt(mats)}</div></div>
+    <div class="pur-stat"><div class="pur-stat-label">🔌 Equipos</div><div class="pur-stat-value blue">${fmt(eqs)}</div></div>
+    <div class="pur-stat"><div class="pur-stat-label">👷 Mano de obra</div><div class="pur-stat-value amber">${fmt(mos)}</div></div>
+    <div class="pur-stat"><div class="pur-stat-label">Ítems registrados</div><div class="pur-stat-value">${purs.length}</div></div>`;
+
+  // Table
+  const tbody=document.getElementById('purchases-tbody');
+  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="12" class="empty-table">No hay compras registradas en esta categoría</td></tr>`;return;}
+  tbody.innerHTML='';
+  filtered.forEach(item=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td class="bold">${item.name}</td>
+      <td>${catBadge(item.cat)}</td>
+      <td>${item.qty}</td>
+      <td>${item.unit||'—'}</td>
+      <td>${fmt(item.price)}</td>
+      <td class="bold">${fmt(item.qty*item.price)}</td>
+      <td>${item.prov||'—'}</td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:11px">${item.oc||'—'}</span></td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:11px">${item.invoice||'—'}</span></td>
+      <td>${statusBadge(item.status)}</td>
+      <td style="font-size:11px;color:var(--text3)">${fmtDate(item.date)}</td>
+      <td>
+        <button class="action-btn" onclick="editPurchase('${item.id}')">✏️</button>
+        <button class="action-btn del" onclick="deletePurchase('${item.id}')">🗑</button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+
+  // Compare within project
+  renderProjCompare(p);
+}
+
+function renderProjCompare(p){
+  const wrap=document.getElementById('proj-compare-content');
+  const allPurs=appData.purchases[p.id]||[];
+  if(!allPurs.length){wrap.innerHTML='<p style="font-size:13px;color:var(--text3)">Registra compras para ver comparaciones</p>';return;}
+
+  // Group by item name across all projects
+  const itemMap={};
+  appData.projects.forEach(proj=>{
+    (appData.purchases[proj.id]||[]).forEach(i=>{
+      const key=i.name.toLowerCase().trim();
+      if(!itemMap[key])itemMap[key]={name:i.name,entries:[]};
+      itemMap[key].entries.push({projName:proj.name,price:i.price,date:i.date,projId:proj.id});
+    });
+  });
+
+  // Only items that appear in this project AND at least one other
+  const myItems=[...new Set(allPurs.map(i=>i.name.toLowerCase().trim()))];
+  const compareItems=myItems.filter(k=>itemMap[k]&&itemMap[k].entries.filter(e=>e.projId!==p.id).length>0);
+
+  if(!compareItems.length){wrap.innerHTML='<p style="font-size:13px;color:var(--text3)">Los ítems de este proyecto aún no aparecen en otros proyectos para comparar.</p>';return;}
+
+  // Table
+  let html=`<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>Ítem</th><th>Este proyecto</th><th>Otros proyectos</th><th>Variación</th></tr></thead><tbody>`;
+  compareItems.forEach(k=>{
+    const myEntry=allPurs.find(i=>i.name.toLowerCase().trim()===k);
+    const myPrice=myEntry?myEntry.price:0;
+    const others=itemMap[k].entries.filter(e=>e.projId!==p.id);
+    const avgOther=others.reduce((s,e)=>s+e.price,0)/others.length;
+    const diff=myPrice-avgOther;
+    const pct=avgOther?Math.round(diff/avgOther*100):0;
+    const cls=diff>0?'price-up':diff<0?'price-down':'price-same';
+    const arrow=diff>0?'↑':diff<0?'↓':'→';
+    const othersText=others.map(o=>`${o.projName}: ${fmt(o.price)}`).join(' | ');
+    html+=`<tr><td class="item-name">${itemMap[k].name}</td><td style="font-family:'DM Mono',monospace">${fmt(myPrice)}</td><td style="font-size:11px;color:var(--text3)">${othersText}</td><td class="${cls}" style="font-family:'DM Mono',monospace">${arrow} ${Math.abs(pct)}%</td></tr>`;
+  });
+  html+=`</tbody></table></div>`;
+  wrap.innerHTML=html;
+}
+
+// ── GLOBAL COMPARE ──
+function renderGlobalCompare(){
+  const wrap=document.getElementById('compare-global-content');wrap.innerHTML='';
+
+  // Build item price history across all projects
+  const itemMap={};
+  appData.projects.forEach(proj=>{
+    (appData.purchases[proj.id]||[]).forEach(i=>{
+      const key=i.name.toLowerCase().trim();
+      if(!itemMap[key])itemMap[key]={name:i.name,entries:[]};
+      itemMap[key].entries.push({projName:proj.name,price:i.price,date:i.date||'',cat:i.cat});
+    });
+  });
+
+  const multiItems=Object.values(itemMap).filter(i=>i.entries.length>1);
+
+  if(!multiItems.length){
+    wrap.innerHTML=`<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">Sin datos suficientes</div><p style="font-size:14px">Registra el mismo ítem en varios proyectos para ver la comparación de precios.</p></div>`;
+    return;
+  }
+
+  // Filter controls
+  const filterDiv=document.createElement('div');filterDiv.className='compare-section';
+  filterDiv.innerHTML=`<div class="compare-title">Evolución de precios por ítem</div>
+  <div class="compare-filter">
+    <select id="compare-item-sel" style="min-width:220px">
+      ${multiItems.map(i=>`<option value="${i.name.toLowerCase().trim()}">${i.name}</option>`).join('')}
+    </select>
+  </div>
+  <div class="chart-container"><canvas id="price-chart"></canvas></div>
+  <div class="chart-legend" id="chart-legend"></div>`;
+  wrap.appendChild(filterDiv);
+
+  // Full table
+  const tableDiv=document.createElement('div');tableDiv.className='compare-section';
+  tableDiv.innerHTML=`<div class="compare-title">Tabla comparativa completa</div>
+  <div class="compare-filter">
+    <input type="text" id="compare-search" placeholder="Buscar ítem..." style="min-width:200px" oninput="filterCompareTable(this.value)">
+    <select id="compare-cat-filter" onchange="filterCompareTable(document.getElementById('compare-search').value)">
+      <option value="">Todas las categorías</option>
+      <option value="Materiales">📦 Materiales</option>
+      <option value="Equipos">🔌 Equipos</option>
+      <option value="Mano de obra">👷 Mano de obra</option>
+    </select>
+  </div>
+  <div class="compare-table-wrap" id="full-compare-table"></div>`;
+  wrap.appendChild(tableDiv);
+
+  document.getElementById('compare-item-sel').addEventListener('change',function(){drawPriceChart(itemMap[this.value]);});
+  drawPriceChart(multiItems[0]);
+  renderFullCompareTable(multiItems,'','');
+}
+
+const CHART_COLORS=['#C8F060','#60A8F0','#F0B860','#E060C8','#FF6B5B','#60E0C8','#A060F0','#F06080'];
+
+function drawPriceChart(item){
+  if(chartInstance){chartInstance.destroy();chartInstance=null;}
+  const ctx=document.getElementById('price-chart');if(!ctx)return;
+  const entries=[...item.entries].sort((a,b)=>a.date.localeCompare(b.date));
+  const labels=entries.map(e=>e.projName);
+  const data=entries.map(e=>e.price);
+  const legend=document.getElementById('chart-legend');
+  chartInstance=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        label:item.name,data,
+        backgroundColor:labels.map((_,i)=>CHART_COLORS[i%CHART_COLORS.length]+'99'),
+        borderColor:labels.map((_,i)=>CHART_COLORS[i%CHART_COLORS.length]),
+        borderWidth:1.5,borderRadius:6
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' '+fmt(c.raw)}}},
+      scales:{
+        y:{ticks:{color:'#5A5955',callback:v=>fmt(v)},grid:{color:'rgba(255,255,255,0.05)'}},
+        x:{ticks:{color:'#9A9890'},grid:{display:false}}
+      }
+    }
+  });
+  if(legend){
+    legend.innerHTML=entries.map((e,i)=>`<div class="legend-item"><div class="legend-dot" style="background:${CHART_COLORS[i%CHART_COLORS.length]}"></div><span>${e.projName}: ${fmt(e.price)}</span></div>`).join('');
+  }
+}
+
+function renderFullCompareTable(items,search,cat){
+  const wrap=document.getElementById('full-compare-table');if(!wrap)return;
+  let filtered=items;
+  if(search)filtered=filtered.filter(i=>i.name.toLowerCase().includes(search.toLowerCase()));
+  if(cat)filtered=filtered.filter(i=>i.entries.some(e=>e.cat===cat));
+  if(!filtered.length){wrap.innerHTML='<p style="font-size:13px;color:var(--text3);padding:16px">Sin resultados</p>';return;}
+  let html=`<table class="compare-table"><thead><tr><th>Ítem</th><th>Proyectos</th><th>Precio mín.</th><th>Precio máx.</th><th>Variación</th></tr></thead><tbody>`;
+  filtered.forEach(item=>{
+    const prices=item.entries.map(e=>e.price);
+    const mn=Math.min(...prices),mx=Math.max(...prices);
+    const var_pct=mn>0?Math.round((mx-mn)/mn*100):0;
+    const cls=var_pct>20?'price-up':var_pct>0?'price-same':'price-down';
+    const projs=item.entries.map(e=>`<span style="font-size:11px;color:var(--text3)">${e.projName} (${fmt(e.price)})</span>`).join('<br>');
+    html+=`<tr><td class="item-name">${item.name}</td><td>${projs}</td><td style="font-family:'DM Mono',monospace;color:var(--accent)">${fmt(mn)}</td><td style="font-family:'DM Mono',monospace;color:var(--amber)">${fmt(mx)}</td><td class="${cls}" style="font-family:'DM Mono',monospace">↑${var_pct}%</td></tr>`;
+  });
+  html+='</tbody></table>';
+  wrap.innerHTML=html;
+}
+
+function filterCompareTable(search){
+  const cat=document.getElementById('compare-cat-filter')?.value||'';
+  const itemMap={};
+  appData.projects.forEach(proj=>{
+    (appData.purchases[proj.id]||[]).forEach(i=>{
+      const key=i.name.toLowerCase().trim();
+      if(!itemMap[key])itemMap[key]={name:i.name,entries:[]};
+      itemMap[key].entries.push({projName:proj.name,price:i.price,date:i.date||'',cat:i.cat});
+    });
+  });
+  const multi=Object.values(itemMap).filter(i=>i.entries.length>1);
+  renderFullCompareTable(multi,search,cat);
+}
+
+// ── PURCHASE MODAL ──
+function openNewPurchase(){
+  editingPurchaseId=null;
+  document.getElementById('modal-pur-title').textContent='Registrar compra';
+  document.getElementById('pur-name').value='';document.getElementById('pur-cat').value='Materiales';
+  document.getElementById('pur-prov').value='';document.getElementById('pur-qty').value='1';
+  document.getElementById('pur-unit').value='und';document.getElementById('pur-price').value='';
+  document.getElementById('pur-oc').value='';document.getElementById('pur-invoice').value='';
+  document.getElementById('pur-status').value='Pendiente';document.getElementById('pur-notes').value='';
+  document.getElementById('pur-date').value=new Date().toISOString().split('T')[0];
+  openModal('modal-purchase');
+}
+function editPurchase(id){
+  const purs=appData.purchases[currentProjectId]||[];
+  const item=purs.find(x=>x.id===id);if(!item)return;
+  editingPurchaseId=id;
+  document.getElementById('modal-pur-title').textContent='Editar compra';
+  document.getElementById('pur-name').value=item.name||'';document.getElementById('pur-cat').value=item.cat||'Materiales';
+  document.getElementById('pur-prov').value=item.prov||'';document.getElementById('pur-qty').value=item.qty||1;
+  document.getElementById('pur-unit').value=item.unit||'und';document.getElementById('pur-price').value=item.price||0;
+  document.getElementById('pur-oc').value=item.oc||'';document.getElementById('pur-invoice').value=item.invoice||'';
+  document.getElementById('pur-status').value=item.status||'Pendiente';document.getElementById('pur-notes').value=item.notes||'';
+  document.getElementById('pur-date').value=item.date||'';
+  openModal('modal-purchase');
+}
+function deletePurchase(id){
+  if(!confirm('¿Eliminar este ítem?'))return;
+  appData.purchases[currentProjectId]=(appData.purchases[currentProjectId]||[]).filter(x=>x.id!==id);
+  scheduleSave();renderPurchases();showToast('Ítem eliminado');
+}
+function savePurchase(){
+  const name=document.getElementById('pur-name').value.trim();
+  if(!name){showToast('Ingresa el nombre del ítem');return;}
+  const item={
+    id:editingPurchaseId||'pur_'+Date.now(),
+    name,cat:document.getElementById('pur-cat').value,
+    prov:document.getElementById('pur-prov').value.trim(),
+    qty:parseFloat(document.getElementById('pur-qty').value)||1,
+    unit:document.getElementById('pur-unit').value.trim()||'und',
+    price:parseFloat(document.getElementById('pur-price').value)||0,
+    oc:document.getElementById('pur-oc').value.trim(),
+    invoice:document.getElementById('pur-invoice').value.trim(),
+    status:document.getElementById('pur-status').value,
+    notes:document.getElementById('pur-notes').value.trim(),
+    date:document.getElementById('pur-date').value
+  };
+  if(!appData.purchases[currentProjectId])appData.purchases[currentProjectId]=[];
+  if(editingPurchaseId){
+    const idx=appData.purchases[currentProjectId].findIndex(x=>x.id===editingPurchaseId);
+    if(idx>=0)appData.purchases[currentProjectId][idx]=item;
+  }else{
+    appData.purchases[currentProjectId].push(item);
+  }
+  scheduleSave();closeModal('modal-purchase');renderPurchases();showToast(editingPurchaseId?'Ítem actualizado':'Ítem registrado');
+}
+
+// ── PROJECT MODAL ──
+function openNewProject(){
+  editingProjectId=null;selectedColor=COLORS[0];
+  document.getElementById('proj-name-input').value='';document.getElementById('proj-desc-input').value='';
+  document.getElementById('modal-proj-title').textContent='Nuevo proyecto';
+  enabledTasks={};
+  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{enabledTasks[t.id]=true;if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=true;});})));
+  buildColorPicker();buildTaskSelector();openModal('modal-project');
+}
+function openEditProject(id){
+  const p=appData.projects.find(x=>x.id===id);if(!p)return;
+  editingProjectId=id;selectedColor=COLORS.find(c=>c.hex===p.color)||COLORS[0];
+  document.getElementById('proj-name-input').value=p.name;document.getElementById('proj-desc-input').value=p.desc||'';
+  document.getElementById('modal-proj-title').textContent='Editar proyecto';
+  enabledTasks={};
+  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
+    enabledTasks[t.id]=(p.enabledTasks&&p.enabledTasks[t.id]===false)?false:true;
+    if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=(p.enabledTasks&&p.enabledTasks[st.id]===false)?false:true;});
+  })));
+  buildColorPicker();buildTaskSelector();openModal('modal-project');
+}
+function buildColorPicker(){
+  const w=document.getElementById('color-picker');w.innerHTML='';
+  COLORS.forEach(c=>{const el=document.createElement('div');el.className='color-opt'+(c.hex===selectedColor.hex?' selected':'');el.style.background=c.hex;el.onclick=()=>{selectedColor=c;w.querySelectorAll('.color-opt').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');};w.appendChild(el);});
+}
+function buildTaskSelector(){
+  const wrap=document.getElementById('task-selector');wrap.innerHTML='';
+  PHASES.forEach(ph=>{
+    const sec=document.createElement('div');sec.className='ts-phase';
+    let total=0,checked=0;
+    ph.groups.forEach(gr=>gr.tasks.forEach(t=>{if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{total++;if(enabledTasks[st.id]!==false)checked++;});}else{total++;if(enabledTasks[t.id]!==false)checked++;}}));
+    const hdr=document.createElement('div');hdr.className='ts-phase-header';
+    const phCb=document.createElement('input');phCb.type='checkbox';phCb.className='ts-phase-check';
+    if(checked===total)phCb.checked=true;else if(checked>0)phCb.indeterminate=true;
+    hdr.innerHTML=`<span class="ts-phase-name">${ph.num}. ${ph.name}</span><span class="ts-phase-badge">${checked}/${total}</span><span class="ts-chevron">▶</span>`;
+    hdr.insertBefore(phCb,hdr.firstChild);
+    const body=document.createElement('div');body.className='ts-phase-body';
+    phCb.addEventListener('change',function(e){e.stopPropagation();ph.groups.forEach(gr=>gr.tasks.forEach(t=>{enabledTasks[t.id]=this.checked;if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=this.checked;});}));buildTaskSelector();});
+    hdr.addEventListener('click',e=>{if(e.target===phCb)return;body.classList.toggle('open');hdr.classList.toggle('open',body.classList.contains('open'));});
+    ph.groups.forEach(gr=>{
+      if(gr.label){const gl=document.createElement('div');gl.style.cssText='font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:8px 14px 4px 44px';gl.textContent=gr.label;body.appendChild(gl);}
+      gr.tasks.forEach(t=>{
+        const hasSubs=t.subtasks&&t.subtasks.length>0;
+        const tRow=document.createElement('div');tRow.className='ts-task-row';
+        const tCb=document.createElement('input');tCb.type='checkbox';tCb.className='ts-task-check';
+        if(hasSubs){const en=t.subtasks.filter(st=>enabledTasks[st.id]!==false).length;if(en===t.subtasks.length)tCb.checked=true;else if(en>0)tCb.indeterminate=true;}
+        else tCb.checked=enabledTasks[t.id]!==false;
+        const tLbl=document.createElement('span');tLbl.className='ts-task-label';tLbl.textContent=t.label;
+        tRow.appendChild(tCb);tRow.appendChild(tLbl);
+        tCb.addEventListener('change',function(e){e.stopPropagation();enabledTasks[t.id]=this.checked;if(hasSubs)t.subtasks.forEach(st=>{enabledTasks[st.id]=this.checked;});buildTaskSelector();});
+        tRow.addEventListener('click',e=>{if(e.target===tCb)return;tCb.checked=!tCb.checked;tCb.dispatchEvent(new Event('change'));});
+        body.appendChild(tRow);
+        if(hasSubs)t.subtasks.forEach(st=>{
+          const stRow=document.createElement('div');stRow.className='ts-subtask-row';
+          const stCb=document.createElement('input');stCb.type='checkbox';stCb.className='ts-subtask-check';stCb.checked=enabledTasks[st.id]!==false;
+          const stLbl=document.createElement('span');stLbl.className='ts-subtask-label';stLbl.textContent=st.label;
+          stRow.appendChild(stCb);stRow.appendChild(stLbl);
+          stCb.addEventListener('change',function(e){e.stopPropagation();enabledTasks[st.id]=this.checked;buildTaskSelector();});
+          stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
+          body.appendChild(stRow);
+        });
+      });
+    });
+    sec.appendChild(hdr);sec.appendChild(body);wrap.appendChild(sec);
+  });
+}
+function saveProject(){
+  const name=document.getElementById('proj-name-input').value.trim();
+  const desc=document.getElementById('proj-desc-input').value.trim();
+  if(!name){showToast('Escribe el nombre del proyecto');return;}
+  const saved={};Object.keys(enabledTasks).forEach(k=>{if(enabledTasks[k]===false)saved[k]=false;});
+  if(editingProjectId){
+    const p=appData.projects.find(x=>x.id===editingProjectId);
+    if(p){p.name=name;p.desc=desc;p.color=selectedColor.hex;p.colorDim=selectedColor.dim;p.enabledTasks=saved;}
+    showToast('Proyecto actualizado');
+  }else{
+    appData.projects.push({id:'proj_'+Date.now(),name,desc,color:selectedColor.hex,colorDim:selectedColor.dim,enabledTasks:saved});
+    showToast('Proyecto creado');
+  }
+  scheduleSave();closeModal('modal-project');renderDashboard();
+}
+
+// ── PISOS ──
+function countFloorProgress(fl,p){
+  let total=0,done=0;
+  const cl=fl.checklist||{},en=p.enabledTasks||{};
+  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
+    if(en[t.id]===false)return;
+    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]===false)return;total++;if(cl[t.id]&&cl[t.id][st.id])done++;});}
+    else{total++;if(cl[t.id])done++;}
+  })));
+  return{total,done};
+}
+
+function updateFloorProgress(fl,p){
+  const card=document.getElementById('floor-card-'+fl.id);if(!card)return;
+  const{done,total}=countFloorProgress(fl,p);
+  const pct=total?Math.round(done/total*100):0;
+  const col=pct===100?'var(--accent)':pct>0?'var(--blue)':'var(--border2)';
+  const fill=card.querySelector('.floor-prog-fill');
+  const pctEl=card.querySelector('.floor-prog-pct');
+  const cnt=card.querySelector('.floor-task-count');
+  if(fill){fill.style.width=pct+'%';fill.style.background=col;}
+  if(pctEl)pctEl.textContent=pct+'%';
+  if(cnt)cnt.textContent=done+'/'+total;
+  // Actualizar mini overview
+  const ov=document.querySelector('.floors-overview');
+  if(!ov)return;
+  const floors=appData.floors[currentProjectId]||[];
+  const idx=floors.findIndex(f=>f.id===fl.id);
+  const ovCards=ov.querySelectorAll('.floor-ov-card');
+  if(ovCards[idx]){
+    const{done:d2,total:t2}=countFloorProgress(fl,p);
+    const pct2=t2?Math.round(d2/t2*100):0;
+    const col2=pct2===100?'var(--accent)':pct2>0?'var(--blue)':'var(--text2)';
+    ovCards[idx].querySelector('.floor-ov-pct').textContent=pct2+'%';
+    ovCards[idx].querySelector('.floor-ov-pct').style.color=col2;
+    ovCards[idx].querySelector('.floor-ov-tasks').textContent=d2+'/'+t2+' tareas';
+    const fill2=ovCards[idx].querySelector('.floor-ov-bar-fill');
+    if(fill2){fill2.style.width=pct2+'%';fill2.style.background=col2;}
+  }
+}
+
+function renderFloors(){
+  const p=appData.projects.find(x=>x.id===currentProjectId);if(!p)return;
+  if(!appData.floors[p.id])appData.floors[p.id]=[];
+  const floors=appData.floors[p.id];
+
+  // Preservar pisos abiertos
+  const openIds={};
+  document.querySelectorAll('.floor-body.open').forEach(b=>{openIds[b.dataset.floorid]=true;});
+
+  const container=document.getElementById('floors-container');
+  container.innerHTML='';
+
+  // Barra de configuración
+  const configBar=document.createElement('div');configBar.className='floors-config-bar';
+  configBar.innerHTML=`
+    <div class="floors-config-info">
+      <div class="floors-config-title">🏢 Pisos del proyecto</div>
+      <div class="floors-config-sub">Abre cada piso y chuleá las actividades que aplican</div>
+    </div>
+    <div class="floors-count-ctrl">
+      <button class="floors-count-btn" onclick="removeFloor()" title="Quitar último piso">−</button>
+      <span class="floors-count-val">${floors.length}</span>
+      <button class="floors-count-btn" onclick="addFloor()" title="Agregar piso">+</button>
+    </div>`;
+  container.appendChild(configBar);
+
+  if(!floors.length){
+    const em=document.createElement('div');em.className='empty-state';
+    em.innerHTML='<div class="empty-icon">🏢</div><div class="empty-title">Sin pisos configurados</div><p style="font-size:14px;margin-top:6px">Usa el botón <strong>+</strong> para agregar los pisos del proyecto</p>';
+    container.appendChild(em);return;
+  }
+
+  // Mini-resumen por piso
+  const overview=document.createElement('div');overview.className='floors-overview';
+  floors.forEach(fl=>{
+    const{done,total}=countFloorProgress(fl,p);
+    const pct=total?Math.round(done/total*100):0;
+    const col=pct===100?'var(--accent)':pct>0?'var(--blue)':'var(--text2)';
+    const ov=document.createElement('div');ov.className='floor-ov-card';ov.title='Ir a '+fl.name;
+    ov.innerHTML=`<div class="floor-ov-label">${fl.name}</div><div class="floor-ov-pct" style="color:${col}">${pct}%</div><div class="floor-ov-tasks">${done}/${total} tareas</div><div class="floor-ov-bar"><div class="floor-ov-bar-fill" style="width:${pct}%;background:${col}"></div></div>`;
+    ov.onclick=()=>{
+      const card=document.getElementById('floor-card-'+fl.id);
+      if(card){card.scrollIntoView({behavior:'smooth',block:'start'});
+        const body=card.querySelector('.floor-body');const hdr=card.querySelector('.floor-hdr');
+        if(body&&!body.classList.contains('open')){body.classList.add('open');hdr.classList.add('open');}}
+    };
+    overview.appendChild(ov);
+  });
+  container.appendChild(overview);
+
+  // Tarjetas de piso
+  const list=document.createElement('div');list.className='floors-list';
+  floors.forEach((fl,idx)=>{
+    if(!fl.checklist)fl.checklist={};
+    const{done,total}=countFloorProgress(fl,p);
+    const pct=total?Math.round(done/total*100):0;
+    const progCol=pct===100?'var(--accent)':pct>0?'var(--blue)':'var(--border2)';
+
+    const card=document.createElement('div');card.className='floor-card';card.id='floor-card-'+fl.id;
+
+    const hdr=document.createElement('div');hdr.className='floor-hdr'+(openIds[fl.id]?' open':'');
+    hdr.innerHTML=`<span class="floor-badge">Piso ${idx+1}</span><span class="floor-name-disp">${fl.name}</span><span class="floor-task-count">${done}/${total}</span><div class="floor-prog-wrap"><div class="floor-prog-track"><div class="floor-prog-fill" style="width:${pct}%;background:${progCol}"></div></div><span class="floor-prog-pct">${pct}%</span></div><span class="floor-chevron">▶</span>`;
+    hdr.addEventListener('click',()=>{const b=card.querySelector('.floor-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
+
+    const body=document.createElement('div');body.className='floor-body'+(openIds[fl.id]?' open':'');body.dataset.floorid=fl.id;
+
+    // Nombre editable
+    const nameRow=document.createElement('div');nameRow.className='floor-name-row';
+    const nameInput=document.createElement('input');nameInput.type='text';nameInput.className='floor-name-edit';
+    nameInput.value=fl.name;nameInput.placeholder='Nombre del piso';
+    nameInput.addEventListener('change',()=>{
+      const v=nameInput.value.trim();if(!v)return;
+      fl.name=v;hdr.querySelector('.floor-name-disp').textContent=v;scheduleSave();
+    });
+    nameRow.appendChild(nameInput);body.appendChild(nameRow);
+
+    // Checklist usando las FASES del proyecto
+    buildFloorChecklist(body,fl,p);
+
+    card.appendChild(hdr);card.appendChild(body);list.appendChild(card);
+  });
+  container.appendChild(list);
+}
+
+function buildFloorChecklist(body,fl,p){
+  if(!fl.checklist)fl.checklist={};
+  const cl=fl.checklist,en=p.enabledTasks||{};
+  PHASES.forEach(ph=>{
+    let phT=0,phD=0;
+    ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
+      if(en[t.id]===false)return;
+      if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]===false)return;phT++;if(cl[t.id]&&cl[t.id][st.id])phD++;});}
+      else{phT++;if(cl[t.id])phD++;}
+    }));
+    if(phT===0)return;
+    const pct=Math.round(phD/phT*100);
+    const phCard=document.createElement('div');phCard.className='phase-card';phCard.style.marginBottom='8px';
+    const phHdr=document.createElement('div');phHdr.className='phase-hdr';
+    phHdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phD}/${phT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${pct}%;background:${ph.color}"></div></div><span class="phase-mini-pct">${pct}%</span></div><span class="phase-chevron">▶</span>`;
+    phHdr.addEventListener('click',()=>{const b=phCard.querySelector('.phase-body');const o=b.classList.toggle('open');phHdr.classList.toggle('open',o);});
+    const phBody=document.createElement('div');phBody.className='phase-body';
+    ph.groups.forEach(gr=>{
+      const eTasks=gr.tasks.filter(t=>en[t.id]!==false);if(!eTasks.length)return;
+      const gs=document.createElement('div');gs.className='group-section';
+      if(gr.label){const gl=document.createElement('div');gl.className='group-label';gl.textContent=gr.label;gs.appendChild(gl);}
+      eTasks.forEach(t=>{
+        const hasSubs=t.subtasks&&t.subtasks.length>0;
+        const eSubs=hasSubs?t.subtasks.filter(st=>en[st.id]!==false):[];
+        if(hasSubs&&!eSubs.length)return;
+        const tRow=document.createElement('div');tRow.className='task-row';
+        if(hasSubs){
+          const dC=eSubs.filter(st=>cl[t.id]&&cl[t.id][st.id]).length;
+          const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';
+          if(dC===eSubs.length&&eSubs.length>0)cb.checked=true;else if(dC>0)cb.indeterminate=true;
+          cb.addEventListener('change',function(e){
+            e.stopPropagation();if(!fl.checklist[t.id])fl.checklist[t.id]={};
+            eSubs.forEach(st=>{fl.checklist[t.id][st.id]=this.checked;});
+            scheduleSave();updateFloorProgress(fl,p);
+            // refresh phase header counts
+            const newD=eSubs.filter(st=>fl.checklist[t.id]&&fl.checklist[t.id][st.id]).length;
+            cb.checked=newD===eSubs.length;cb.indeterminate=newD>0&&newD<eSubs.length;
+            refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p);
+          });
+          const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=t.label;
+          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
+          tRow.appendChild(cb);tRow.appendChild(lbl);tRow.appendChild(tog);
+          tRow.addEventListener('click',e=>{if(e.target===cb||e.target===tog)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
+          const subBody=document.createElement('div');subBody.className='subtasks-body';
+          eSubs.forEach(st=>{
+            const stC=cl[t.id]&&cl[t.id][st.id];
+            const stRow=document.createElement('div');stRow.className='subtask-row';
+            stRow.innerHTML=`<input type="checkbox" class="subtask-cb" ${stC?'checked':''}><span class="subtask-lbl${stC?' done':''}">${st.label}</span>`;
+            const stCb=stRow.querySelector('.subtask-cb');
+            stCb.addEventListener('change',function(e){
+              e.stopPropagation();if(!fl.checklist[t.id])fl.checklist[t.id]={};
+              fl.checklist[t.id][st.id]=this.checked;
+              stRow.querySelector('.subtask-lbl').className='subtask-lbl'+(this.checked?' done':'');
+              // actualizar checkbox padre
+              const newD=eSubs.filter(s=>fl.checklist[t.id]&&fl.checklist[t.id][s.id]).length;
+              cb.checked=newD===eSubs.length;cb.indeterminate=newD>0&&newD<eSubs.length;
+              scheduleSave();updateFloorProgress(fl,p);refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p);
+            });
+            stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
+            subBody.appendChild(stRow);
+          });
+          gs.appendChild(tRow);gs.appendChild(subBody);
+        }else{
+          const chk=!!cl[t.id];
+          const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';if(chk)cb.checked=true;
+          cb.addEventListener('change',function(e){
+            e.stopPropagation();fl.checklist[t.id]=this.checked;
+            lbl.className='task-lbl'+(this.checked?' done':'');
+            scheduleSave();updateFloorProgress(fl,p);refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p);
+          });
+          const lbl=document.createElement('span');lbl.className='task-lbl'+(chk?' done':'');lbl.textContent=t.label;
+          tRow.appendChild(cb);tRow.appendChild(lbl);
+          tRow.addEventListener('click',e=>{if(e.target===cb)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
+          gs.appendChild(tRow);
+        }
+      });
+      phBody.appendChild(gs);
+    });
+    phCard.appendChild(phHdr);phCard.appendChild(phBody);body.appendChild(phCard);
+  });
+}
+
+function refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p){
+  const cl=fl.checklist||{},en=p.enabledTasks||{};
+  let phT=0,phD=0;
+  ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
+    if(en[t.id]===false)return;
+    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]===false)return;phT++;if(cl[t.id]&&cl[t.id][st.id])phD++;});}
+    else{phT++;if(cl[t.id])phD++;}
+  }));
+  const pct=phT?Math.round(phD/phT*100):0;
+  const cnt=phHdr.querySelector('.phase-count');const fill=phHdr.querySelector('.phase-mini-bar-fill');const pctEl=phHdr.querySelector('.phase-mini-pct');
+  if(cnt)cnt.textContent=phD+'/'+phT;if(fill)fill.style.width=pct+'%';if(pctEl)pctEl.textContent=pct+'%';
+}
+
+function addFloor(){
+  if(!currentProjectId)return;
+  if(!appData.floors[currentProjectId])appData.floors[currentProjectId]=[];
+  const floors=appData.floors[currentProjectId];
+  const num=floors.length+1;
+  floors.push({id:'fl_'+Date.now(),name:'Piso '+num,checklist:{}});
+  scheduleSave();renderFloors();showToast('Piso '+num+' agregado');
+}
+
+function removeFloor(){
+  if(!currentProjectId)return;
+  const floors=appData.floors[currentProjectId]||[];
+  if(!floors.length){showToast('No hay pisos para eliminar');return;}
+  const last=floors[floors.length-1];
+  const p=appData.projects.find(x=>x.id===currentProjectId);
+  const{done}=countFloorProgress(last,p||{enabledTasks:{}});
+  if(done>0&&!confirm('El "'+last.name+'" tiene '+done+' tarea(s) completada(s). ¿Eliminar igualmente?'))return;
+  floors.pop();scheduleSave();renderFloors();showToast('Piso eliminado');
+}
+
+// ── CTX MENU ──
+function showCtxMenu(e,id){
+  ctxProjectId=id;const m=document.getElementById('ctx-menu');m.classList.remove('hidden');
+  m.style.left=Math.min(e.clientX,window.innerWidth-160)+'px';m.style.top=Math.min(e.clientY,window.innerHeight-100)+'px';
+}
+function ctxEdit(){hideCtxMenu();openEditProject(ctxProjectId);}
+function ctxDelete(){
+  hideCtxMenu();if(!confirm('¿Eliminar este proyecto y todas sus compras?'))return;
+  appData.projects=appData.projects.filter(p=>p.id!==ctxProjectId);
+  delete appData.checklist[ctxProjectId];delete appData.purchases[ctxProjectId];
+  scheduleSave();renderDashboard();showToast('Proyecto eliminado');
+}
+function hideCtxMenu(){document.getElementById('ctx-menu').classList.add('hidden');}
+document.addEventListener('click',e=>{if(!e.target.closest('#ctx-menu')&&!e.target.closest('.proj-menu-btn'))hideCtxMenu();});
+
+// ── MODALS ──
+function openModal(id){document.getElementById(id).classList.remove('hidden');}
+function closeModal(id){document.getElementById(id).classList.add('hidden');}
+document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)closeModal(o.id);});});
+
+// ── TOAST ──
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+(async()=>{await loadFromCloud();document.getElementById('screen-login').style.display='flex';})();
+</script>
+</body>
+</html>
