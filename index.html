@@ -381,6 +381,76 @@ canvas{width:100%!important;height:100%!important;}
 .fob-bar-fill{height:100%;border-radius:99px;transition:width 0.5s ease;}
 .fob-stats{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
 .fob-pct{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;min-width:70px;text-align:right;}
+
+/* ─── DASHBOARD V2 ─── */
+.dash-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.dash-section-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);}
+.stats-row-v2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:32px;}
+.stat-v2{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;display:flex;align-items:center;gap:14px;transition:border-color 0.2s,transform 0.15s;cursor:default;}
+.stat-v2:hover{border-color:var(--border2);transform:translateY(-1px);}
+.stat-v2-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.stat-v2-icon.g{background:rgba(200,240,96,0.12);}
+.stat-v2-icon.b{background:rgba(96,168,240,0.12);}
+.stat-v2-icon.a{background:rgba(240,184,96,0.12);}
+.stat-v2-icon.p{background:rgba(160,96,240,0.12);}
+.stat-v2-body{flex:1;min-width:0;}
+.stat-v2-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
+.stat-v2-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;line-height:1;}
+.stat-v2-val.accent{color:var(--accent);}
+.stat-v2-val.blue{color:var(--blue);}
+.stat-v2-val.amber{color:var(--amber);}
+.stat-v2-val.purple{color:#A060F0;}
+.stat-v2-sub{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:3px;}
+
+/* ─── PROJECT CARDS V2 ─── */
+.projects-grid-v2{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;position:relative;}
+.pcard:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.35);}
+.pcard-stripe{height:3px;width:100%;}
+.pcard-body{padding:20px 20px 16px;}
+.pcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.pcard-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.pcard-menu{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px 8px;font-size:18px;border-radius:6px;transition:all 0.1s;line-height:1;}
+.pcard-menu:hover{background:var(--bg4);color:var(--text);}
+.pcard-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px;line-height:1.2;}
+.pcard-desc{font-size:12px;color:var(--text3);margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:16px;}
+.pcard-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;font-family:'DM Mono',monospace;margin-bottom:14px;}
+.pcard-status.new{background:rgba(240,184,96,0.12);color:var(--amber);}
+.pcard-status::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.pcard-status.progress{background:rgba(96,168,240,0.12);color:var(--blue);}
+.pcard-status.done{background:rgba(200,240,96,0.12);color:var(--accent);}
+.pcard-mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.pcard-mini{background:var(--bg3);border-radius:8px;padding:9px 10px;}
+.pcard-mini-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
+.pcard-mini-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;}
+.pcard-bar-track{height:5px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-bottom:6px;}
+.pcard-bar-fill{height:100%;border-radius:99px;transition:width 0.5s ease;}
+.pcard-footer{display:flex;justify-content:space-between;align-items:center;}
+.pcard-footer-meta{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;}
+.pcard-pct{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
+/* ADD CARD */
+.pcard-add{background:transparent;border:1px dashed var(--border2);border-radius:var(--radius);min-height:220px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;color:var(--text3);}
+.pcard-add:hover{border-color:var(--accent);background:var(--accent-dim);color:var(--accent);}
+.pcard-add-ring{width:50px;height:50px;border-radius:50%;border:2px dashed currentColor;display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform 0.3s;}
+.pcard-add:hover .pcard-add-ring{transform:rotate(90deg);}
+.pcard-add-lbl{font-size:13px;font-weight:500;}
+
+/* ─── PROJECT DETAIL V2 ─── */
+.pdv2{margin-bottom:0;}
+.pdv2-breadcrumb{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);margin-bottom:18px;font-family:'DM Mono',monospace;}
+.pdv2-bc-link{color:var(--text3);cursor:pointer;transition:color 0.15s;border:none;background:none;font-family:'DM Mono',monospace;font-size:11px;padding:0;}
+.pdv2-bc-link:hover{color:var(--accent);}
+.pdv2-sep{opacity:0.3;font-size:12px;}
+.pdv2-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap;}
+.pdv2-title-wrap{display:flex;align-items:center;gap:14px;}
+.pdv2-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.pdv2-name{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);line-height:1.1;margin-bottom:4px;}
+.pdv2-sub{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;}
+.pdv2-btns{display:flex;gap:8px;flex-shrink:0;padding-top:4px;}
+.pdv2-kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:22px;}
+.pdv2-kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;}
+.pdv2-kpi-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:3px;line-height:1;}
+.pdv2-kpi-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;}
 </style>
 </head>
 <body>
@@ -430,10 +500,12 @@ canvas{width:100%!important;height:100%!important;}
   <!-- DASHBOARD -->
   <div id="tab-dashboard" class="main">
     <div class="page-title">Proyectos</div>
-    <div class="page-sub">Selecciona un proyecto para ver su checklist y compras</div>
-    <div class="stats-row" id="dash-stats"></div>
-    <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);margin-bottom:16px;">Todos los proyectos</div>
-    <div class="projects-grid" id="projects-grid"></div>
+    <div class="page-sub" style="margin-bottom:28px;">Gestión de proyectos de instalación TIC / Redes</div>
+    <div id="dash-stats"></div>
+    <div class="dash-section-hdr">
+      <div class="dash-section-title">Todos los proyectos</div>
+    </div>
+    <div class="projects-grid-v2" id="projects-grid"></div>
   </div>
 
   <!-- COMPARE GLOBAL -->
@@ -445,14 +517,30 @@ canvas{width:100%!important;height:100%!important;}
 
   <!-- PROJECT DETAIL -->
   <div id="tab-project" class="main hidden">
-    <div class="proj-detail-header">
-      <div class="back-row">
-        <button class="btn-back" onclick="showDashboard()">← Volver</button>
-        <div>
-          <div class="proj-detail-title" id="proj-detail-title"></div>
-          <div class="proj-detail-sub" id="proj-detail-sub"></div>
+    <div class="pdv2">
+      <!-- Breadcrumb -->
+      <div class="pdv2-breadcrumb">
+        <button class="pdv2-bc-link" onclick="showDashboard()">📋 Proyectos</button>
+        <span class="pdv2-sep">/</span>
+        <span id="pdv2-bc-name" style="color:var(--text2)"></span>
+      </div>
+      <!-- Header -->
+      <div class="pdv2-head">
+        <div class="pdv2-title-wrap">
+          <div class="pdv2-icon" id="pdv2-icon">🏗</div>
+          <div>
+            <div class="pdv2-name" id="proj-detail-title"></div>
+            <div class="pdv2-sub" id="proj-detail-sub"></div>
+          </div>
+        </div>
+        <div class="pdv2-btns">
+          <button class="tb-btn" onclick="editCurrentProject()">✏️ Editar</button>
+          <button class="tb-btn" onclick="deleteCurrentProject()" style="color:var(--red);">🗑 Eliminar</button>
         </div>
       </div>
+      <!-- KPI row -->
+      <div class="pdv2-kpi-row" id="pdv2-kpi-row"></div>
+      <!-- Inner tabs -->
       <div class="proj-inner-tabs">
         <button class="proj-inner-tab active" onclick="switchProjTab('checklist')">📋 Tareas</button>
         <button class="proj-inner-tab" onclick="switchProjTab('pisos')">🏢 Pisos</button>
@@ -751,46 +839,102 @@ function switchMainTab(tab){
 // ── DASHBOARD ──
 function showDashboard(){switchMainTab('dashboard');}
 function renderDashboard(){
-  let tt=0,td=0,totalSpend=0;
+  // Global stats
+  let gDone=0,gTotal=0,totalSpend=0,activeProj=0;
   appData.projects.forEach(p=>{
-    const{total,done}=countEnabled(p);tt+=total;td+=done;
+    const floors=appData.floors[p.id]||[];
+    if(floors.length>0){const pr=calcOverallFloorProgress(floors,p);gDone+=pr.done;gTotal+=pr.total;if(pr.pct>0&&pr.pct<100)activeProj++;}
     (appData.purchases[p.id]||[]).forEach(pur=>totalSpend+=pur.qty*pur.price);
   });
-  const gp=tt?Math.round(td/tt*100):0;
+  const gPct=gTotal?Math.round(gDone/gTotal*100):0;
+  const totalFloors=Object.values(appData.floors||{}).reduce((s,fl)=>s+fl.length,0);
   document.getElementById('dash-stats').innerHTML=`
-    <div class="stat-card"><div class="stat-label">Proyectos</div><div class="stat-value">${appData.projects.length}</div></div>
-    <div class="stat-card"><div class="stat-label">Tareas completadas</div><div class="stat-value accent">${td}/${tt}</div></div>
-    <div class="stat-card"><div class="stat-label">Avance global</div><div class="stat-value accent">${gp}%</div></div>
-    <div class="stat-card"><div class="stat-label">Inversión total</div><div class="stat-value blue">${fmt(totalSpend)}</div></div>`;
+    <div class="stats-row-v2">
+      <div class="stat-v2">
+        <div class="stat-v2-icon g">📋</div>
+        <div class="stat-v2-body">
+          <div class="stat-v2-lbl">Proyectos</div>
+          <div class="stat-v2-val">${appData.projects.length}</div>
+          <div class="stat-v2-sub">${activeProj} en progreso</div>
+        </div>
+      </div>
+      <div class="stat-v2">
+        <div class="stat-v2-icon b">🏢</div>
+        <div class="stat-v2-body">
+          <div class="stat-v2-lbl">Total pisos</div>
+          <div class="stat-v2-val blue">${totalFloors}</div>
+          <div class="stat-v2-sub">en todos los proyectos</div>
+        </div>
+      </div>
+      <div class="stat-v2">
+        <div class="stat-v2-icon a">✅</div>
+        <div class="stat-v2-body">
+          <div class="stat-v2-lbl">Avance global</div>
+          <div class="stat-v2-val accent">${gPct}%</div>
+          <div class="stat-v2-sub">${gDone}/${gTotal} tareas</div>
+        </div>
+      </div>
+      <div class="stat-v2">
+        <div class="stat-v2-icon p">💰</div>
+        <div class="stat-v2-body">
+          <div class="stat-v2-lbl">Inversión total</div>
+          <div class="stat-v2-val purple">${fmt(totalSpend)}</div>
+          <div class="stat-v2-sub">en compras registradas</div>
+        </div>
+      </div>
+    </div>`;
+
   const grid=document.getElementById('projects-grid');grid.innerHTML='';
-  if(!appData.projects.length){
-    grid.innerHTML=`<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Sin proyectos aún</div></div></div>`;
-  }else{
-    appData.projects.forEach(p=>{
-      const floors=appData.floors[p.id]||[];
-      let pct=0,done=0,total=0,floorLabel='Sin pisos';
-      if(floors.length>0){
-        const pr=calcOverallFloorProgress(floors,p);
-        pct=pr.pct;done=pr.done;total=pr.total;
-        floorLabel=floors.length+' piso'+(floors.length!==1?'s':'');
-      }
-      const spend=(appData.purchases[p.id]||[]).reduce((s,i)=>s+i.qty*i.price,0);
-      const card=document.createElement('div');card.className='proj-card';
-      card.style.setProperty('--proj-color',p.color||COLORS[0].hex);
-      card.style.setProperty('--proj-color-dim',p.colorDim||COLORS[0].dim);
-      card.innerHTML=`
-        <div class="proj-card-top"><div class="proj-icon">🏗</div><button class="proj-menu-btn" data-id="${p.id}">⋮</button></div>
-        <div class="proj-name">${p.name}</div>
-        <div class="proj-meta">${p.desc||''}${p.desc?'  ·  ':''}<span style="color:var(--blue)">${fmt(spend)}</span></div>
-        <div class="proj-bar-track"><div class="proj-bar-fill" style="width:${pct}%"></div></div>
-        <div class="proj-bar-stats"><span>${floorLabel} · ${done}/${total} tareas</span><span>${pct}%</span></div>`;
-      card.addEventListener('click',e=>{if(e.target.closest('.proj-menu-btn'))return;openProject(p.id);});
-      card.querySelector('.proj-menu-btn').addEventListener('click',e=>{e.stopPropagation();showCtxMenu(e,p.id);});
-      grid.appendChild(card);
-    });
-  }
-  const add=document.createElement('div');add.className='proj-card-add';
-  add.innerHTML='<div class="proj-card-add-icon">+</div><div>Nuevo proyecto</div>';
+  appData.projects.forEach(p=>{
+    const floors=appData.floors[p.id]||[];
+    let pct=0,done=0,total=0;
+    if(floors.length>0){const pr=calcOverallFloorProgress(floors,p);pct=pr.pct;done=pr.done;total=pr.total;}
+    const spend=(appData.purchases[p.id]||[]).reduce((s,i)=>s+i.qty*i.price,0);
+    const col=p.color||COLORS[0].hex;
+    const colDim=p.colorDim||COLORS[0].dim;
+    let statusClass='new',statusTxt='Nuevo';
+    if(floors.length===0){statusClass='new';statusTxt='Sin pisos';}
+    else if(pct===100){statusClass='done';statusTxt='Completado';}
+    else if(pct>0){statusClass='progress';statusTxt='En progreso';}
+    else{statusClass='new';statusTxt='Sin avance';}
+    const card=document.createElement('div');card.className='pcard';
+    card.innerHTML=`
+      <div class="pcard-stripe" style="background:${col}"></div>
+      <div class="pcard-body">
+        <div class="pcard-top">
+          <div class="pcard-icon" style="background:${colDim}">🏗</div>
+          <button class="pcard-menu" data-id="${p.id}">⋮</button>
+        </div>
+        <div class="pcard-name">${p.name}</div>
+        <div class="pcard-desc">${p.desc||'Sin descripción'}</div>
+        <div class="pcard-status ${statusClass}">${statusTxt}</div>
+        <div class="pcard-mini-stats">
+          <div class="pcard-mini">
+            <div class="pcard-mini-val">${floors.length}</div>
+            <div class="pcard-mini-lbl">Pisos</div>
+          </div>
+          <div class="pcard-mini">
+            <div class="pcard-mini-val">${done}/${total}</div>
+            <div class="pcard-mini-lbl">Tareas</div>
+          </div>
+          <div class="pcard-mini">
+            <div class="pcard-mini-val" style="color:var(--blue)">${fmt(spend)}</div>
+            <div class="pcard-mini-lbl">Inversión</div>
+          </div>
+        </div>
+        <div class="pcard-bar-track"><div class="pcard-bar-fill" style="width:${pct}%;background:${col}"></div></div>
+        <div class="pcard-footer">
+          <span class="pcard-footer-meta">${floors.length} piso${floors.length!==1?'s':''} · ${done} completadas</span>
+          <span class="pcard-pct" style="color:${col}">${pct}%</span>
+        </div>
+      </div>`;
+    card.addEventListener('click',e=>{if(e.target.closest('.pcard-menu'))return;openProject(p.id);});
+    card.querySelector('.pcard-menu').addEventListener('click',e=>{e.stopPropagation();showCtxMenu(e,p.id);});
+    grid.appendChild(card);
+  });
+  // Add card
+  const add=document.createElement('div');add.className='pcard-add';
+  add.innerHTML='<div class="pcard-add-ring">+</div><div class="pcard-add-lbl">Nuevo proyecto</div>';
   add.onclick=openNewProject;grid.appendChild(add);
 }
 
@@ -801,10 +945,51 @@ function openProject(id){
   if(!appData.checklist[id])appData.checklist[id]={};
   if(!appData.purchases[id])appData.purchases[id]=[];
   if(!appData.floors[id])appData.floors[id]=[];
+  // Header
+  const col=p.color||COLORS[0].hex;
+  const colDim=p.colorDim||COLORS[0].dim;
   document.getElementById('proj-detail-title').textContent=p.name;
   document.getElementById('proj-detail-sub').textContent=p.desc||'';
+  document.getElementById('pdv2-bc-name').textContent=p.name;
+  const iconEl=document.getElementById('pdv2-icon');
+  if(iconEl){iconEl.style.background=colDim;iconEl.textContent='🏗';}
+  // KPI row
+  const floors=appData.floors[id]||[];
+  const pr=calcOverallFloorProgress(floors,p);
+  const spend=(appData.purchases[id]||[]).reduce((s,i)=>s+i.qty*i.price,0);
+  const statusTxt=floors.length===0?'Sin pisos':pr.pct===100?'✅ Completado':pr.pct>0?'🔄 En progreso':'⏳ Sin avance';
+  const kpiEl=document.getElementById('pdv2-kpi-row');
+  if(kpiEl)kpiEl.innerHTML=`
+    <div class="pdv2-kpi">
+      <div class="pdv2-kpi-val" style="color:${col}">${pr.pct}%</div>
+      <div class="pdv2-kpi-lbl">Progreso</div>
+    </div>
+    <div class="pdv2-kpi">
+      <div class="pdv2-kpi-val">${floors.length}</div>
+      <div class="pdv2-kpi-lbl">Pisos</div>
+    </div>
+    <div class="pdv2-kpi">
+      <div class="pdv2-kpi-val">${pr.done}/${pr.total}</div>
+      <div class="pdv2-kpi-lbl">Tareas</div>
+    </div>
+    <div class="pdv2-kpi">
+      <div class="pdv2-kpi-val" style="color:var(--blue)">${fmt(spend)}</div>
+      <div class="pdv2-kpi-lbl">Inversión</div>
+    </div>
+    <div class="pdv2-kpi">
+      <div class="pdv2-kpi-val" style="font-size:13px;padding-top:3px">${statusTxt}</div>
+      <div class="pdv2-kpi-lbl">Estado</div>
+    </div>`;
   switchMainTab('project');
   switchProjTab('checklist');
+}
+function editCurrentProject(){if(currentProjectId)openEditProject(currentProjectId);}
+function deleteCurrentProject(){
+  if(!currentProjectId)return;
+  if(!confirm('¿Eliminar este proyecto y todas sus compras?'))return;
+  appData.projects=appData.projects.filter(p=>p.id!==currentProjectId);
+  delete appData.checklist[currentProjectId];delete appData.purchases[currentProjectId];delete appData.floors[currentProjectId];
+  scheduleSave();showDashboard();renderDashboard();showToast('Proyecto eliminado');
 }
 
 function switchProjTab(tab){
