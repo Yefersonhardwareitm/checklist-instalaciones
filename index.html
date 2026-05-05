@@ -758,8 +758,13 @@ function renderDashboard(){
     grid.innerHTML=`<div style="grid-column:1/-1"><div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Sin proyectos aún</div></div></div>`;
   }else{
     appData.projects.forEach(p=>{
-      const{total,done}=countEnabled(p);
-      const pct=total?Math.round(done/total*100):0;
+      const floors=appData.floors[p.id]||[];
+      let pct=0,done=0,total=0,floorLabel='Sin pisos';
+      if(floors.length>0){
+        const pr=calcOverallFloorProgress(floors,p);
+        pct=pr.pct;done=pr.done;total=pr.total;
+        floorLabel=floors.length+' piso'+(floors.length!==1?'s':'');
+      }
       const spend=(appData.purchases[p.id]||[]).reduce((s,i)=>s+i.qty*i.price,0);
       const card=document.createElement('div');card.className='proj-card';
       card.style.setProperty('--proj-color',p.color||COLORS[0].hex);
@@ -769,7 +774,7 @@ function renderDashboard(){
         <div class="proj-name">${p.name}</div>
         <div class="proj-meta">${p.desc||''}${p.desc?'  ·  ':''}<span style="color:var(--blue)">${fmt(spend)}</span></div>
         <div class="proj-bar-track"><div class="proj-bar-fill" style="width:${pct}%"></div></div>
-        <div class="proj-bar-stats"><span>${done}/${total} tareas</span><span>${pct}%</span></div>`;
+        <div class="proj-bar-stats"><span>${floorLabel} · ${done}/${total} tareas</span><span>${pct}%</span></div>`;
       card.addEventListener('click',e=>{if(e.target.closest('.proj-menu-btn'))return;openProject(p.id);});
       card.querySelector('.proj-menu-btn').addEventListener('click',e=>{e.stopPropagation();showCtxMenu(e,p.id);});
       grid.appendChild(card);
@@ -800,7 +805,7 @@ function switchProjTab(tab){
   document.querySelectorAll('.proj-inner-tab').forEach((b,i)=>{
     b.classList.toggle('active',['checklist','pisos','compras'][i]===tab);
   });
-  if(tab==='checklist'){const p=appData.projects.find(x=>x.id===currentProjectId);if(p)renderProjectDetail(p);}
+  if(tab==='checklist'){const p=appData.projects.find(x=>x.id===currentProjectId);if(p)renderTaskList(p);}
   if(tab==='pisos')renderFloors();
   if(tab==='compras')renderPurchases();
 }
@@ -815,6 +820,63 @@ function countEnabled(proj){
     else{total++;if(cl[t.id])done++;}
   })));
   return{total,done};
+}
+
+function renderTaskList(p){
+  const en=p.enabledTasks||{};
+  let total=0;
+  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
+    if(en[t.id]===false)return;
+    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]!==false)total++;});}
+    else total++;
+  })));
+  const el=document.getElementById('tareas-count');if(el)el.textContent=total+' tareas habilitadas';
+  const container=document.getElementById('phases-container');
+  const openP={};container.querySelectorAll('.phase-body.open').forEach(b=>{openP[b.dataset.pid]=true;});
+  container.innerHTML='';
+  PHASES.forEach(ph=>{
+    let phT=0;
+    ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
+      if(en[t.id]===false)return;
+      if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]!==false)phT++;});}
+      else phT++;
+    }));
+    if(phT===0)return;
+    const card=document.createElement('div');card.className='phase-card';
+    const hdr=document.createElement('div');hdr.className='phase-hdr'+(openP[ph.id]?' open':'');
+    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phT} tareas</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
+    hdr.addEventListener('click',()=>{const b=card.querySelector('.phase-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
+    const body=document.createElement('div');body.className='phase-body'+(openP[ph.id]?' open':'');body.dataset.pid=ph.id;
+    ph.groups.forEach(gr=>{
+      const eTasks=gr.tasks.filter(t=>en[t.id]!==false);if(!eTasks.length)return;
+      const gs=document.createElement('div');gs.className='group-section';
+      if(gr.label){const gl=document.createElement('div');gl.className='group-label';gl.textContent=gr.label;gs.appendChild(gl);}
+      eTasks.forEach(t=>{
+        const hasSubs=t.subtasks&&t.subtasks.length>0;
+        const eSubs=hasSubs?t.subtasks.filter(st=>en[st.id]!==false):[];
+        if(hasSubs&&!eSubs.length)return;
+        const tRow=document.createElement('div');tRow.className='task-row';tRow.style.cursor='default';
+        const dot=document.createElement('div');dot.style.cssText=`width:8px;height:8px;border-radius:50%;background:${ph.color};flex-shrink:0;margin-left:2px;`;
+        const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=t.label;
+        tRow.appendChild(dot);tRow.appendChild(lbl);
+        if(hasSubs){
+          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
+          tRow.appendChild(tog);
+          const subBody=document.createElement('div');subBody.className='subtasks-body';
+          eSubs.forEach(st=>{
+            const stRow=document.createElement('div');stRow.className='subtask-row';stRow.style.cursor='default';
+            const stDot=document.createElement('div');stDot.style.cssText=`width:6px;height:6px;border-radius:50%;background:${ph.color};flex-shrink:0;opacity:0.5;`;
+            const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=st.label;
+            stRow.appendChild(stDot);stRow.appendChild(stLbl);subBody.appendChild(stRow);
+          });
+          gs.appendChild(tRow);gs.appendChild(subBody);
+        }else{gs.appendChild(tRow);}
+      });
+      body.appendChild(gs);
+    });
+    card.appendChild(hdr);card.appendChild(body);container.appendChild(card);
+  });
 }
 
 function renderProjectDetail(p){
