@@ -73,32 +73,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .page-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);margin-bottom:4px;}
 .page-sub{font-size:14px;color:var(--text3);margin-bottom:28px;}
 
-/* STATS */
-.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:32px;}
-.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;}
-.stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px;}
-.stat-value{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;color:var(--text);}
-.stat-value.accent{color:var(--accent);}
-.stat-value.blue{color:var(--blue);}
-.stat-value.amber{color:var(--amber);}
-
-/* PROJECTS GRID */
-.projects-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
-.proj-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:22px;cursor:pointer;transition:all 0.15s;position:relative;overflow:hidden;}
-.proj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--proj-color,var(--accent));}
-.proj-card:hover{border-color:var(--border2);background:var(--bg3);transform:translateY(-2px);}
-.proj-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
-.proj-icon{width:38px;height:38px;border-radius:10px;background:var(--proj-color-dim,var(--accent-dim));display:flex;align-items:center;justify-content:center;font-size:18px;}
-.proj-menu-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px 8px;font-size:18px;border-radius:6px;transition:background 0.1s;}
-.proj-menu-btn:hover{background:var(--bg4);color:var(--text);}
-.proj-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:4px;}
-.proj-meta{font-size:12px;color:var(--text3);margin-bottom:16px;font-family:'DM Mono',monospace;}
-.proj-bar-track{height:5px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-bottom:6px;}
-.proj-bar-fill{height:100%;border-radius:99px;background:var(--proj-color,var(--accent));transition:width 0.4s ease;}
-.proj-bar-stats{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
-.proj-card-add{background:transparent;border:1px dashed var(--border2);border-radius:var(--radius);padding:22px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:180px;transition:all 0.2s;color:var(--text3);}
-.proj-card-add:hover{border-color:var(--accent);background:var(--accent-dim);color:var(--accent);}
-.proj-card-add-icon{font-size:28px;}
+/* legacy aliases kept for compat */
+.stats-row{display:none;}
+.stat-card{display:none;}
 
 /* PROJECT DETAIL TABS */
 .proj-detail-header{margin-bottom:24px;}
@@ -382,75 +359,98 @@ canvas{width:100%!important;height:100%!important;}
 .fob-stats{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
 .fob-pct{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;min-width:70px;text-align:right;}
 
-/* ─── DASHBOARD V2 ─── */
-.dash-section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
-.dash-section-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:var(--text3);}
-.stats-row-v2{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:32px;}
-.stat-v2{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;display:flex;align-items:center;gap:14px;transition:border-color 0.2s,transform 0.15s;cursor:default;}
-.stat-v2:hover{border-color:var(--border2);transform:translateY(-1px);}
-.stat-v2-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.stat-v2-icon.g{background:rgba(200,240,96,0.12);}
-.stat-v2-icon.b{background:rgba(96,168,240,0.12);}
-.stat-v2-icon.a{background:rgba(240,184,96,0.12);}
-.stat-v2-icon.p{background:rgba(160,96,240,0.12);}
-.stat-v2-body{flex:1;min-width:0;}
-.stat-v2-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
-.stat-v2-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;line-height:1;}
-.stat-v2-val.accent{color:var(--accent);}
-.stat-v2-val.blue{color:var(--blue);}
-.stat-v2-val.amber{color:var(--amber);}
-.stat-v2-val.purple{color:#A060F0;}
-.stat-v2-sub{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;margin-top:3px;}
+/* ═══ HOME PAGE ═══ */
+#tab-dashboard{background:var(--bg);}
+.home-wrap{max-width:1380px;margin:0 auto;padding:0 28px 80px;}
+/* Hero */
+.home-hero{padding:44px 0 36px;position:relative;overflow:hidden;}
+.home-hero-glow{position:absolute;top:-60px;left:-80px;width:420px;height:420px;background:radial-gradient(circle,rgba(200,240,96,0.07) 0%,transparent 70%);pointer-events:none;}
+.home-hero-glow2{position:absolute;top:0;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(96,168,240,0.05) 0%,transparent 70%);pointer-events:none;}
+.home-eyebrow{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:10px;}
+.home-eyebrow::before{content:'';width:24px;height:1px;background:var(--accent);flex-shrink:0;}
+.home-title{font-family:'Syne',sans-serif;font-size:44px;font-weight:800;line-height:1.05;margin-bottom:8px;background:linear-gradient(140deg,#F0EDE6 30%,rgba(200,240,96,0.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.home-sub{font-size:15px;color:var(--text3);margin-bottom:36px;}
+/* Stats strip */
+.home-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:48px;}
+.hstat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.15s;}
+.hstat:hover{border-color:var(--border2);transform:translateY(-1px);}
+.hstat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--hs-c,var(--accent));}
+.hstat-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);line-height:1;margin-bottom:4px;}
+.hstat-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
+.hstat-sub{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;}
+/* Section header */
+.home-sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;}
+.home-sec-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:8px;}
+.home-count-badge{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);background:var(--bg3);border:1px solid var(--border);border-radius:99px;padding:2px 10px;}
 
-/* ─── PROJECT CARDS V2 ─── */
-.projects-grid-v2{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
-.pcard{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:border-color 0.2s,transform 0.2s,box-shadow 0.2s;position:relative;}
-.pcard:hover{border-color:var(--border2);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.35);}
-.pcard-stripe{height:3px;width:100%;}
-.pcard-body{padding:20px 20px 16px;}
-.pcard-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
-.pcard-icon{width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.pcard-menu{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px 8px;font-size:18px;border-radius:6px;transition:all 0.1s;line-height:1;}
-.pcard-menu:hover{background:var(--bg4);color:var(--text);}
-.pcard-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text);margin-bottom:2px;line-height:1.2;}
-.pcard-desc{font-size:12px;color:var(--text3);margin-bottom:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:16px;}
-.pcard-status{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:99px;font-family:'DM Mono',monospace;margin-bottom:14px;}
-.pcard-status.new{background:rgba(240,184,96,0.12);color:var(--amber);}
-.pcard-status::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
-.pcard-status.progress{background:rgba(96,168,240,0.12);color:var(--blue);}
-.pcard-status.done{background:rgba(200,240,96,0.12);color:var(--accent);}
-.pcard-mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
-.pcard-mini{background:var(--bg3);border-radius:8px;padding:9px 10px;}
-.pcard-mini-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text);margin-bottom:2px;}
-.pcard-mini-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.07em;}
-.pcard-bar-track{height:5px;background:var(--bg4);border-radius:99px;overflow:hidden;margin-bottom:6px;}
-.pcard-bar-fill{height:100%;border-radius:99px;transition:width 0.5s ease;}
-.pcard-footer{display:flex;justify-content:space-between;align-items:center;}
-.pcard-footer-meta{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;}
-.pcard-pct{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
-/* ADD CARD */
-.pcard-add{background:transparent;border:1px dashed var(--border2);border-radius:var(--radius);min-height:220px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;transition:all 0.2s;color:var(--text3);}
-.pcard-add:hover{border-color:var(--accent);background:var(--accent-dim);color:var(--accent);}
-.pcard-add-ring{width:50px;height:50px;border-radius:50%;border:2px dashed currentColor;display:flex;align-items:center;justify-content:center;font-size:22px;transition:transform 0.3s;}
-.pcard-add:hover .pcard-add-ring{transform:rotate(90deg);}
-.pcard-add-lbl{font-size:13px;font-weight:500;}
+/* ═══ PROJECT CARDS ═══ */
+.home-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
+.hcard{background:var(--bg2);border:1px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;transition:border-color 0.22s,transform 0.22s,box-shadow 0.22s;position:relative;display:flex;flex-direction:column;}
+.hcard:hover{border-color:rgba(255,255,255,0.16);transform:translateY(-5px);box-shadow:0 24px 56px rgba(0,0,0,0.5);}
+.hcard-stripe{height:4px;width:100%;flex-shrink:0;}
+.hcard-body{padding:22px 22px 18px;display:flex;flex-direction:column;flex:1;}
+.hcard-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.hcard-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.hcard-menu{background:none;border:none;color:var(--text3);cursor:pointer;padding:5px 8px;font-size:16px;border-radius:7px;transition:all 0.1s;opacity:0;}
+.hcard:hover .hcard-menu{opacity:1;}
+.hcard-menu:hover{background:var(--bg4);color:var(--text);}
+.hcard-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text);margin-bottom:3px;line-height:1.2;}
+.hcard-desc{font-size:12px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:16px;min-height:16px;}
+/* Ring + status row */
+.hcard-mid{display:flex;align-items:center;gap:16px;margin-bottom:16px;}
+.hcard-ring{position:relative;flex-shrink:0;}
+.hcard-ring svg{display:block;}
+.hcard-ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.hcard-ring-pct{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;line-height:1;}
+.hcard-ring-lbl{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;}
+.hcard-info{flex:1;min-width:0;}
+.hcard-status{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px;font-family:'DM Mono',monospace;margin-bottom:10px;}
+.hcard-status::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+.hcard-status.new{background:rgba(240,184,96,0.12);color:var(--amber);}
+.hcard-status.prog{background:rgba(96,168,240,0.12);color:var(--blue);}
+.hcard-status.done{background:rgba(200,240,96,0.12);color:var(--accent);}
+.hcard-status.none{background:rgba(90,89,85,0.15);color:var(--text3);}
+/* Mini stats grid */
+.hcard-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;margin-top:auto;}
+.hcard-stat{background:var(--bg3);padding:10px 12px;}
+.hcard-stat-val{font-family:'DM Mono',monospace;font-size:13px;color:var(--text);margin-bottom:2px;font-weight:500;}
+.hcard-stat-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;}
+/* ADD card */
+.hcard-add{background:transparent;border:2px dashed var(--border);border-radius:18px;min-height:260px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;transition:all 0.25s;color:var(--text3);}
+.hcard-add:hover{border-color:var(--accent);background:rgba(200,240,96,0.04);color:var(--accent);}
+.hcard-add-ring{width:58px;height:58px;border-radius:50%;border:2px dashed currentColor;display:flex;align-items:center;justify-content:center;font-size:26px;transition:transform 0.35s;}
+.hcard-add:hover .hcard-add-ring{transform:rotate(90deg) scale(1.05);}
+.hcard-add-lbl{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;}
+.hcard-add-sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);}
 
-/* ─── PROJECT DETAIL V2 ─── */
-.pdv2{margin-bottom:0;}
-.pdv2-breadcrumb{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);margin-bottom:18px;font-family:'DM Mono',monospace;}
-.pdv2-bc-link{color:var(--text3);cursor:pointer;transition:color 0.15s;border:none;background:none;font-family:'DM Mono',monospace;font-size:11px;padding:0;}
-.pdv2-bc-link:hover{color:var(--accent);}
-.pdv2-sep{opacity:0.3;font-size:12px;}
-.pdv2-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap;}
-.pdv2-title-wrap{display:flex;align-items:center;gap:14px;}
-.pdv2-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
-.pdv2-name{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);line-height:1.1;margin-bottom:4px;}
-.pdv2-sub{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;}
-.pdv2-btns{display:flex;gap:8px;flex-shrink:0;padding-top:4px;}
-.pdv2-kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:22px;}
-.pdv2-kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;}
-.pdv2-kpi-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text);margin-bottom:3px;line-height:1;}
-.pdv2-kpi-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;}
+/* ═══ PROJECT DETAIL HEADER ═══ */
+#tab-project{background:var(--bg);}
+#tab-project .main{padding-top:8px;}
+.pdet-banner{height:5px;width:100%;transition:background 0.4s;}
+.pdet-hdr{max-width:1200px;margin:0 auto;padding:24px 24px 0;}
+.pdet-nav{display:flex;align-items:center;gap:10px;margin-bottom:22px;}
+.pdet-back{display:flex;align-items:center;gap:7px;background:none;border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 15px;color:var(--text2);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;}
+.pdet-back:hover{border-color:var(--accent);color:var(--accent);background:rgba(200,240,96,0.06);}
+.pdet-bc{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+.pdet-bc-sep{opacity:0.3;}
+.pdet-bc-cur{color:var(--text2);}
+.pdet-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px;flex-wrap:wrap;}
+.pdet-title-group{display:flex;align-items:center;gap:16px;}
+.pdet-icon{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
+.pdet-name{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--text);line-height:1.1;margin-bottom:5px;}
+.pdet-meta{font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;}
+.pdet-actions{display:flex;gap:8px;padding-top:4px;flex-shrink:0;}
+.pdet-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(105px,1fr));gap:8px;margin-bottom:20px;}
+.pdet-kpi{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;transition:border-color 0.2s;}
+.pdet-kpi:hover{border-color:var(--border2);}
+.pdet-kpi-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;line-height:1;margin-bottom:4px;}
+.pdet-kpi-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:0.1em;}
+/* Entrance animation */
+@keyframes fadeSlideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.anim-in{animation:fadeSlideUp 0.3s ease both;}
+.anim-in-d1{animation-delay:0.05s;}
+.anim-in-d2{animation-delay:0.1s;}
+.anim-in-d3{animation-delay:0.15s;}
 </style>
 </head>
 <body>
@@ -497,15 +497,29 @@ canvas{width:100%!important;height:100%!important;}
     <button class="nav-tab" onclick="switchMainTab('compare')">📊 Comparación de precios</button>
   </div>
 
-  <!-- DASHBOARD -->
-  <div id="tab-dashboard" class="main">
-    <div class="page-title">Proyectos</div>
-    <div class="page-sub" style="margin-bottom:28px;">Gestión de proyectos de instalación TIC / Redes</div>
-    <div id="dash-stats"></div>
-    <div class="dash-section-hdr">
-      <div class="dash-section-title">Todos los proyectos</div>
+  <!-- DASHBOARD HOME -->
+  <div id="tab-dashboard">
+    <div class="home-wrap">
+      <!-- Hero -->
+      <div class="home-hero">
+        <div class="home-hero-glow"></div>
+        <div class="home-hero-glow2"></div>
+        <div class="home-eyebrow">NAS · TIC</div>
+        <div class="home-title">Gestión de<br>Proyectos</div>
+        <div class="home-sub">Instalaciones TIC, redes y telecomunicaciones</div>
+        <div class="home-stats" id="dash-stats"></div>
+      </div>
+      <!-- Section header -->
+      <div class="home-sec-hdr">
+        <div class="home-sec-title">
+          Proyectos
+          <span class="home-count-badge" id="home-proj-count">0</span>
+        </div>
+        <button class="tb-btn accent" onclick="openNewProject()">+ Nuevo proyecto</button>
+      </div>
+      <!-- Cards grid -->
+      <div class="home-grid" id="projects-grid"></div>
     </div>
-    <div class="projects-grid-v2" id="projects-grid"></div>
   </div>
 
   <!-- COMPARE GLOBAL -->
@@ -516,37 +530,44 @@ canvas{width:100%!important;height:100%!important;}
   </div>
 
   <!-- PROJECT DETAIL -->
-  <div id="tab-project" class="main hidden">
-    <div class="pdv2">
-      <!-- Breadcrumb -->
-      <div class="pdv2-breadcrumb">
-        <button class="pdv2-bc-link" onclick="showDashboard()">📋 Proyectos</button>
-        <span class="pdv2-sep">/</span>
-        <span id="pdv2-bc-name" style="color:var(--text2)"></span>
+  <div id="tab-project" class="hidden">
+    <!-- Color banner -->
+    <div class="pdet-banner" id="pdet-banner"></div>
+    <!-- Header section -->
+    <div class="pdet-hdr">
+      <!-- Nav -->
+      <div class="pdet-nav anim-in">
+        <button class="pdet-back" onclick="showDashboard()">← Proyectos</button>
+        <div class="pdet-bc">
+          <span class="pdet-bc-sep">/</span>
+          <span class="pdet-bc-cur" id="pdet-bc-name"></span>
+        </div>
       </div>
-      <!-- Header -->
-      <div class="pdv2-head">
-        <div class="pdv2-title-wrap">
-          <div class="pdv2-icon" id="pdv2-icon">🏗</div>
+      <!-- Title row -->
+      <div class="pdet-head anim-in anim-in-d1">
+        <div class="pdet-title-group">
+          <div class="pdet-icon" id="pdet-icon">🏗</div>
           <div>
-            <div class="pdv2-name" id="proj-detail-title"></div>
-            <div class="pdv2-sub" id="proj-detail-sub"></div>
+            <div class="pdet-name" id="proj-detail-title"></div>
+            <div class="pdet-meta" id="proj-detail-sub"></div>
           </div>
         </div>
-        <div class="pdv2-btns">
+        <div class="pdet-actions">
           <button class="tb-btn" onclick="editCurrentProject()">✏️ Editar</button>
-          <button class="tb-btn" onclick="deleteCurrentProject()" style="color:var(--red);">🗑 Eliminar</button>
+          <button class="tb-btn" onclick="deleteCurrentProject()" style="color:var(--red)">🗑</button>
         </div>
       </div>
-      <!-- KPI row -->
-      <div class="pdv2-kpi-row" id="pdv2-kpi-row"></div>
+      <!-- KPIs -->
+      <div class="pdet-kpis anim-in anim-in-d2" id="pdet-kpis"></div>
       <!-- Inner tabs -->
-      <div class="proj-inner-tabs">
+      <div class="proj-inner-tabs anim-in anim-in-d3">
         <button class="proj-inner-tab active" onclick="switchProjTab('checklist')">📋 Tareas</button>
         <button class="proj-inner-tab" onclick="switchProjTab('pisos')">🏢 Pisos</button>
         <button class="proj-inner-tab" onclick="switchProjTab('compras')">🛒 Compras</button>
       </div>
     </div>
+    <!-- Tab contents -->
+    <div class="main">
 
     <!-- TAREAS TAB -->
     <div id="proj-tab-checklist">
@@ -596,8 +617,9 @@ canvas{width:100%!important;height:100%!important;}
         <div id="proj-compare-content"></div>
       </div>
     </div>
-  </div>
-</div>
+  </div><!-- end .main -->
+  </div><!-- end #tab-project -->
+</div><!-- end #screen-app -->
 
 <!-- MODAL PROYECTO -->
 <div id="modal-project" class="modal-overlay hidden">
@@ -839,52 +861,47 @@ function switchMainTab(tab){
 // ── DASHBOARD ──
 function showDashboard(){switchMainTab('dashboard');}
 function renderDashboard(){
-  // Global stats
-  let gDone=0,gTotal=0,totalSpend=0,activeProj=0;
+  let gDone=0,gTotal=0,totalSpend=0,activeProj=0,completedProj=0;
   appData.projects.forEach(p=>{
     const floors=appData.floors[p.id]||[];
-    if(floors.length>0){const pr=calcOverallFloorProgress(floors,p);gDone+=pr.done;gTotal+=pr.total;if(pr.pct>0&&pr.pct<100)activeProj++;}
+    if(floors.length>0){
+      const pr=calcOverallFloorProgress(floors,p);
+      gDone+=pr.done;gTotal+=pr.total;
+      if(pr.pct===100)completedProj++;
+      else if(pr.pct>0)activeProj++;
+    }
     (appData.purchases[p.id]||[]).forEach(pur=>totalSpend+=pur.qty*pur.price);
   });
   const gPct=gTotal?Math.round(gDone/gTotal*100):0;
   const totalFloors=Object.values(appData.floors||{}).reduce((s,fl)=>s+fl.length,0);
+  // Stats strip
   document.getElementById('dash-stats').innerHTML=`
-    <div class="stats-row-v2">
-      <div class="stat-v2">
-        <div class="stat-v2-icon g">📋</div>
-        <div class="stat-v2-body">
-          <div class="stat-v2-lbl">Proyectos</div>
-          <div class="stat-v2-val">${appData.projects.length}</div>
-          <div class="stat-v2-sub">${activeProj} en progreso</div>
-        </div>
-      </div>
-      <div class="stat-v2">
-        <div class="stat-v2-icon b">🏢</div>
-        <div class="stat-v2-body">
-          <div class="stat-v2-lbl">Total pisos</div>
-          <div class="stat-v2-val blue">${totalFloors}</div>
-          <div class="stat-v2-sub">en todos los proyectos</div>
-        </div>
-      </div>
-      <div class="stat-v2">
-        <div class="stat-v2-icon a">✅</div>
-        <div class="stat-v2-body">
-          <div class="stat-v2-lbl">Avance global</div>
-          <div class="stat-v2-val accent">${gPct}%</div>
-          <div class="stat-v2-sub">${gDone}/${gTotal} tareas</div>
-        </div>
-      </div>
-      <div class="stat-v2">
-        <div class="stat-v2-icon p">💰</div>
-        <div class="stat-v2-body">
-          <div class="stat-v2-lbl">Inversión total</div>
-          <div class="stat-v2-val purple">${fmt(totalSpend)}</div>
-          <div class="stat-v2-sub">en compras registradas</div>
-        </div>
-      </div>
+    <div class="hstat" style="--hs-c:var(--accent)">
+      <div class="hstat-lbl">Proyectos</div>
+      <div class="hstat-val">${appData.projects.length}</div>
+      <div class="hstat-sub">${activeProj} activos · ${completedProj} completos</div>
+    </div>
+    <div class="hstat" style="--hs-c:var(--blue)">
+      <div class="hstat-lbl">Pisos totales</div>
+      <div class="hstat-val" style="color:var(--blue)">${totalFloors}</div>
+      <div class="hstat-sub">en todos los proyectos</div>
+    </div>
+    <div class="hstat" style="--hs-c:var(--accent)">
+      <div class="hstat-lbl">Avance global</div>
+      <div class="hstat-val" style="color:var(--accent)">${gPct}%</div>
+      <div class="hstat-sub">${gDone} de ${gTotal} tareas</div>
+    </div>
+    <div class="hstat" style="--hs-c:#A060F0">
+      <div class="hstat-lbl">Inversión total</div>
+      <div class="hstat-val" style="color:#A060F0">${fmt(totalSpend)}</div>
+      <div class="hstat-sub">registrada en compras</div>
     </div>`;
-
+  // Badge count
+  const countEl=document.getElementById('home-proj-count');
+  if(countEl)countEl.textContent=appData.projects.length;
+  // Grid
   const grid=document.getElementById('projects-grid');grid.innerHTML='';
+  const R=36,C=2*Math.PI*R; // ring radius and circumference
   appData.projects.forEach(p=>{
     const floors=appData.floors[p.id]||[];
     let pct=0,done=0,total=0;
@@ -892,49 +909,70 @@ function renderDashboard(){
     const spend=(appData.purchases[p.id]||[]).reduce((s,i)=>s+i.qty*i.price,0);
     const col=p.color||COLORS[0].hex;
     const colDim=p.colorDim||COLORS[0].dim;
-    let statusClass='new',statusTxt='Nuevo';
-    if(floors.length===0){statusClass='new';statusTxt='Sin pisos';}
-    else if(pct===100){statusClass='done';statusTxt='Completado';}
-    else if(pct>0){statusClass='progress';statusTxt='En progreso';}
-    else{statusClass='new';statusTxt='Sin avance';}
-    const card=document.createElement('div');card.className='pcard';
+    let sc='none',st='Sin pisos';
+    if(floors.length===0){sc='none';st='Sin pisos';}
+    else if(pct===100){sc='done';st='Completado';}
+    else if(pct>0){sc='prog';st='En progreso';}
+    else{sc='new';st='Sin avance';}
+    const offset=C*(1-pct/100);
+    const card=document.createElement('div');card.className='hcard';
     card.innerHTML=`
-      <div class="pcard-stripe" style="background:${col}"></div>
-      <div class="pcard-body">
-        <div class="pcard-top">
-          <div class="pcard-icon" style="background:${colDim}">🏗</div>
-          <button class="pcard-menu" data-id="${p.id}">⋮</button>
+      <div class="hcard-stripe" style="background:${col}"></div>
+      <div class="hcard-body">
+        <div class="hcard-head">
+          <div class="hcard-left" style="gap:12px;display:flex;align-items:center;">
+            <div class="hcard-icon" style="background:${colDim}">🏗</div>
+            <div>
+              <div class="hcard-name">${p.name}</div>
+              <div class="hcard-desc">${p.desc||'Sin descripción'}</div>
+            </div>
+          </div>
+          <button class="hcard-menu" data-id="${p.id}">⋮</button>
         </div>
-        <div class="pcard-name">${p.name}</div>
-        <div class="pcard-desc">${p.desc||'Sin descripción'}</div>
-        <div class="pcard-status ${statusClass}">${statusTxt}</div>
-        <div class="pcard-mini-stats">
-          <div class="pcard-mini">
-            <div class="pcard-mini-val">${floors.length}</div>
-            <div class="pcard-mini-lbl">Pisos</div>
+        <div class="hcard-mid">
+          <div class="hcard-ring">
+            <svg width="80" height="80" viewBox="0 0 80 80" class="hcard-ring-svg">
+              <circle cx="40" cy="40" r="${R}" class="hcard-ring-bg"/>
+              <circle cx="40" cy="40" r="${R}" class="hcard-ring-fill"
+                stroke="${col}" stroke-dasharray="${C}" stroke-dashoffset="${offset}"
+                transform="rotate(-90 40 40)"/>
+            </svg>
+            <div class="hcard-ring-center">
+              <div class="hcard-ring-pct" style="color:${col}">${pct}%</div>
+              <div class="hcard-ring-lbl">avance</div>
+            </div>
           </div>
-          <div class="pcard-mini">
-            <div class="pcard-mini-val">${done}/${total}</div>
-            <div class="pcard-mini-lbl">Tareas</div>
-          </div>
-          <div class="pcard-mini">
-            <div class="pcard-mini-val" style="color:var(--blue)">${fmt(spend)}</div>
-            <div class="pcard-mini-lbl">Inversión</div>
+          <div class="hcard-info">
+            <div class="hcard-status ${sc}">${st}</div>
+            <div style="font-size:12px;color:var(--text3);font-family:'DM Mono',monospace;line-height:1.7">
+              <div>${floors.length} piso${floors.length!==1?'s':''}</div>
+              <div>${done}/${total} tareas ✓</div>
+              <div style="color:var(--blue)">${fmt(spend)}</div>
+            </div>
           </div>
         </div>
-        <div class="pcard-bar-track"><div class="pcard-bar-fill" style="width:${pct}%;background:${col}"></div></div>
-        <div class="pcard-footer">
-          <span class="pcard-footer-meta">${floors.length} piso${floors.length!==1?'s':''} · ${done} completadas</span>
-          <span class="pcard-pct" style="color:${col}">${pct}%</span>
+        <div class="hcard-stats">
+          <div class="hcard-stat">
+            <div class="hcard-stat-val">${floors.length}</div>
+            <div class="hcard-stat-lbl">Pisos</div>
+          </div>
+          <div class="hcard-stat">
+            <div class="hcard-stat-val">${done}/${total}</div>
+            <div class="hcard-stat-lbl">Tareas</div>
+          </div>
+          <div class="hcard-stat">
+            <div class="hcard-stat-val" style="color:var(--blue)">${fmt(spend)}</div>
+            <div class="hcard-stat-lbl">Inversión</div>
+          </div>
         </div>
       </div>`;
-    card.addEventListener('click',e=>{if(e.target.closest('.pcard-menu'))return;openProject(p.id);});
-    card.querySelector('.pcard-menu').addEventListener('click',e=>{e.stopPropagation();showCtxMenu(e,p.id);});
+    card.addEventListener('click',e=>{if(e.target.closest('.hcard-menu'))return;openProject(p.id);});
+    card.querySelector('.hcard-menu').addEventListener('click',e=>{e.stopPropagation();showCtxMenu(e,p.id);});
     grid.appendChild(card);
   });
   // Add card
-  const add=document.createElement('div');add.className='pcard-add';
-  add.innerHTML='<div class="pcard-add-ring">+</div><div class="pcard-add-lbl">Nuevo proyecto</div>';
+  const add=document.createElement('div');add.className='hcard-add';
+  add.innerHTML=`<div class="hcard-add-ring">+</div><div class="hcard-add-lbl">Nuevo proyecto</div><div class="hcard-add-sub">Crea un nuevo proyecto</div>`;
   add.onclick=openNewProject;grid.appendChild(add);
 }
 
@@ -945,40 +983,45 @@ function openProject(id){
   if(!appData.checklist[id])appData.checklist[id]={};
   if(!appData.purchases[id])appData.purchases[id]=[];
   if(!appData.floors[id])appData.floors[id]=[];
-  // Header
   const col=p.color||COLORS[0].hex;
   const colDim=p.colorDim||COLORS[0].dim;
+  // Banner
+  const banner=document.getElementById('pdet-banner');
+  if(banner)banner.style.background=col;
+  // Breadcrumb & title
+  const bcName=document.getElementById('pdet-bc-name');
+  if(bcName)bcName.textContent=p.name;
   document.getElementById('proj-detail-title').textContent=p.name;
-  document.getElementById('proj-detail-sub').textContent=p.desc||'';
-  document.getElementById('pdv2-bc-name').textContent=p.name;
-  const iconEl=document.getElementById('pdv2-icon');
+  document.getElementById('proj-detail-sub').textContent=p.desc||'Sin descripción';
+  // Icon
+  const iconEl=document.getElementById('pdet-icon');
   if(iconEl){iconEl.style.background=colDim;iconEl.textContent='🏗';}
-  // KPI row
+  // KPIs
   const floors=appData.floors[id]||[];
   const pr=calcOverallFloorProgress(floors,p);
   const spend=(appData.purchases[id]||[]).reduce((s,i)=>s+i.qty*i.price,0);
-  const statusTxt=floors.length===0?'Sin pisos':pr.pct===100?'✅ Completado':pr.pct>0?'🔄 En progreso':'⏳ Sin avance';
-  const kpiEl=document.getElementById('pdv2-kpi-row');
-  if(kpiEl)kpiEl.innerHTML=`
-    <div class="pdv2-kpi">
-      <div class="pdv2-kpi-val" style="color:${col}">${pr.pct}%</div>
-      <div class="pdv2-kpi-lbl">Progreso</div>
+  const stTxt=floors.length===0?'Sin pisos':pr.pct===100?'✅ Completo':pr.pct>0?'🔄 En progreso':'⏳ Sin avance';
+  const kEl=document.getElementById('pdet-kpis');
+  if(kEl)kEl.innerHTML=`
+    <div class="pdet-kpi">
+      <div class="pdet-kpi-val" style="color:${col}">${pr.pct}%</div>
+      <div class="pdet-kpi-lbl">Progreso</div>
     </div>
-    <div class="pdv2-kpi">
-      <div class="pdv2-kpi-val">${floors.length}</div>
-      <div class="pdv2-kpi-lbl">Pisos</div>
+    <div class="pdet-kpi">
+      <div class="pdet-kpi-val">${floors.length}</div>
+      <div class="pdet-kpi-lbl">Pisos</div>
     </div>
-    <div class="pdv2-kpi">
-      <div class="pdv2-kpi-val">${pr.done}/${pr.total}</div>
-      <div class="pdv2-kpi-lbl">Tareas</div>
+    <div class="pdet-kpi">
+      <div class="pdet-kpi-val">${pr.done}/${pr.total}</div>
+      <div class="pdet-kpi-lbl">Tareas ✓</div>
     </div>
-    <div class="pdv2-kpi">
-      <div class="pdv2-kpi-val" style="color:var(--blue)">${fmt(spend)}</div>
-      <div class="pdv2-kpi-lbl">Inversión</div>
+    <div class="pdet-kpi">
+      <div class="pdet-kpi-val" style="color:var(--blue)">${fmt(spend)}</div>
+      <div class="pdet-kpi-lbl">Inversión</div>
     </div>
-    <div class="pdv2-kpi">
-      <div class="pdv2-kpi-val" style="font-size:13px;padding-top:3px">${statusTxt}</div>
-      <div class="pdv2-kpi-lbl">Estado</div>
+    <div class="pdet-kpi">
+      <div class="pdet-kpi-val" style="font-size:13px;padding-top:2px">${stTxt}</div>
+      <div class="pdet-kpi-lbl">Estado</div>
     </div>`;
   switchMainTab('project');
   switchProjTab('checklist');
