@@ -350,6 +350,20 @@ canvas{width:100%!important;height:100%!important;}
 .btn-add-ftask{padding:8px 16px;background:var(--accent);color:#0E0F0C;border:none;border-radius:var(--radius-sm);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:background 0.15s;font-family:'Syne',sans-serif;}
 .btn-add-ftask:hover{background:var(--accent2);}
 .floor-empty-tasks{font-size:12px;color:var(--text3);padding:6px 2px 10px;font-style:italic;}
+/* PISOS EN MODAL */
+.floor-modal-ctrl{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.floor-modal-label{font-size:12px;color:var(--text3);margin-left:4px;}
+.modal-floors-section{margin-top:8px;display:flex;flex-direction:column;gap:6px;}
+.mfl-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
+.mfl-hdr{display:flex;align-items:center;gap:8px;padding:10px 14px;cursor:pointer;user-select:none;transition:background 0.1s;}
+.mfl-hdr:hover{background:var(--bg4);}
+.mfl-name-inp{flex:1;background:transparent;border:none;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--text);outline:none;cursor:text;}
+.mfl-badge{font-size:10px;font-family:'DM Mono',monospace;color:var(--text3);background:var(--bg4);padding:2px 8px;border-radius:4px;white-space:nowrap;}
+.mfl-chevron{font-size:9px;color:var(--text3);transition:transform 0.2s;margin-left:2px;}
+.mfl-hdr.open .mfl-chevron{transform:rotate(90deg);}
+.mfl-body{display:none;border-top:1px solid var(--border);max-height:320px;overflow-y:auto;}
+.mfl-body.open{display:block;}
+.mfl-phase-lbl{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:8px 14px 2px;background:rgba(255,255,255,0.02);}
 </style>
 </head>
 <body>
@@ -490,6 +504,16 @@ canvas{width:100%!important;height:100%!important;}
     <div class="form-row"><label class="form-label">Descripción (opcional)</label><input type="text" id="proj-desc-input" class="form-input" placeholder="Ej: Calle 15 #8-42, Bogotá"></div>
     <div class="form-row"><label class="form-label">Color</label><div class="color-row" id="color-picker"></div></div>
     <div class="form-row">
+      <label class="form-label">Pisos del proyecto</label>
+      <div class="floor-modal-ctrl">
+        <button type="button" class="floors-count-btn" onclick="modalFloorMinus()">−</button>
+        <span id="modal-floor-count" class="floors-count-val">0</span>
+        <button type="button" class="floors-count-btn" onclick="modalFloorPlus()">+</button>
+        <span class="floor-modal-label">Agrega cada piso y configura sus actividades</span>
+      </div>
+      <div id="modal-floors-section" class="modal-floors-section"></div>
+    </div>
+    <div class="form-row">
       <label class="form-label">Tareas activas <span style="color:var(--text3);font-size:10px;text-transform:none;letter-spacing:0">(activa/desactiva según aplique)</span></label>
       <div class="task-selector" id="task-selector"></div>
     </div>
@@ -619,7 +643,7 @@ const COLORS=[
 
 let appData={password:'nas2024',projects:[],checklist:{},purchases:{},floors:{}};
 let currentProjectId=null,editingProjectId=null,ctxProjectId=null,selectedColor=COLORS[0],saveTimer=null;
-let enabledTasks={},editingPurchaseId=null,purchaseFilter='all';
+let enabledTasks={},editingPurchaseId=null,purchaseFilter='all',modalFloors=[];
 let chartInstance=null;
 
 // ── CLOUD ──
@@ -1143,9 +1167,9 @@ function openNewProject(){
   editingProjectId=null;selectedColor=COLORS[0];
   document.getElementById('proj-name-input').value='';document.getElementById('proj-desc-input').value='';
   document.getElementById('modal-proj-title').textContent='Nuevo proyecto';
-  enabledTasks={};
+  enabledTasks={};modalFloors=[];
   PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{enabledTasks[t.id]=true;if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=true;});})));
-  buildColorPicker();buildTaskSelector();openModal('modal-project');
+  buildColorPicker();buildTaskSelector();syncModalFloorCount();buildModalFloorSection();openModal('modal-project');
 }
 function openEditProject(id){
   const p=appData.projects.find(x=>x.id===id);if(!p)return;
@@ -1157,7 +1181,9 @@ function openEditProject(id){
     enabledTasks[t.id]=(p.enabledTasks&&p.enabledTasks[t.id]===false)?false:true;
     if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=(p.enabledTasks&&p.enabledTasks[st.id]===false)?false:true;});
   })));
-  buildColorPicker();buildTaskSelector();openModal('modal-project');
+  // Cargar pisos existentes
+  modalFloors=(appData.floors[id]||[]).map(fl=>({name:fl.name,enabledTasks:{...(fl.enabledTasks||{})}}));
+  buildColorPicker();buildTaskSelector();syncModalFloorCount();buildModalFloorSection();openModal('modal-project');
 }
 function buildColorPicker(){
   const w=document.getElementById('color-picker');w.innerHTML='';
@@ -1212,21 +1238,129 @@ function saveProject(){
   if(editingProjectId){
     const p=appData.projects.find(x=>x.id===editingProjectId);
     if(p){p.name=name;p.desc=desc;p.color=selectedColor.hex;p.colorDim=selectedColor.dim;p.enabledTasks=saved;}
+    // Actualizar pisos: preservar checklist existente, actualizar nombre y enabledTasks
+    if(!appData.floors[editingProjectId])appData.floors[editingProjectId]=[];
+    const existing=appData.floors[editingProjectId];
+    modalFloors.forEach((mfl,idx)=>{
+      if(idx<existing.length){existing[idx].name=mfl.name;existing[idx].enabledTasks={...mfl.enabledTasks};}
+      else{existing.push({id:'fl_'+(Date.now()+idx),name:mfl.name,enabledTasks:{...mfl.enabledTasks},checklist:{}});}
+    });
+    if(modalFloors.length<existing.length)appData.floors[editingProjectId]=existing.slice(0,modalFloors.length);
     showToast('Proyecto actualizado');
   }else{
-    appData.projects.push({id:'proj_'+Date.now(),name,desc,color:selectedColor.hex,colorDim:selectedColor.dim,enabledTasks:saved});
+    const newId='proj_'+Date.now();
+    appData.projects.push({id:newId,name,desc,color:selectedColor.hex,colorDim:selectedColor.dim,enabledTasks:saved});
+    appData.floors[newId]=modalFloors.map((mfl,idx)=>({id:'fl_'+(Date.now()+idx),name:mfl.name,enabledTasks:{...mfl.enabledTasks},checklist:{}}));
     showToast('Proyecto creado');
   }
   scheduleSave();closeModal('modal-project');renderDashboard();
 }
 
+// ── MODAL PISOS ──
+function syncModalFloorCount(){
+  document.getElementById('modal-floor-count').textContent=modalFloors.length;
+}
+function modalFloorPlus(){
+  const num=modalFloors.length+1;
+  // Por defecto todas las tareas habilitadas en el proyecto se habilitan en el piso
+  const flEn={};
+  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
+    if(enabledTasks[t.id]!==false){flEn[t.id]=true;if(t.subtasks)t.subtasks.forEach(st=>{if(enabledTasks[st.id]!==false)flEn[st.id]=true;});}
+  })));
+  modalFloors.push({name:'Piso '+num,enabledTasks:flEn});
+  syncModalFloorCount();buildModalFloorSection();
+}
+function modalFloorMinus(){
+  if(!modalFloors.length)return;
+  modalFloors.pop();syncModalFloorCount();buildModalFloorSection();
+}
+function buildModalFloorSection(){
+  const section=document.getElementById('modal-floors-section');
+  section.innerHTML='';
+  if(!modalFloors.length)return;
+  // Preserve open/closed state by index
+  const openSet=new Set();
+  section.querySelectorAll('.mfl-body.open').forEach((b,i)=>openSet.add(Number(b.dataset.idx)));
+  modalFloors.forEach((fl,idx)=>{
+    const card=document.createElement('div');card.className='mfl-card';
+    // Contar tareas habilitadas para el badge
+    const enCount=Object.values(fl.enabledTasks).filter(Boolean).length;
+    const hdr=document.createElement('div');hdr.className='mfl-hdr'+(openSet.has(idx)?' open':'');
+    const nameInp=document.createElement('input');nameInp.type='text';nameInp.className='mfl-name-inp';nameInp.value=fl.name;nameInp.placeholder='Nombre del piso';
+    nameInp.addEventListener('input',()=>{fl.name=nameInp.value;});
+    nameInp.addEventListener('click',e=>e.stopPropagation());
+    const badge=document.createElement('span');badge.className='mfl-badge';badge.id='mfl-badge-'+idx;badge.textContent=enCount+' act.';
+    const chev=document.createElement('span');chev.className='mfl-chevron';chev.textContent='▶';
+    hdr.appendChild(nameInp);hdr.appendChild(badge);hdr.appendChild(chev);
+    hdr.addEventListener('click',()=>{const b=card.querySelector('.mfl-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
+    const body=document.createElement('div');body.className='mfl-body'+(openSet.has(idx)?' open':'');body.dataset.idx=idx;
+    // Construir lista de tareas por fase
+    PHASES.forEach(ph=>{
+      let phHasAny=false;
+      ph.groups.forEach(gr=>gr.tasks.forEach(t=>{if(enabledTasks[t.id]!==false)phHasAny=true;}));
+      if(!phHasAny)return;
+      const phLbl=document.createElement('div');phLbl.className='mfl-phase-lbl';phLbl.textContent=ph.num+'. '+ph.name;body.appendChild(phLbl);
+      ph.groups.forEach(gr=>{
+        if(gr.label){const gl=document.createElement('div');gl.style.cssText='font-size:10px;color:var(--text3);padding:4px 14px 2px 28px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;';gl.textContent=gr.label;body.appendChild(gl);}
+        gr.tasks.forEach(t=>{
+          if(enabledTasks[t.id]===false)return;
+          const hasSubs=t.subtasks&&t.subtasks.length>0;
+          const eSubs=hasSubs?t.subtasks.filter(st=>enabledTasks[st.id]!==false):[];
+          const tRow=document.createElement('div');tRow.className='ts-task-row';
+          const tCb=document.createElement('input');tCb.type='checkbox';tCb.className='ts-task-check';
+          if(hasSubs){
+            const enSubs=eSubs.filter(st=>fl.enabledTasks[st.id]!==false);
+            tCb.checked=enSubs.length===eSubs.length&&eSubs.length>0;
+            tCb.indeterminate=enSubs.length>0&&enSubs.length<eSubs.length;
+          }else{tCb.checked=fl.enabledTasks[t.id]!==false;}
+          tCb.addEventListener('change',function(e){
+            e.stopPropagation();
+            fl.enabledTasks[t.id]=this.checked;
+            if(hasSubs)eSubs.forEach(st=>{fl.enabledTasks[st.id]=this.checked;});
+            // Actualizar badge sin reconstruir todo
+            const newCount=Object.values(fl.enabledTasks).filter(Boolean).length;
+            const b=document.getElementById('mfl-badge-'+idx);if(b)b.textContent=newCount+' act.';
+            // Si tiene subs, actualizar sus checkboxes
+            if(hasSubs){subRows.forEach((sr,si)=>{sr.querySelector('.ts-subtask-check').checked=this.checked;});}
+          });
+          const tLbl=document.createElement('span');tLbl.className='ts-task-label';tLbl.textContent=t.label;
+          tRow.appendChild(tCb);tRow.appendChild(tLbl);
+          tRow.addEventListener('click',e=>{if(e.target===tCb)return;tCb.checked=!tCb.checked;tCb.dispatchEvent(new Event('change'));});
+          body.appendChild(tRow);
+          // Subtareas
+          const subRows=[];
+          if(hasSubs)eSubs.forEach(st=>{
+            const stRow=document.createElement('div');stRow.className='ts-subtask-row';
+            const stCb=document.createElement('input');stCb.type='checkbox';stCb.className='ts-subtask-check';stCb.checked=fl.enabledTasks[st.id]!==false;
+            stCb.addEventListener('change',function(e){
+              e.stopPropagation();fl.enabledTasks[st.id]=this.checked;
+              const enNow=eSubs.filter(s=>fl.enabledTasks[s.id]!==false).length;
+              tCb.checked=enNow===eSubs.length;tCb.indeterminate=enNow>0&&enNow<eSubs.length;
+              const newCount=Object.values(fl.enabledTasks).filter(Boolean).length;
+              const b=document.getElementById('mfl-badge-'+idx);if(b)b.textContent=newCount+' act.';
+            });
+            stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
+            const stLbl=document.createElement('span');stLbl.className='ts-subtask-label';stLbl.textContent=st.label;
+            stRow.appendChild(stCb);stRow.appendChild(stLbl);body.appendChild(stRow);subRows.push(stRow);
+          });
+        });
+      });
+    });
+    card.appendChild(hdr);card.appendChild(body);section.appendChild(card);
+  });
+}
+
 // ── PISOS ──
 function countFloorProgress(fl,p){
   let total=0,done=0;
-  const cl=fl.checklist||{},en=p.enabledTasks||{};
+  const cl=fl.checklist||{};
+  const flEn=fl.enabledTasks||{};
+  const projEn=p.enabledTasks||{};
+  // Una tarea aplica si está habilitada en el proyecto Y en el piso
+  const ok=id=>projEn[id]!==false&&flEn[id]!==false;
   PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-    if(en[t.id]===false)return;
-    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]===false)return;total++;if(cl[t.id]&&cl[t.id][st.id])done++;});}
+    if(!ok(t.id))return;
+    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(!ok(st.id))return;total++;if(cl[t.id]&&cl[t.id][st.id])done++;});}
     else{total++;if(cl[t.id])done++;}
   })));
   return{total,done};
@@ -1347,12 +1481,16 @@ function renderFloors(){
 
 function buildFloorChecklist(body,fl,p){
   if(!fl.checklist)fl.checklist={};
-  const cl=fl.checklist,en=p.enabledTasks||{};
+  const cl=fl.checklist;
+  const flEn=fl.enabledTasks||{};
+  const projEn=p.enabledTasks||{};
+  // Tarea aplica si está habilitada en proyecto Y en el piso
+  const ok=id=>projEn[id]!==false&&flEn[id]!==false;
   PHASES.forEach(ph=>{
     let phT=0,phD=0;
     ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-      if(en[t.id]===false)return;
-      if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]===false)return;phT++;if(cl[t.id]&&cl[t.id][st.id])phD++;});}
+      if(!ok(t.id))return;
+      if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(!ok(st.id))return;phT++;if(cl[t.id]&&cl[t.id][st.id])phD++;});}
       else{phT++;if(cl[t.id])phD++;}
     }));
     if(phT===0)return;
@@ -1363,12 +1501,12 @@ function buildFloorChecklist(body,fl,p){
     phHdr.addEventListener('click',()=>{const b=phCard.querySelector('.phase-body');const o=b.classList.toggle('open');phHdr.classList.toggle('open',o);});
     const phBody=document.createElement('div');phBody.className='phase-body';
     ph.groups.forEach(gr=>{
-      const eTasks=gr.tasks.filter(t=>en[t.id]!==false);if(!eTasks.length)return;
+      const eTasks=gr.tasks.filter(t=>ok(t.id));if(!eTasks.length)return;
       const gs=document.createElement('div');gs.className='group-section';
       if(gr.label){const gl=document.createElement('div');gl.className='group-label';gl.textContent=gr.label;gs.appendChild(gl);}
       eTasks.forEach(t=>{
         const hasSubs=t.subtasks&&t.subtasks.length>0;
-        const eSubs=hasSubs?t.subtasks.filter(st=>en[st.id]!==false):[];
+        const eSubs=hasSubs?t.subtasks.filter(st=>ok(st.id)):[];
         if(hasSubs&&!eSubs.length)return;
         const tRow=document.createElement('div');tRow.className='task-row';
         if(hasSubs){
@@ -1429,11 +1567,13 @@ function buildFloorChecklist(body,fl,p){
 }
 
 function refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p){
-  const cl=fl.checklist||{},en=p.enabledTasks||{};
+  const cl=fl.checklist||{};
+  const flEn=fl.enabledTasks||{},projEn=p.enabledTasks||{};
+  const ok=id=>projEn[id]!==false&&flEn[id]!==false;
   let phT=0,phD=0;
   ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-    if(en[t.id]===false)return;
-    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]===false)return;phT++;if(cl[t.id]&&cl[t.id][st.id])phD++;});}
+    if(!ok(t.id))return;
+    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(!ok(st.id))return;phT++;if(cl[t.id]&&cl[t.id][st.id])phD++;});}
     else{phT++;if(cl[t.id])phD++;}
   }));
   const pct=phT?Math.round(phD/phT*100):0;
