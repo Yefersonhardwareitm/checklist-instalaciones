@@ -364,6 +364,15 @@ canvas{width:100%!important;height:100%!important;}
 .mfl-body{display:none;border-top:1px solid var(--border);max-height:320px;overflow-y:auto;}
 .mfl-body.open{display:block;}
 .mfl-phase-lbl{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:8px 14px 2px;background:rgba(255,255,255,0.02);}
+/* TAREAS EDITABLE */
+.tarea-actions{display:flex;gap:2px;margin-left:auto;opacity:0;transition:opacity 0.15s;}
+.task-row:hover .tarea-actions,.subtask-row:hover .tarea-actions{opacity:1;}
+.tarea-act-btn{background:none;border:none;color:var(--text3);cursor:pointer;padding:3px 6px;font-size:12px;border-radius:4px;transition:all 0.1s;line-height:1;white-space:nowrap;}
+.tarea-act-btn:hover{background:var(--bg4);color:var(--text);}
+.tarea-act-btn.danger:hover{background:rgba(255,107,91,0.12);color:var(--red);}
+.add-tarea-btn{display:flex;align-items:center;gap:6px;background:none;border:1px dashed var(--border);border-radius:6px;padding:7px 12px;color:var(--text3);cursor:pointer;font-size:12px;width:100%;margin-top:8px;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.add-tarea-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+.custom-phase-lbl{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);padding:6px 0 2px;opacity:0.8;}
 /* PROGRESO GENERAL PISOS */
 .floors-overall-bar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
 .fob-label{font-size:12px;color:var(--text3);min-width:160px;}
@@ -455,8 +464,8 @@ canvas{width:100%!important;height:100%!important;}
     <div id="proj-tab-checklist">
       <div id="tareas-header" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
         <div style="flex:1">
-          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px;">📋 Lista de tareas del proyecto</div>
-          <div style="font-size:12px;color:var(--text3);">Activa o desactiva las tareas que aplican. El avance se registra en la pestaña <strong style="color:var(--accent)">🏢 Pisos</strong></div>
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px;">📋 Tareas del proyecto</div>
+          <div style="font-size:12px;color:var(--text3);">Activa/desactiva, renombra o agrega tareas personalizadas. El avance real se registra en <strong style="color:var(--accent)">🏢 Pisos</strong></div>
         </div>
         <div id="tareas-count" style="font-family:'DM Mono',monospace;font-size:13px;color:var(--text3);white-space:nowrap;"></div>
       </div>
@@ -823,60 +832,161 @@ function countEnabled(proj){
 }
 
 function renderTaskList(p){
+  if(!p.customTasks)p.customTasks=[];
+  if(!p.taskLabels)p.taskLabels={};
   const en=p.enabledTasks||{};
+  const getLabel=(id,def)=>p.taskLabels[id]||def;
   let total=0;
   PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
     if(en[t.id]===false)return;
     if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]!==false)total++;});}
     else total++;
   })));
+  (p.customTasks||[]).forEach(ct=>{
+    if(en[ct.id]===false)return;
+    if(ct.subtasks&&ct.subtasks.length){ct.subtasks.forEach(st=>{if(en[st.id]!==false)total++;});}
+    else total++;
+  });
   const el=document.getElementById('tareas-count');if(el)el.textContent=total+' tareas habilitadas';
   const container=document.getElementById('phases-container');
   const openP={};container.querySelectorAll('.phase-body.open').forEach(b=>{openP[b.dataset.pid]=true;});
   container.innerHTML='';
   PHASES.forEach(ph=>{
+    const phCustom=(p.customTasks||[]).filter(ct=>ct.phaseId===ph.id);
     let phT=0;
     ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
       if(en[t.id]===false)return;
       if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]!==false)phT++;});}
       else phT++;
     }));
-    if(phT===0)return;
+    phCustom.forEach(ct=>{
+      if(en[ct.id]===false)return;
+      if(ct.subtasks&&ct.subtasks.length){ct.subtasks.forEach(st=>{if(en[st.id]!==false)phT++;});}
+      else phT++;
+    });
     const card=document.createElement('div');card.className='phase-card';
     const hdr=document.createElement('div');hdr.className='phase-hdr'+(openP[ph.id]?' open':'');
-    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phT} tareas</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
+    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phT} habilitadas</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
     hdr.addEventListener('click',()=>{const b=card.querySelector('.phase-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
     const body=document.createElement('div');body.className='phase-body'+(openP[ph.id]?' open':'');body.dataset.pid=ph.id;
+    // Tareas predefinidas del PHASE
     ph.groups.forEach(gr=>{
-      const eTasks=gr.tasks.filter(t=>en[t.id]!==false);if(!eTasks.length)return;
       const gs=document.createElement('div');gs.className='group-section';
       if(gr.label){const gl=document.createElement('div');gl.className='group-label';gl.textContent=gr.label;gs.appendChild(gl);}
-      eTasks.forEach(t=>{
+      gr.tasks.forEach(t=>{
         const hasSubs=t.subtasks&&t.subtasks.length>0;
-        const eSubs=hasSubs?t.subtasks.filter(st=>en[st.id]!==false):[];
-        if(hasSubs&&!eSubs.length)return;
-        const tRow=document.createElement('div');tRow.className='task-row';tRow.style.cursor='default';
-        const dot=document.createElement('div');dot.style.cssText=`width:8px;height:8px;border-radius:50%;background:${ph.color};flex-shrink:0;margin-left:2px;`;
-        const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=t.label;
-        tRow.appendChild(dot);tRow.appendChild(lbl);
+        const isEn=en[t.id]!==false;
+        const tRow=document.createElement('div');tRow.className='task-row';tRow.style.cssText='cursor:default;opacity:'+(isEn?'1':'0.42')+';';
+        const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';cb.checked=isEn;cb.title=isEn?'Deshabilitar tarea':'Habilitar tarea';
+        cb.addEventListener('change',function(e){
+          e.stopPropagation();if(!p.enabledTasks)p.enabledTasks={};
+          p.enabledTasks[t.id]=this.checked;
+          if(t.subtasks)t.subtasks.forEach(st=>{p.enabledTasks[st.id]=this.checked;});
+          scheduleSave();renderTaskList(p);
+        });
+        const dot=document.createElement('div');dot.style.cssText=`width:8px;height:8px;border-radius:50%;background:${ph.color};flex-shrink:0;`;
+        const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=getLabel(t.id,t.label);
+        const acts=document.createElement('div');acts.className='tarea-actions';
+        const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='✏️';eBtn.title='Renombrar';
+        eBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',getLabel(t.id,t.label));if(nl&&nl.trim()){if(!p.taskLabels)p.taskLabels={};p.taskLabels[t.id]=nl.trim();scheduleSave();renderTaskList(p);}});
+        acts.appendChild(eBtn);
+        tRow.appendChild(cb);tRow.appendChild(dot);tRow.appendChild(lbl);
         if(hasSubs){
           const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
           tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
           tRow.appendChild(tog);
-          const subBody=document.createElement('div');subBody.className='subtasks-body';
-          eSubs.forEach(st=>{
-            const stRow=document.createElement('div');stRow.className='subtask-row';stRow.style.cursor='default';
+        }
+        tRow.appendChild(acts);
+        gs.appendChild(tRow);
+        if(hasSubs){
+          const sb2=document.createElement('div');sb2.className='subtasks-body';
+          t.subtasks.forEach(st=>{
+            const stEn=en[st.id]!==false;
+            const stRow=document.createElement('div');stRow.className='subtask-row';stRow.style.cssText='cursor:default;opacity:'+(stEn?'1':'0.42')+';';
+            const stCb=document.createElement('input');stCb.type='checkbox';stCb.className='subtask-cb';stCb.style.cssText='width:12px;height:12px;';stCb.checked=stEn;
+            stCb.addEventListener('change',function(e){e.stopPropagation();if(!p.enabledTasks)p.enabledTasks={};p.enabledTasks[st.id]=this.checked;scheduleSave();renderTaskList(p);});
             const stDot=document.createElement('div');stDot.style.cssText=`width:6px;height:6px;border-radius:50%;background:${ph.color};flex-shrink:0;opacity:0.5;`;
-            const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=st.label;
-            stRow.appendChild(stDot);stRow.appendChild(stLbl);subBody.appendChild(stRow);
+            const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=getLabel(st.id,st.label);
+            const stActs=document.createElement('div');stActs.className='tarea-actions';
+            const stEBtn=document.createElement('button');stEBtn.className='tarea-act-btn';stEBtn.textContent='✏️';stEBtn.title='Renombrar';
+            stEBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',getLabel(st.id,st.label));if(nl&&nl.trim()){if(!p.taskLabels)p.taskLabels={};p.taskLabels[st.id]=nl.trim();scheduleSave();renderTaskList(p);}});
+            stActs.appendChild(stEBtn);
+            stRow.appendChild(stCb);stRow.appendChild(stDot);stRow.appendChild(stLbl);stRow.appendChild(stActs);
+            sb2.appendChild(stRow);
           });
-          gs.appendChild(tRow);gs.appendChild(subBody);
-        }else{gs.appendChild(tRow);}
+          gs.appendChild(sb2);
+        }
       });
       body.appendChild(gs);
     });
+    // Tareas personalizadas de esta fase
+    if(phCustom.length){
+      const cGs=document.createElement('div');cGs.className='group-section';
+      const cLbl=document.createElement('div');cLbl.className='group-label custom-phase-lbl';cLbl.textContent='Personalizadas';
+      cGs.appendChild(cLbl);
+      phCustom.forEach(ct=>renderCustomTaskRow(cGs,ct,p,ph));
+      body.appendChild(cGs);
+    }
+    // Botón agregar tarea
+    const addBtn=document.createElement('button');addBtn.className='add-tarea-btn';addBtn.innerHTML='<span style="font-size:16px;line-height:1">+</span> Agregar tarea a esta fase';
+    addBtn.addEventListener('click',()=>{
+      const lb=prompt('Nombre de la nueva tarea:');
+      if(!lb||!lb.trim())return;
+      if(!p.customTasks)p.customTasks=[];
+      p.customTasks.push({id:'ct_'+Date.now(),phaseId:ph.id,label:lb.trim(),subtasks:[]});
+      scheduleSave();renderTaskList(p);
+    });
+    body.appendChild(addBtn);
     card.appendChild(hdr);card.appendChild(body);container.appendChild(card);
   });
+}
+
+function renderCustomTaskRow(container,ct,p,ph){
+  const en=p.enabledTasks||{};
+  const isEn=en[ct.id]!==false;
+  const tRow=document.createElement('div');tRow.className='task-row';tRow.style.cssText='cursor:default;opacity:'+(isEn?'1':'0.42')+';';
+  const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';cb.checked=isEn;
+  cb.addEventListener('change',function(e){
+    e.stopPropagation();if(!p.enabledTasks)p.enabledTasks={};
+    p.enabledTasks[ct.id]=this.checked;
+    if(ct.subtasks)ct.subtasks.forEach(st=>{p.enabledTasks[st.id]=this.checked;});
+    scheduleSave();renderTaskList(p);
+  });
+  const dot=document.createElement('div');dot.style.cssText=`width:8px;height:8px;border-radius:50%;background:${ph.color};flex-shrink:0;`;
+  const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=ct.label;
+  const acts=document.createElement('div');acts.className='tarea-actions';acts.style.opacity='1';
+  const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='✏️';eBtn.title='Editar';
+  eBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',ct.label);if(nl&&nl.trim()){ct.label=nl.trim();scheduleSave();renderTaskList(p);}});
+  const asBtn=document.createElement('button');asBtn.className='tarea-act-btn';asBtn.style.fontSize='11px';asBtn.textContent='+sub';asBtn.title='Agregar subtarea';
+  asBtn.addEventListener('click',e=>{e.stopPropagation();const lb=prompt('Nombre de la subtarea:');if(!lb||!lb.trim())return;if(!ct.subtasks)ct.subtasks=[];ct.subtasks.push({id:'cs_'+Date.now(),label:lb.trim()});scheduleSave();renderTaskList(p);});
+  const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='🗑️';dBtn.title='Eliminar';
+  dBtn.addEventListener('click',e=>{e.stopPropagation();if(!confirm('¿Eliminar esta tarea personalizada?'))return;p.customTasks=p.customTasks.filter(x=>x.id!==ct.id);scheduleSave();renderTaskList(p);});
+  acts.appendChild(eBtn);acts.appendChild(asBtn);acts.appendChild(dBtn);
+  tRow.appendChild(cb);tRow.appendChild(dot);tRow.appendChild(lbl);
+  if(ct.subtasks&&ct.subtasks.length){
+    const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+    tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
+    tRow.appendChild(tog);
+  }
+  tRow.appendChild(acts);
+  container.appendChild(tRow);
+  if(ct.subtasks&&ct.subtasks.length){
+    const subBody=document.createElement('div');subBody.className='subtasks-body';
+    ct.subtasks.forEach(st=>{
+      const stRow=document.createElement('div');stRow.className='subtask-row';stRow.style.cursor='default';
+      const stDot=document.createElement('div');stDot.style.cssText=`width:6px;height:6px;border-radius:50%;background:${ph.color};flex-shrink:0;opacity:0.5;`;
+      const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=st.label;
+      const stActs=document.createElement('div');stActs.className='tarea-actions';stActs.style.opacity='1';
+      const stEBtn=document.createElement('button');stEBtn.className='tarea-act-btn';stEBtn.textContent='✏️';
+      stEBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',st.label);if(nl&&nl.trim()){st.label=nl.trim();scheduleSave();renderTaskList(p);}});
+      const stDBtn=document.createElement('button');stDBtn.className='tarea-act-btn danger';stDBtn.textContent='🗑️';
+      stDBtn.addEventListener('click',e=>{e.stopPropagation();ct.subtasks=ct.subtasks.filter(x=>x.id!==st.id);scheduleSave();renderTaskList(p);});
+      stActs.appendChild(stEBtn);stActs.appendChild(stDBtn);
+      stRow.appendChild(stDot);stRow.appendChild(stLbl);stRow.appendChild(stActs);
+      subBody.appendChild(stRow);
+    });
+    container.appendChild(subBody);
+  }
 }
 
 function renderProjectDetail(p){
@@ -1437,6 +1547,12 @@ function countFloorProgress(fl,p){
     if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(!ok(st.id))return;total++;if(cl[t.id]&&cl[t.id][st.id])done++;});}
     else{total++;if(cl[t.id])done++;}
   })));
+  // Tareas personalizadas del proyecto
+  (p.customTasks||[]).forEach(ct=>{
+    if(!ok(ct.id))return;
+    if(ct.subtasks&&ct.subtasks.length){ct.subtasks.forEach(st=>{if(!ok(st.id))return;total++;if(cl[ct.id]&&cl[ct.id][st.id])done++;});}
+    else{total++;if(cl[ct.id])done++;}
+  });
   return{total,done};
 }
 
@@ -1663,6 +1779,74 @@ function buildFloorChecklist(body,fl,p){
     });
     phCard.appendChild(phHdr);phCard.appendChild(phBody);body.appendChild(phCard);
   });
+  // Tareas personalizadas del proyecto en el piso
+  const projCustom=(p.customTasks||[]).filter(ct=>ok(ct.id));
+  if(projCustom.length){
+    let ctT=0,ctD=0;
+    projCustom.forEach(ct=>{
+      if(ct.subtasks&&ct.subtasks.length){ct.subtasks.forEach(st=>{if(!ok(st.id))return;ctT++;if(cl[ct.id]&&cl[ct.id][st.id])ctD++;});}
+      else{ctT++;if(cl[ct.id])ctD++;}
+    });
+    const ctPct=ctT?Math.round(ctD/ctT*100):0;
+    const ctCard=document.createElement('div');ctCard.className='phase-card';ctCard.style.marginBottom='8px';
+    const ctHdr=document.createElement('div');ctHdr.className='phase-hdr';
+    ctHdr.innerHTML=`<span class="phase-num">+</span><span class="phase-name">Personalizadas</span><span class="phase-count">${ctD}/${ctT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${ctPct}%;background:var(--accent)"></div></div><span class="phase-mini-pct">${ctPct}%</span></div><span class="phase-chevron">▶</span>`;
+    ctHdr.addEventListener('click',()=>{const b=ctCard.querySelector('.phase-body');const o=b.classList.toggle('open');ctHdr.classList.toggle('open',o);});
+    const ctBody=document.createElement('div');ctBody.className='phase-body';
+    projCustom.forEach(ct=>{
+      const hasSubs=ct.subtasks&&ct.subtasks.length>0;
+      const eSubs=hasSubs?ct.subtasks.filter(st=>ok(st.id)):[];
+      const ctRow=document.createElement('div');ctRow.className='task-row';
+      if(hasSubs){
+        const dC=eSubs.filter(st=>cl[ct.id]&&cl[ct.id][st.id]).length;
+        const cbc=document.createElement('input');cbc.type='checkbox';cbc.className='task-cb';
+        if(dC===eSubs.length&&eSubs.length>0)cbc.checked=true;else if(dC>0)cbc.indeterminate=true;
+        cbc.addEventListener('change',function(e){
+          e.stopPropagation();if(!fl.checklist[ct.id])fl.checklist[ct.id]={};
+          eSubs.forEach(st=>{fl.checklist[ct.id][st.id]=this.checked;});
+          const newD=eSubs.filter(st=>fl.checklist[ct.id]&&fl.checklist[ct.id][st.id]).length;
+          cbc.checked=newD===eSubs.length;cbc.indeterminate=newD>0&&newD<eSubs.length;
+          scheduleSave();updateFloorProgress(fl,p);
+        });
+        const lblc=document.createElement('span');lblc.className='task-lbl';lblc.textContent=ct.label;
+        const togc=document.createElement('button');togc.className='subtask-toggle';togc.textContent='Subtareas ▾';
+        togc.addEventListener('click',e=>{e.stopPropagation();const sb=ctRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');togc.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
+        ctRow.appendChild(cbc);ctRow.appendChild(lblc);ctRow.appendChild(togc);
+        ctRow.addEventListener('click',e=>{if(e.target===cbc||e.target===togc)return;cbc.checked=!cbc.checked;cbc.dispatchEvent(new Event('change'));});
+        const sbody2=document.createElement('div');sbody2.className='subtasks-body';
+        eSubs.forEach(st=>{
+          const stC=cl[ct.id]&&cl[ct.id][st.id];
+          const stRow=document.createElement('div');stRow.className='subtask-row';
+          stRow.innerHTML=`<input type="checkbox" class="subtask-cb" ${stC?'checked':''}><span class="subtask-lbl${stC?' done':''}">${st.label}</span>`;
+          const stCb=stRow.querySelector('.subtask-cb');
+          stCb.addEventListener('change',function(e){
+            e.stopPropagation();if(!fl.checklist[ct.id])fl.checklist[ct.id]={};
+            fl.checklist[ct.id][st.id]=this.checked;
+            stRow.querySelector('.subtask-lbl').className='subtask-lbl'+(this.checked?' done':'');
+            const newD2=eSubs.filter(s=>fl.checklist[ct.id]&&fl.checklist[ct.id][s.id]).length;
+            cbc.checked=newD2===eSubs.length;cbc.indeterminate=newD2>0&&newD2<eSubs.length;
+            scheduleSave();updateFloorProgress(fl,p);
+          });
+          stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
+          sbody2.appendChild(stRow);
+        });
+        ctBody.appendChild(ctRow);ctBody.appendChild(sbody2);
+      }else{
+        const chkc=!!cl[ct.id];
+        const cbc2=document.createElement('input');cbc2.type='checkbox';cbc2.className='task-cb';if(chkc)cbc2.checked=true;
+        const lblc2=document.createElement('span');lblc2.className='task-lbl'+(chkc?' done':'');lblc2.textContent=ct.label;
+        cbc2.addEventListener('change',function(e){
+          e.stopPropagation();fl.checklist[ct.id]=this.checked;
+          lblc2.className='task-lbl'+(this.checked?' done':'');
+          scheduleSave();updateFloorProgress(fl,p);
+        });
+        ctRow.appendChild(cbc2);ctRow.appendChild(lblc2);
+        ctRow.addEventListener('click',e=>{if(e.target===cbc2)return;cbc2.checked=!cbc2.checked;cbc2.dispatchEvent(new Event('change'));});
+        ctBody.appendChild(ctRow);
+      }
+    });
+    ctCard.appendChild(ctHdr);ctCard.appendChild(ctBody);body.appendChild(ctCard);
+  }
 }
 
 function refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p){
