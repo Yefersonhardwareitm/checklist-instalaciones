@@ -341,6 +341,21 @@ canvas{width:100%!important;height:100%!important;}
 .mfl-body{display:none;border-top:1px solid var(--border);max-height:320px;overflow-y:auto;}
 .mfl-body.open{display:block;}
 .mfl-phase-lbl{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:8px 14px 2px;background:rgba(255,255,255,0.02);}
+/* ─── COMENTARIOS DE TAREA ─── */
+.task-comment-btn{background:none;border:none;cursor:pointer;padding:4px 7px;border-radius:5px;font-size:13px;color:var(--text3);transition:all 0.12s;flex-shrink:0;margin-left:4px;line-height:1;}
+.task-comment-btn:hover{background:var(--bg4);color:var(--text2);}
+.task-comment-btn.has-comment{color:var(--amber);}
+.comment-wrap{display:none;padding:6px 18px 10px 44px;background:rgba(240,184,96,0.04);border-left:2px solid rgba(240,184,96,0.22);}
+.comment-wrap.sub-comment{padding-left:68px;}
+.comment-wrap.open{display:block;animation:fadeSlideUp 0.18s ease both;}
+.comment-textarea{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 10px;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;resize:vertical;min-height:52px;max-height:130px;outline:none;transition:border-color 0.2s;display:block;}
+.comment-textarea:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(240,184,96,0.09);}
+.comment-textarea::placeholder{color:var(--text3);}
+.comment-meta{font-size:10px;color:var(--text3);margin-top:5px;display:flex;justify-content:space-between;font-family:'DM Mono',monospace;}
+.task-note-wrap{margin-top:6px;}
+.task-note-inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:7px 10px;color:var(--text);font-size:12px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color 0.2s;}
+.task-note-inp:focus{border-color:var(--amber);}
+.task-note-inp::placeholder{color:var(--text3);}
 /* TAREAS EDITABLE */
 .tarea-actions{display:flex;gap:2px;margin-left:auto;opacity:0;transition:opacity 0.15s;}
 .task-row:hover .tarea-actions,.subtask-row:hover .tarea-actions{opacity:1;}
@@ -1189,6 +1204,11 @@ function renderCustomTaskRow(container,ct,p,ph){
   asBtn.addEventListener('click',e=>{e.stopPropagation();const lb=prompt('Nombre de la subtarea:');if(!lb||!lb.trim())return;if(!ct.subtasks)ct.subtasks=[];ct.subtasks.push({id:'cs_'+Date.now(),label:lb.trim()});scheduleSave();renderTaskList(p);});
   const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='🗑️';dBtn.title='Eliminar';
   dBtn.addEventListener('click',e=>{e.stopPropagation();if(!confirm('¿Eliminar esta tarea personalizada?'))return;p.customTasks=p.customTasks.filter(x=>x.id!==ct.id);scheduleSave();renderTaskList(p);});
+  // Botón nota de tarea
+  const noteBtn=document.createElement('button');noteBtn.className='tarea-act-btn'+(ct.note?' has-comment':'');
+  noteBtn.textContent=ct.note?'💬':'💭';noteBtn.title=ct.note?'Ver nota':'Agregar nota';noteBtn.style.marginRight='2px';
+  noteBtn.addEventListener('click',e=>{e.stopPropagation();noteWrap.classList.toggle('open');if(noteWrap.classList.contains('open'))noteInp.focus();});
+  acts.insertBefore(noteBtn,eBtn);
   acts.appendChild(eBtn);acts.appendChild(asBtn);acts.appendChild(dBtn);
   tRow.appendChild(cb);tRow.appendChild(dot);tRow.appendChild(lbl);
   if(ct.subtasks&&ct.subtasks.length){
@@ -1198,6 +1218,14 @@ function renderCustomTaskRow(container,ct,p,ph){
   }
   tRow.appendChild(acts);
   container.appendChild(tRow);
+  // Área de nota de la tarea personalizada
+  const noteWrap=document.createElement('div');noteWrap.className='task-note-wrap comment-wrap'+(ct.note?' open':'');noteWrap.style.paddingLeft='44px';
+  const noteInp=document.createElement('input');noteInp.type='text';noteInp.className='task-note-inp';
+  noteInp.placeholder='Nota o descripción de esta tarea...';noteInp.value=ct.note||'';
+  noteInp.addEventListener('input',()=>{ct.note=noteInp.value;const hasN=!!noteInp.value.trim();noteBtn.className='tarea-act-btn'+(hasN?' has-comment':'');noteBtn.textContent=hasN?'💬':'💭';scheduleSave();});
+  const noteMeta=document.createElement('div');noteMeta.className='comment-meta';noteMeta.innerHTML='<span style="color:var(--amber)">📝 Nota de la tarea</span>';
+  noteWrap.appendChild(noteInp);noteWrap.appendChild(noteMeta);
+  container.appendChild(noteWrap);
   if(ct.subtasks&&ct.subtasks.length){
     const subBody=document.createElement('div');subBody.className='subtasks-body';
     ct.subtasks.forEach(st=>{
@@ -1922,6 +1950,48 @@ function renderFloors(){
   container.appendChild(list);
 }
 
+// ── HELPER: botón de comentario por tarea ──
+function makeCommentUI(fl,taskKey,rowEl,appendTo,isSub){
+  if(!fl.comments)fl.comments={};
+  const txt=fl.comments[taskKey]||'';
+  const hasC=!!txt.trim();
+  // Botón
+  const btn=document.createElement('button');
+  btn.className='task-comment-btn'+(hasC?' has-comment':'');
+  btn.textContent=hasC?'💬':'💭';
+  btn.title=hasC?'Ver/editar comentario':'Agregar comentario';
+  // Área de comentario
+  const wrap=document.createElement('div');
+  wrap.className='comment-wrap'+(isSub?' sub-comment':'');
+  const ta=document.createElement('textarea');
+  ta.className='comment-textarea';
+  ta.placeholder='Observación, novedad o comentario...';
+  ta.value=txt;ta.rows=2;
+  const meta=document.createElement('div');meta.className='comment-meta';
+  const lenSpan=document.createElement('span');lenSpan.textContent=txt.length+'/400';
+  meta.innerHTML='<span style="color:var(--amber)">💬 Comentario</span>';
+  meta.appendChild(lenSpan);
+  wrap.appendChild(ta);wrap.appendChild(meta);
+  ta.addEventListener('input',()=>{
+    if(!fl.comments)fl.comments={};
+    fl.comments[taskKey]=ta.value.slice(0,400);
+    ta.value=fl.comments[taskKey];
+    lenSpan.textContent=ta.value.length+'/400';
+    const hasNow=!!ta.value.trim();
+    btn.className='task-comment-btn'+(hasNow?' has-comment':'');
+    btn.textContent=hasNow?'💬':'💭';
+    btn.title=hasNow?'Ver/editar comentario':'Agregar comentario';
+    scheduleSave();
+  });
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    const open=wrap.classList.toggle('open');
+    if(open){ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);}
+  });
+  rowEl.appendChild(btn);
+  appendTo.appendChild(wrap);
+}
+
 function buildFloorChecklist(body,fl,p){
   if(!fl.checklist)fl.checklist={};
   const cl=fl.checklist;
@@ -1969,26 +2039,29 @@ function buildFloorChecklist(body,fl,p){
           const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
           tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
           tRow.appendChild(cb);tRow.appendChild(lbl);tRow.appendChild(tog);
-          tRow.addEventListener('click',e=>{if(e.target===cb||e.target===tog)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
+          tRow.addEventListener('click',e=>{if(e.target===cb||e.target===tog||e.target.classList.contains('task-comment-btn'))return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
           const subBody=document.createElement('div');subBody.className='subtasks-body';
           eSubs.forEach(st=>{
             const stC=cl[t.id]&&cl[t.id][st.id];
             const stRow=document.createElement('div');stRow.className='subtask-row';
-            stRow.innerHTML=`<input type="checkbox" class="subtask-cb" ${stC?'checked':''}><span class="subtask-lbl${stC?' done':''}">${st.label}</span>`;
-            const stCb=stRow.querySelector('.subtask-cb');
+            const stCb=document.createElement('input');stCb.type='checkbox';stCb.className='subtask-cb';if(stC)stCb.checked=true;
+            const stLbl=document.createElement('span');stLbl.className='subtask-lbl'+(stC?' done':'');stLbl.textContent=st.label;
             stCb.addEventListener('change',function(e){
               e.stopPropagation();if(!fl.checklist[t.id])fl.checklist[t.id]={};
               fl.checklist[t.id][st.id]=this.checked;
-              stRow.querySelector('.subtask-lbl').className='subtask-lbl'+(this.checked?' done':'');
-              // actualizar checkbox padre
+              stLbl.className='subtask-lbl'+(this.checked?' done':'');
               const newD=eSubs.filter(s=>fl.checklist[t.id]&&fl.checklist[t.id][s.id]).length;
               cb.checked=newD===eSubs.length;cb.indeterminate=newD>0&&newD<eSubs.length;
               scheduleSave();updateFloorProgress(fl,p);refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p);
             });
-            stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
+            stRow.addEventListener('click',e=>{if(e.target===stCb||e.target.classList.contains('task-comment-btn'))return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
+            stRow.appendChild(stCb);stRow.appendChild(stLbl);
             subBody.appendChild(stRow);
+            makeCommentUI(fl,t.id+'_'+st.id,stRow,subBody,true);
           });
-          gs.appendChild(tRow);gs.appendChild(subBody);
+          gs.appendChild(tRow);
+          makeCommentUI(fl,t.id,tRow,gs,false);
+          gs.appendChild(subBody);
         }else{
           const chk=!!cl[t.id];
           const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';if(chk)cb.checked=true;
@@ -1999,8 +2072,9 @@ function buildFloorChecklist(body,fl,p){
           });
           const lbl=document.createElement('span');lbl.className='task-lbl'+(chk?' done':'');lbl.textContent=t.label;
           tRow.appendChild(cb);tRow.appendChild(lbl);
-          tRow.addEventListener('click',e=>{if(e.target===cb)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
+          tRow.addEventListener('click',e=>{if(e.target===cb||e.target.classList.contains('task-comment-btn'))return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
           gs.appendChild(tRow);
+          makeCommentUI(fl,t.id,tRow,gs,false);
         }
       });
       phBody.appendChild(gs);
@@ -2040,25 +2114,29 @@ function buildFloorChecklist(body,fl,p){
         const togc=document.createElement('button');togc.className='subtask-toggle';togc.textContent='Subtareas ▾';
         togc.addEventListener('click',e=>{e.stopPropagation();const sb=ctRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');togc.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
         ctRow.appendChild(cbc);ctRow.appendChild(lblc);ctRow.appendChild(togc);
-        ctRow.addEventListener('click',e=>{if(e.target===cbc||e.target===togc)return;cbc.checked=!cbc.checked;cbc.dispatchEvent(new Event('change'));});
+        ctRow.addEventListener('click',e=>{if(e.target===cbc||e.target===togc||e.target.classList.contains('task-comment-btn'))return;cbc.checked=!cbc.checked;cbc.dispatchEvent(new Event('change'));});
         const sbody2=document.createElement('div');sbody2.className='subtasks-body';
         eSubs.forEach(st=>{
           const stC=cl[ct.id]&&cl[ct.id][st.id];
           const stRow=document.createElement('div');stRow.className='subtask-row';
-          stRow.innerHTML=`<input type="checkbox" class="subtask-cb" ${stC?'checked':''}><span class="subtask-lbl${stC?' done':''}">${st.label}</span>`;
-          const stCb=stRow.querySelector('.subtask-cb');
-          stCb.addEventListener('change',function(e){
+          const stCb2=document.createElement('input');stCb2.type='checkbox';stCb2.className='subtask-cb';if(stC)stCb2.checked=true;
+          const stLbl2=document.createElement('span');stLbl2.className='subtask-lbl'+(stC?' done':'');stLbl2.textContent=st.label;
+          stCb2.addEventListener('change',function(e){
             e.stopPropagation();if(!fl.checklist[ct.id])fl.checklist[ct.id]={};
             fl.checklist[ct.id][st.id]=this.checked;
-            stRow.querySelector('.subtask-lbl').className='subtask-lbl'+(this.checked?' done':'');
+            stLbl2.className='subtask-lbl'+(this.checked?' done':'');
             const newD2=eSubs.filter(s=>fl.checklist[ct.id]&&fl.checklist[ct.id][s.id]).length;
             cbc.checked=newD2===eSubs.length;cbc.indeterminate=newD2>0&&newD2<eSubs.length;
             scheduleSave();updateFloorProgress(fl,p);
           });
-          stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
+          stRow.appendChild(stCb2);stRow.appendChild(stLbl2);
+          stRow.addEventListener('click',e=>{if(e.target===stCb2||e.target.classList.contains('task-comment-btn'))return;stCb2.checked=!stCb2.checked;stCb2.dispatchEvent(new Event('change'));});
           sbody2.appendChild(stRow);
+          makeCommentUI(fl,ct.id+'_'+st.id,stRow,sbody2,true);
         });
-        ctBody.appendChild(ctRow);ctBody.appendChild(sbody2);
+        ctBody.appendChild(ctRow);
+        makeCommentUI(fl,ct.id,ctRow,ctBody,false);
+        ctBody.appendChild(sbody2);
       }else{
         const chkc=!!cl[ct.id];
         const cbc2=document.createElement('input');cbc2.type='checkbox';cbc2.className='task-cb';if(chkc)cbc2.checked=true;
@@ -2069,8 +2147,9 @@ function buildFloorChecklist(body,fl,p){
           scheduleSave();updateFloorProgress(fl,p);
         });
         ctRow.appendChild(cbc2);ctRow.appendChild(lblc2);
-        ctRow.addEventListener('click',e=>{if(e.target===cbc2)return;cbc2.checked=!cbc2.checked;cbc2.dispatchEvent(new Event('change'));});
+        ctRow.addEventListener('click',e=>{if(e.target===cbc2||e.target.classList.contains('task-comment-btn'))return;cbc2.checked=!cbc2.checked;cbc2.dispatchEvent(new Event('change'));});
         ctBody.appendChild(ctRow);
+        makeCommentUI(fl,ct.id,ctRow,ctBody,false);
       }
     });
     ctCard.appendChild(ctHdr);ctCard.appendChild(ctBody);body.appendChild(ctCard);
