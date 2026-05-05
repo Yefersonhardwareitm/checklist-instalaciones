@@ -342,9 +342,9 @@ canvas{width:100%!important;height:100%!important;}
 .mfl-body.open{display:block;}
 .mfl-phase-lbl{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:8px 14px 2px;background:rgba(255,255,255,0.02);}
 /* ─── COMENTARIOS DE TAREA ─── */
-.task-comment-btn{background:none;border:none;cursor:pointer;padding:4px 7px;border-radius:5px;font-size:13px;color:var(--text3);transition:all 0.12s;flex-shrink:0;margin-left:4px;line-height:1;}
-.task-comment-btn:hover{background:var(--bg4);color:var(--text2);}
-.task-comment-btn.has-comment{color:var(--amber);}
+.task-comment-btn{background:none;border:1px solid transparent;cursor:pointer;padding:3px 8px;border-radius:6px;font-size:12px;color:var(--text3);transition:all 0.15s;flex-shrink:0;margin-left:6px;line-height:1.4;font-family:'DM Mono',monospace;}
+.task-comment-btn:hover{background:var(--bg4);color:var(--text2);border-color:var(--border);}
+.task-comment-btn.has-comment{background:rgba(240,184,96,0.18);color:#F0B860;border:1px solid rgba(240,184,96,0.45);font-weight:700;box-shadow:0 0 6px rgba(240,184,96,0.15);}
 .comment-wrap{display:none;padding:6px 18px 10px 44px;background:rgba(240,184,96,0.04);border-left:2px solid rgba(240,184,96,0.22);}
 .comment-wrap.sub-comment{padding-left:68px;}
 .comment-wrap.open{display:block;animation:fadeSlideUp 0.18s ease both;}
@@ -1205,7 +1205,7 @@ function renderCustomTaskRow(container,ct,p,ph){
   const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='🗑️';dBtn.title='Eliminar';
   dBtn.addEventListener('click',e=>{e.stopPropagation();if(!confirm('¿Eliminar esta tarea personalizada?'))return;p.customTasks=p.customTasks.filter(x=>x.id!==ct.id);scheduleSave();renderTaskList(p);});
   // Botón nota de tarea
-  const noteBtn=document.createElement('button');noteBtn.className='tarea-act-btn'+(ct.note?' has-comment':'');
+  const noteBtn=document.createElement('button');noteBtn.className='task-comment-btn'+(ct.note?' has-comment':'');
   noteBtn.textContent=ct.note?'💬':'💭';noteBtn.title=ct.note?'Ver nota':'Agregar nota';noteBtn.style.marginRight='2px';
   noteBtn.addEventListener('click',e=>{e.stopPropagation();noteWrap.classList.toggle('open');if(noteWrap.classList.contains('open'))noteInp.focus();});
   acts.insertBefore(noteBtn,eBtn);
@@ -1222,7 +1222,7 @@ function renderCustomTaskRow(container,ct,p,ph){
   const noteWrap=document.createElement('div');noteWrap.className='task-note-wrap comment-wrap'+(ct.note?' open':'');noteWrap.style.paddingLeft='44px';
   const noteInp=document.createElement('input');noteInp.type='text';noteInp.className='task-note-inp';
   noteInp.placeholder='Nota o descripción de esta tarea...';noteInp.value=ct.note||'';
-  noteInp.addEventListener('input',()=>{ct.note=noteInp.value;const hasN=!!noteInp.value.trim();noteBtn.className='tarea-act-btn'+(hasN?' has-comment':'');noteBtn.textContent=hasN?'💬':'💭';scheduleSave();});
+  noteInp.addEventListener('input',()=>{ct.note=noteInp.value;const hasN=!!noteInp.value.trim();noteBtn.className='task-comment-btn'+(hasN?' has-comment':'');noteBtn.textContent=hasN?'💬':'💭';scheduleSave();});
   const noteMeta=document.createElement('div');noteMeta.className='comment-meta';noteMeta.innerHTML='<span style="color:var(--amber)">📝 Nota de la tarea</span>';
   noteWrap.appendChild(noteInp);noteWrap.appendChild(noteMeta);
   container.appendChild(noteWrap);
