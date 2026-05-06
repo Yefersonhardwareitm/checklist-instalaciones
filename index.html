@@ -483,6 +483,15 @@ canvas{width:100%!important;height:100%!important;}
 .param-predef-badge{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;background:var(--bg4);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-left:auto;}
 .param-task-row{display:flex;align-items:center;gap:10px;padding:8px 18px 8px 44px;border-bottom:1px solid rgba(255,255,255,0.03);opacity:0.55;}
 .param-task-row:last-of-type{border-bottom:none;}
+/* ── cantidad (qty) input en checklist de piso ── */
+.qty-input{width:80px;padding:3px 8px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:'DM Mono',monospace;font-size:13px;text-align:center;outline:none;transition:border-color 0.15s;}
+.qty-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(200,240,96,0.18);}
+.qty-input::-webkit-inner-spin-button,.qty-input::-webkit-outer-spin-button{opacity:0.5;}
+.qty-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.qty-row .task-lbl{min-width:0;flex:1;}
+/* branch accordion en checklist árbol */
+.tree-branch-hdr{background:rgba(255,255,255,0.025);border-radius:6px;margin:3px 0;}
+.tree-branch-hdr:hover{background:rgba(255,255,255,0.045);}
 </style>
 </head>
 <body>
@@ -755,42 +764,43 @@ const BIN_ID='69f6174eaaba88219762b1e0';
 const API_KEY='$2a$10$wG6u5Kgiue9nTE6dkp5lsOpnNeUDsmMs4M/JLTybqbc21PEZVtdyu';
 const BIN_URL='https://api.jsonbin.io/v3/b/'+BIN_ID;
 
-const PHASES=[
-  {id:'p1',num:'1',name:'Levantamiento de Requerimiento',color:'#C8F060',groups:[{id:'g0',label:'',tasks:[
-    {id:'t101',label:'Recepción de solicitud'},{id:'t102',label:'Validación de necesidad'},
-    {id:'t103',label:'Levantamiento en sitio'},{id:'t104',label:'Recopilar información técnica',subtasks:[{id:'s1041',label:'Cantidad de puntos'},{id:'s1042',label:'Equipos'},{id:'s1043',label:'Cobertura'}]},
-    {id:'t105',label:'Registro fotográfico'},{id:'t106',label:'Definición de alcance'}]}]},
-  {id:'p2',num:'2',name:'Diseño y Planeación',color:'#60A8F0',groups:[{id:'g0',label:'',tasks:[
-    {id:'t201',label:'Diseño de plano',subtasks:[{id:'s2011',label:'Red de datos'},{id:'s2012',label:'Tubería'},{id:'s2013',label:'Ubicación de equipos'}]},
-    {id:'t202',label:'Definición de soluciones',subtasks:[{id:'s2021',label:'Red de datos'},{id:'s2022',label:'CCTV'},{id:'s2023',label:'Audio'},{id:'s2024',label:'Alarmas / sensores'}]},
-    {id:'t203',label:'Lista de materiales'},{id:'t204',label:'Lista de equipos'},{id:'t205',label:'Estimación de mano de obra'}]}]},
-  {id:'p3',num:'3',name:'Cotizaciones',color:'#F0B860',groups:[
-    {id:'g1',label:'Mano de obra',tasks:[{id:'t301',label:'Cotización de instalación'},{id:'t302',label:'Validación de proveedor'}]},
-    {id:'g2',label:'Materiales',tasks:[{id:'t303',label:'Solicitud de cotización'},{id:'t304',label:'Comparativo de precios'}]},
-    {id:'g3',label:'Equipos',tasks:[{id:'t305',label:'Solicitud de cotización equipos'},{id:'t306',label:'Evaluación técnica y económica'}]}]},
-  {id:'p4',num:'4',name:'Órdenes de Compra (OC)',color:'#E060C8',groups:[
-    {id:'g1',label:'Flujo por proveedor',tasks:[{id:'t401',label:'Elaboración de orden de compra'},{id:'t402',label:'Firma dirección TIC'},{id:'t403',label:'Firma gerencia'},{id:'t404',label:'Radicación en contabilidad'},{id:'t405',label:'Aprobación / pago'},{id:'t406',label:'Seguimiento a entrega'}]},
-    {id:'g2',label:'Aplicación práctica',tasks:[{id:'t407',label:'OC #1 → Materiales'},{id:'t408',label:'OC #2 → Equipos proveedor A'},{id:'t409',label:'OC #3 → Equipos proveedor B (si aplica)'},{id:'t410',label:'OC #4 → Mano de obra (si es tercerizada)'}]}]},
-  {id:'p5',num:'5',name:'Recepción de Materiales y Equipos',color:'#60E0C8',groups:[{id:'g0',label:'',tasks:[
-    {id:'t501',label:'Verificación contra factura / OC'},{id:'t502',label:'Revisión de estado físico'},{id:'t503',label:'Registro en inventario'},{id:'t504',label:'Almacenamiento temporal'}]}]},
-  {id:'p6',num:'6',name:'Instalación Física',color:'#FF6B5B',groups:[
-    {id:'g1',label:'Infraestructura',tasks:[{id:'t601',label:'Instalación de tubería / canaleta'},{id:'t602',label:'Instalación de soportes TV'},{id:'t603',label:'Instalación de rack'}]},
-    {id:'g2',label:'Cableado',tasks:[{id:'t604',label:'Tendido de cable'},{id:'t605',label:'Organización en rack'},{id:'t606',label:'Instalación de faceplate'},{id:'t607',label:'Marcación de puntos'}]},
-    {id:'g3',label:'Equipos',tasks:[{id:'t608',label:'Instalación de equipos en rack'},{id:'t609',label:'Instalación de cámaras'},{id:'t610',label:'Instalación de DVR/NVR'},{id:'t611',label:'Instalación de access point'},{id:'t612',label:'Instalación de parlantes'},{id:'t613',label:'Instalación consola de sonido'},{id:'t614',label:'Instalación sensores',subtasks:[{id:'s6141',label:'Humo'},{id:'s6142',label:'Estación manual'},{id:'s6143',label:'Sirena estroboscópica'}]}]},
-    {id:'g4',label:'Otros',tasks:[{id:'t615',label:'Red de televisores'}]}]},
-  {id:'p7',num:'7',name:'Configuración',color:'#A060F0',groups:[{id:'g0',label:'',tasks:[
-    {id:'t701',label:'Configuración de red',subtasks:[{id:'s7011',label:'VLAN'},{id:'s7012',label:'IP'},{id:'s7013',label:'Internet'}]},
-    {id:'t702',label:'Configuración de cámaras'},{id:'t703',label:'Configuración DVR/NVR'},{id:'t704',label:'Configuración access point'},
-    {id:'t705',label:'Configuración sensores',subtasks:[{id:'s7051',label:'Humo'},{id:'s7052',label:'Alarmas'}]},
-    {id:'t706',label:'Integración de sistemas (si aplica)'}]}]},
-  {id:'p8',num:'8',name:'Pruebas',color:'#5BE8A0',groups:[{id:'g0',label:'',tasks:[
-    {id:'t801',label:'Prueba de puntos de red'},{id:'t802',label:'Prueba de conectividad'},
-    {id:'t803',label:'Prueba de cámaras',subtasks:[{id:'s8031',label:'Visualización'},{id:'s8032',label:'Grabación'}]},
-    {id:'t804',label:'Prueba de audio'},{id:'t805',label:'Prueba de alarmas y sensores'},{id:'t806',label:'Validación general del sistema'}]}]},
-  {id:'p9',num:'9',name:'Entrega',color:'#F0E060',groups:[{id:'g0',label:'',tasks:[
-    {id:'t901',label:'Validación con usuario final'},{id:'t902',label:'Acta de entrega'},{id:'t903',label:'Capacitación básica (si aplica)'}]}]},
-  {id:'p10',num:'10',name:'Documentación',color:'#F06080',groups:[{id:'g0',label:'',tasks:[
-    {id:'t1001',label:'Actualización de planos'},{id:'t1002',label:'Registro de puntos (marquillado)'},{id:'t1003',label:'Inventario de equipos'},{id:'t1004',label:'Registro fotográfico final'},{id:'t1005',label:'Cierre de solicitud'}]}]}
+// ── HELPERS PARA DEFAULT_PHASES ──
+const _n=(id,label,items,qty)=>{const o={id,label,items:items||[]};if(qty)o.qty=true;return o;};
+const _SVC=['PUNTOS DE DATOS','CAMARAS','TUBERIA','RACK','DVR NVR','SWITCH','PUNTOS DE VOZ','PUNTOS DE TV','EQUIPOS DE SONIDO','ALARMAS'];
+const _INST4=pfx=>[_n(pfx+'i1','INSTALACION TUBERIA'),_n(pfx+'i2','INSTALACION CABLEADO'),_n(pfx+'i3','INSTALACION TERMINALES'),_n(pfx+'i4','INSTALACION EQUIPOS')];
+
+const DEFAULT_PHASES=[
+  {id:'p1',num:'1',name:'DISEÑO DEL PLANO TIC',color:'#C8F060',
+   items:_SVC.map((l,i)=>_n('p1_'+i,l))},
+  {id:'p2',num:'2',name:'SOLICITUD COTIZACION',color:'#60A8F0',
+   items:[
+     _n('p2mo','MANO DE OBRA',_SVC.map((l,i)=>_n('p2mo'+i,l,[],true))),
+     _n('p2mat','MATERIALES'),
+     _n('p2eq','EQUIPOS',[
+       _n('p2sw','SWITCH',[_n('p2sw1','POE'),_n('p2sw2','DATOS')]),
+       _n('p2cam','CAMARAS',[
+         _n('p2cama','ANALOGAS',[_n('p2ca2','2MP'),_n('p2ca4','4MP'),_n('p2ca8','8MP')]),
+         _n('p2cami','IP',[_n('p2ci2','2MP'),_n('p2ci4','4MP'),_n('p2ci8','8MP')])
+       ]),
+       _n('p2gr','GRABADOR',[_n('p2dvr','DVR'),_n('p2nvr','NVR')]),
+       _n('p2dd','DISCO DURO',[_n('p2dd2','2TB'),_n('p2dd4','4TB'),_n('p2dd8','8TB')]),
+       _n('p2rk','RACK',[
+         _n('p2rka','ABIERTO',[_n('p2rka4','4U'),_n('p2rka6','6U'),_n('p2rka8','8U'),_n('p2rka12','12U')]),
+         _n('p2rkp','PARED',[_n('p2rkp4','4U'),_n('p2rkp6','6U'),_n('p2rkp8','8U'),_n('p2rkp12','12U')])
+       ])
+     ])
+   ]},
+  {id:'p3',num:'3',name:'ORDEN DE COMPRA',color:'#F0B860',
+   items:[['p3el','ELABORACION'],['p3di','FIRMA DIRECCION TIC'],['p3ge','FIRMA GERENCIA'],
+          ['p3co','FIRMA CONTABILIDAD'],['p3re','RECEPCION']
+   ].map(([pid,lbl])=>_n(pid,lbl,[_n(pid+'mo','MANO DE OBRA'),_n(pid+'ma','MATERIALES'),_n(pid+'eq','EQUIPOS')]))},
+  {id:'p4',num:'4',name:'EJECUCION PROYECTO',color:'#E060C8',
+   items:[_n('p4mo','MANO DE OBRA',_SVC.map((l,i)=>_n('p4s'+i,l,_INST4('p4s'+i))))]},
+  {id:'p5',num:'5',name:'ENTREGA PROYECTO',color:'#5BE8A0',
+   items:[
+     _n('p5pr','PRUEBA',[_n('p5pr1','CANTIDAD FUNCIONA',[],true),_n('p5pr2','CANTIDAD NO FUNCIONA',[],true)]),
+     _n('p5do','DOCUMENTACION',[_n('p5do1','CANTIDAD CONTRATADA',[],true),_n('p5do2','CANTIDAD ENTREGADA',[],true)])
+   ]}
 ];
 
 const COLORS=[
@@ -819,6 +829,7 @@ async function loadFromCloud(){
     if(!appData.purchases)appData.purchases={};
     if(!appData.floors)appData.floors={};
     if(!appData.globalTasks)appData.globalTasks=[];
+    if(!appData.phases||!appData.phases.length)appData.phases=JSON.parse(JSON.stringify(DEFAULT_PHASES));
     setSyncStatus('ok');
     localStorage.setItem('nas_backup',JSON.stringify(appData));
   }catch(e){
@@ -845,6 +856,10 @@ function setSyncStatus(s){
 }
 function showLoading(m){document.getElementById('loading-text').textContent=m;document.getElementById('loading-overlay').classList.remove('hidden');}
 function hideLoading(){document.getElementById('loading-overlay').classList.add('hidden');}
+
+// ── HELPERS ÁRBOL ──
+function getLeaves(items){let r=[];(items||[]).forEach(n=>{if(!n.items||!n.items.length)r.push(n);else r=r.concat(getLeaves(n.items));});return r;}
+function getAllNodes(items){let r=[];(items||[]).forEach(n=>{r.push(n);if(n.items&&n.items.length)r=r.concat(getAllNodes(n.items));});return r;}
 
 // ── LOGIN ──
 function doLogin(){
@@ -1088,80 +1103,113 @@ function switchProjTab(tab){
 function showParam(){switchMainTab('param');}
 function renderParam(){
   if(!appData.globalTasks)appData.globalTasks=[];
+  if(!appData.phases||!appData.phases.length)appData.phases=JSON.parse(JSON.stringify(DEFAULT_PHASES));
   const gt=appData.globalTasks;
-  // Stats
-  const statsEl=document.getElementById('param-stats');
-  const totalPre=PHASES.reduce((s,ph)=>s+ph.groups.reduce((ss,gr)=>ss+gr.tasks.reduce((sss,t)=>sss+(t.subtasks&&t.subtasks.length?t.subtasks.length:1),0),0),0);
-  const totalGlob=gt.reduce((s,t)=>s+(t.subtasks&&t.subtasks.length?t.subtasks.length:1),0);
-  statsEl.innerHTML=`
-    <div class="param-stat"><div><div class="param-stat-val">${PHASES.length}</div><div class="param-stat-lbl">Fases</div></div></div>
-    <div class="param-stat"><div><div class="param-stat-val">${totalPre}</div><div class="param-stat-lbl">Actividades predefinidas</div></div></div>
+  const totalLeaves=appData.phases.reduce((s,ph)=>s+getLeaves(ph.items||[]).length,0);
+  document.getElementById('param-stats').innerHTML=`
+    <div class="param-stat"><div><div class="param-stat-val">${appData.phases.length}</div><div class="param-stat-lbl">Fases</div></div></div>
+    <div class="param-stat"><div><div class="param-stat-val">${totalLeaves}</div><div class="param-stat-lbl">Actividades</div></div></div>
     <div class="param-stat"><div><div class="param-stat-val" style="color:var(--accent)">${gt.length}</div><div class="param-stat-lbl param-global-lbl">Tareas globales</div></div></div>`;
-
   const container=document.getElementById('param-container');
-  // Preservar fases abiertas
   const openP={};container.querySelectorAll('.phase-body.open').forEach(b=>{openP[b.dataset.pid]=true;});
   container.innerHTML='';
-
-  PHASES.forEach(ph=>{
+  appData.phases.forEach((ph,phIdx)=>renderParamPhase(container,ph,phIdx,openP));
+  // Botón agregar fase
+  const addPhBtn=document.createElement('button');addPhBtn.className='add-tarea-btn';addPhBtn.style.cssText='margin:14px 0;';
+  addPhBtn.innerHTML='<span style="font-size:16px">+</span> Agregar nueva fase';
+  addPhBtn.addEventListener('click',()=>{
+    const name=prompt('Nombre de la nueva fase:');if(!name||!name.trim())return;
+    appData.phases.push({id:'ph_'+Date.now(),num:String(appData.phases.length+1),name:name.trim(),color:COLORS[appData.phases.length%COLORS.length].hex,items:[]});
+    scheduleSave();renderParam();showToast('Fase agregada');
+  });
+  container.appendChild(addPhBtn);
+  // Sección tareas globales (agrupadas por fase)
+  const glSection=document.createElement('div');glSection.style.cssText='margin-top:18px;';
+  const glTitle=document.createElement('div');glTitle.style.cssText='font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;padding-left:4px;';
+  glTitle.textContent='⚙ Tareas Globales (disponibles en todos los proyectos)';
+  glSection.appendChild(glTitle);
+  appData.phases.forEach(ph=>{
     const phGlobal=gt.filter(t=>t.phaseId===ph.id);
-    const preCount=ph.groups.reduce((s,gr)=>s+gr.tasks.length,0);
-    const card=document.createElement('div');card.className='phase-card';
-    const hdr=document.createElement('div');
-    hdr.className='phase-hdr'+(openP[ph.id]?' open':'');
-    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${preCount} predefinidas${phGlobal.length?' · <span style="color:var(--accent)">'+phGlobal.length+' globales</span>':''}</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
-    const body=document.createElement('div');
-    body.className='phase-body'+(openP[ph.id]?' open':'');body.dataset.pid=ph.id;
+    const card=document.createElement('div');card.className='phase-card';card.style.marginBottom='8px';
+    const hdr=document.createElement('div');hdr.className='phase-hdr'+(openP['gl_'+ph.id]?' open':'');
+    hdr.innerHTML=`<span class="phase-num">⚙</span><span class="phase-name" style="color:var(--accent)">${ph.name}</span><span class="phase-count">${phGlobal.length} globales</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
+    const body=document.createElement('div');body.className='phase-body'+(openP['gl_'+ph.id]?' open':'');body.dataset.pid='gl_'+ph.id;
     hdr.addEventListener('click',()=>{const o=body.classList.toggle('open');hdr.classList.toggle('open',o);});
-
-    // ── Tareas predefinidas (solo lectura)
-    ph.groups.forEach(gr=>{
-      const gs=document.createElement('div');gs.className='group-section';
-      if(gr.label){const gl=document.createElement('div');gl.className='group-label';gl.textContent=gr.label;gs.appendChild(gl);}
-      gr.tasks.forEach(t=>{
-        const tRow=document.createElement('div');tRow.className='task-row';tRow.style.cssText='cursor:default;opacity:0.6;';
-        const dot=document.createElement('div');dot.style.cssText=`width:8px;height:8px;border-radius:50%;background:${ph.color};flex-shrink:0;`;
-        const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=t.label;
-        const badge=document.createElement('span');badge.className='param-predef-badge';badge.textContent='predefinida';
-        tRow.appendChild(dot);tRow.appendChild(lbl);
-        if(t.subtasks&&t.subtasks.length){
-          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
-          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
-          tRow.appendChild(tog);
-        }
-        tRow.appendChild(badge);gs.appendChild(tRow);
-        if(t.subtasks&&t.subtasks.length){
-          const sb=document.createElement('div');sb.className='subtasks-body';
-          t.subtasks.forEach(st=>{
-            const stRow=document.createElement('div');stRow.className='subtask-row';stRow.style.cursor='default';
-            const stDot=document.createElement('div');stDot.style.cssText=`width:6px;height:6px;border-radius:50%;background:${ph.color};flex-shrink:0;opacity:0.5;`;
-            const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=st.label;
-            stRow.appendChild(stDot);stRow.appendChild(stLbl);sb.appendChild(stRow);
-          });
-          gs.appendChild(sb);
-        }
-      });
-      body.appendChild(gs);
-    });
-
-    // ── Tareas globales personalizadas
     const glGs=document.createElement('div');glGs.className='group-section';
-    const glLbl=document.createElement('div');glLbl.className='group-label custom-phase-lbl';
-    glLbl.innerHTML='⚙ Tareas globales <span style="font-weight:400;color:var(--text3)">(disponibles en todos los proyectos)</span>';
-    glGs.appendChild(glLbl);
     if(phGlobal.length){phGlobal.forEach(t=>renderParamTaskRow(glGs,t,ph));}
     else{const em=document.createElement('div');em.style.cssText='padding:8px 18px 4px 44px;font-size:12px;color:var(--text3);font-style:italic;';em.textContent='Sin tareas globales para esta fase';glGs.appendChild(em);}
     const addBtn=document.createElement('button');addBtn.className='add-tarea-btn';addBtn.innerHTML='<span style="font-size:16px;line-height:1">+</span> Agregar tarea global a esta fase';
-    addBtn.addEventListener('click',()=>{
-      const lb=prompt('Nombre de la nueva tarea global:');
-      if(!lb||!lb.trim())return;
-      appData.globalTasks.push({id:'gt_'+Date.now(),phaseId:ph.id,label:lb.trim(),subtasks:[]});
-      scheduleSave();renderParam();showToast('✓ Tarea global agregada');
-    });
-    glGs.appendChild(addBtn);
-    body.appendChild(glGs);
-    card.appendChild(hdr);card.appendChild(body);container.appendChild(card);
+    addBtn.addEventListener('click',()=>{const lb=prompt('Nombre de la tarea global:');if(!lb||!lb.trim())return;appData.globalTasks.push({id:'gt_'+Date.now(),phaseId:ph.id,label:lb.trim(),subtasks:[]});scheduleSave();renderParam();showToast('✓ Tarea global agregada');});
+    glGs.appendChild(addBtn);body.appendChild(glGs);card.appendChild(hdr);card.appendChild(body);glSection.appendChild(card);
   });
+  container.appendChild(glSection);
+}
+function renderParamPhase(container,ph,phIdx,openP){
+  const card=document.createElement('div');card.className='phase-card';card.style.marginBottom='10px';
+  const totalL=getLeaves(ph.items||[]).length;
+  const hdr=document.createElement('div');hdr.className='phase-hdr'+(openP[ph.id]?' open':'');
+  hdr.innerHTML=`<span class="phase-num" style="color:${ph.color||'var(--accent)'}">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${totalL} actividades</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
+  const body=document.createElement('div');body.className='phase-body'+(openP[ph.id]?' open':'');body.dataset.pid=ph.id;
+  hdr.addEventListener('click',()=>{const o=body.classList.toggle('open');hdr.classList.toggle('open',o);});
+  // Acciones de fase
+  const actRow=document.createElement('div');actRow.style.cssText='display:flex;gap:8px;padding:10px 12px 6px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--border);margin-bottom:6px;';
+  const editPhBtn=document.createElement('button');editPhBtn.className='tarea-act-btn';editPhBtn.textContent='✏️ Renombrar';
+  editPhBtn.addEventListener('click',()=>{const n=prompt('Nombre de la fase:',ph.name);if(n&&n.trim()){ph.name=n.trim();scheduleSave();renderParam();}});
+  const colorEl=document.createElement('input');colorEl.type='color';colorEl.value=ph.color||'#C8F060';colorEl.style.cssText='width:32px;height:28px;border:1px solid var(--border);background:none;cursor:pointer;border-radius:4px;';
+  colorEl.title='Color de fase';colorEl.addEventListener('change',()=>{ph.color=colorEl.value;scheduleSave();renderParam();});
+  const numInp=document.createElement('input');numInp.type='text';numInp.value=ph.num;numInp.style.cssText='width:36px;padding:3px 6px;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:inherit;font-size:12px;text-align:center;';
+  numInp.title='Número de fase';numInp.addEventListener('change',()=>{ph.num=numInp.value.trim()||ph.num;scheduleSave();renderParam();});
+  const delPhBtn=document.createElement('button');delPhBtn.className='tarea-act-btn danger';delPhBtn.textContent='🗑️ Eliminar fase';
+  delPhBtn.addEventListener('click',()=>{if(!confirm('¿Eliminar la fase "'+ph.name+'" y todas sus actividades?'))return;appData.phases.splice(phIdx,1);scheduleSave();renderParam();showToast('Fase eliminada');});
+  actRow.appendChild(document.createTextNode('# '));actRow.appendChild(numInp);actRow.appendChild(editPhBtn);actRow.appendChild(colorEl);actRow.appendChild(delPhBtn);
+  body.appendChild(actRow);
+  // Árbol de items editable
+  const itemsCont=document.createElement('div');itemsCont.className='group-section';
+  renderParamItemList(itemsCont,ph.items||[],ph,ph.color||'var(--accent)',0);
+  body.appendChild(itemsCont);
+  // Botón agregar elemento raíz
+  const addRootBtn=document.createElement('button');addRootBtn.className='add-tarea-btn';
+  addRootBtn.innerHTML='<span style="font-size:16px">+</span> Agregar elemento a esta fase';
+  addRootBtn.addEventListener('click',()=>addParamItem(ph.items,()=>{scheduleSave();renderParam();}));
+  body.appendChild(addRootBtn);
+  card.appendChild(hdr);card.appendChild(body);container.appendChild(card);
+}
+function renderParamItemList(container,items,ph,color,depth){
+  const pad=16+depth*18;
+  (items||[]).forEach((node,nodeIdx)=>{
+    const isLeaf=!node.items||!node.items.length;
+    const row=document.createElement('div');row.className='task-row';row.style.cssText='padding-left:'+pad+'px;cursor:default;';
+    // Indicador visual
+    const dot=document.createElement('div');
+    dot.style.cssText='width:8px;height:8px;border-radius:50%;flex-shrink:0;'+(isLeaf?'background:'+color+';opacity:0.7;':'border:2px solid '+color+';background:transparent;');
+    const lbl=document.createElement('span');lbl.className='task-lbl';
+    lbl.textContent=node.label+(node.qty?' (#)':'')+(isLeaf?'':' ▸');
+    // Acciones
+    const acts=document.createElement('div');acts.className='tarea-actions';acts.style.cssText='opacity:1;flex-shrink:0;';
+    const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='✏️';eBtn.title='Editar nombre';
+    eBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nombre:',node.label);if(nl&&nl.trim()){node.label=nl.trim();scheduleSave();renderParam();}});
+    const qBtn=document.createElement('button');qBtn.className='tarea-act-btn';qBtn.style.fontSize='10px';
+    qBtn.textContent=node.qty?'# ✓':'# -';qBtn.title='Activar/desactivar campo de cantidad';
+    qBtn.addEventListener('click',e=>{e.stopPropagation();if(node.qty)delete node.qty;else node.qty=true;scheduleSave();renderParam();});
+    const asBtn=document.createElement('button');asBtn.className='tarea-act-btn';asBtn.style.fontSize='11px';asBtn.textContent='+sub';asBtn.title='Agregar subelemento';
+    asBtn.addEventListener('click',e=>{e.stopPropagation();addParamItem(node.items,()=>{scheduleSave();renderParam();});});
+    const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='🗑️';
+    dBtn.addEventListener('click',e=>{e.stopPropagation();if(!confirm('¿Eliminar "'+node.label+'" y todos sus subelementos?'))return;items.splice(nodeIdx,1);scheduleSave();renderParam();});
+    acts.appendChild(eBtn);acts.appendChild(qBtn);acts.appendChild(asBtn);acts.appendChild(dBtn);
+    row.appendChild(dot);row.appendChild(lbl);row.appendChild(acts);container.appendChild(row);
+    if(!isLeaf){
+      const subCont=document.createElement('div');subCont.className='subtasks-body open';
+      renderParamItemList(subCont,node.items,ph,color,depth+1);
+      container.appendChild(subCont);
+    }
+  });
+}
+function addParamItem(targetItems,callback){
+  const lb=prompt('Nombre del elemento:');if(!lb||!lb.trim())return;
+  const isQty=confirm('¿Este elemento tiene campo de cantidad (#)?\n(Ej: CANTIDAD FUNCIONA, CANTIDAD CONTRATADA...)');
+  const node={id:'ni_'+Date.now(),label:lb.trim(),items:[]};
+  if(isQty)node.qty=true;
+  targetItems.push(node);callback();
 }
 function renderParamTaskRow(container,gt,ph){
   const tRow=document.createElement('div');tRow.className='task-row';tRow.style.cursor='default';
@@ -1173,7 +1221,7 @@ function renderParamTaskRow(container,gt,ph){
   const asBtn=document.createElement('button');asBtn.className='tarea-act-btn';asBtn.style.fontSize='11px';asBtn.textContent='+sub';asBtn.title='Agregar subtarea';
   asBtn.addEventListener('click',e=>{e.stopPropagation();const lb=prompt('Nombre de la subtarea:');if(!lb||!lb.trim())return;if(!gt.subtasks)gt.subtasks=[];gt.subtasks.push({id:'gts_'+Date.now(),label:lb.trim()});scheduleSave();renderParam();});
   const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='🗑️';dBtn.title='Eliminar tarea global';
-  dBtn.addEventListener('click',e=>{e.stopPropagation();if(!confirm('¿Eliminar esta tarea global?\nSe eliminará del catálogo de todos los proyectos.'))return;appData.globalTasks=appData.globalTasks.filter(x=>x.id!==gt.id);scheduleSave();renderParam();showToast('Tarea global eliminada');});
+  dBtn.addEventListener('click',e=>{e.stopPropagation();if(!confirm('¿Eliminar esta tarea global?'))return;appData.globalTasks=appData.globalTasks.filter(x=>x.id!==gt.id);scheduleSave();renderParam();showToast('Tarea global eliminada');});
   acts.appendChild(eBtn);acts.appendChild(asBtn);acts.appendChild(dBtn);
   tRow.appendChild(dot);tRow.appendChild(lbl);
   if(gt.subtasks&&gt.subtasks.length){
@@ -1204,11 +1252,12 @@ function renderParamTaskRow(container,gt,ph){
 function countEnabled(proj){
   let total=0,done=0;
   const cl=appData.checklist[proj.id]||{},en=proj.enabledTasks||{};
-  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-    if(en[t.id]===false)return;
-    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]===false)return;total++;if(cl[t.id]&&cl[t.id][st.id])done++;});}
-    else{total++;if(cl[t.id])done++;}
-  })));
+  getLeaves(appData.phases||[]).forEach(leaf=>{
+    if(en[leaf.id]===false)return;
+    total++;
+    if(leaf.qty){if(cl[leaf.id]&&Number(cl[leaf.id])>0)done++;}
+    else{if(cl[leaf.id])done++;}
+  });
   return{total,done};
 }
 
@@ -1217,19 +1266,11 @@ function renderTaskList(p){
   if(!p.taskLabels)p.taskLabels={};
   const en=p.enabledTasks||{};
   const getLabel=(id,def)=>p.taskLabels[id]||def;
-  let total=0;
-  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-    if(en[t.id]===false)return;
-    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(en[st.id]!==false)total++;});}
-    else total++;
-  })));
-  (p.customTasks||[]).forEach(ct=>{
-    if(en[ct.id]===false)return;
-    if(ct.subtasks&&ct.subtasks.length){ct.subtasks.forEach(st=>{if(en[st.id]!==false)total++;});}
-    else total++;
-  });
+  const total=getLeaves(appData.phases||[]).filter(l=>en[l.id]!==false).length+
+    (p.customTasks||[]).reduce((s,ct)=>{if(en[ct.id]===false)return s;return s+(ct.subtasks&&ct.subtasks.length?ct.subtasks.filter(st=>en[st.id]!==false).length:1);},0);
   const el=document.getElementById('tareas-count');if(el)el.textContent=total+' tareas habilitadas';
   const container=document.getElementById('phases-container');
+  if(!container)return;
   const openP={};container.querySelectorAll('.phase-body.open').forEach(b=>{openP[b.dataset.pid]=true;});
   container.innerHTML='';
   PHASES.forEach(ph=>{
@@ -1388,6 +1429,7 @@ function renderProjectDetail(p){
   const el=document.getElementById('tareas-count');
   if(el)el.textContent=total+' tareas habilitadas';
   const container=document.getElementById('phases-container');
+  if(!container)return;
   const openP={};container.querySelectorAll('.phase-body.open').forEach(b=>{openP[b.dataset.pid]=true;});
   container.innerHTML='';
   const cl=appData.checklist[p.id]||{},en=p.enabledTasks||{};
@@ -1740,7 +1782,7 @@ function openNewProject(){
   document.getElementById('proj-name-input').value='';document.getElementById('proj-desc-input').value='';
   document.getElementById('modal-proj-title').textContent='Nuevo proyecto';
   enabledTasks={};modalFloors=[];
-  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{enabledTasks[t.id]=true;if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=true;});})));
+  getAllNodes(appData.phases||[]).forEach(n=>{enabledTasks[n.id]=true;});
   (appData.globalTasks||[]).forEach(gt=>{enabledTasks[gt.id]=true;if(gt.subtasks)gt.subtasks.forEach(st=>{enabledTasks[st.id]=true;});});
   buildColorPicker();buildTaskSelector();syncModalFloorCount();buildModalFloorSection();openModal('modal-project');
 }
@@ -1750,10 +1792,7 @@ function openEditProject(id){
   document.getElementById('proj-name-input').value=p.name;document.getElementById('proj-desc-input').value=p.desc||'';
   document.getElementById('modal-proj-title').textContent='Editar proyecto';
   enabledTasks={};
-  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-    enabledTasks[t.id]=(p.enabledTasks&&p.enabledTasks[t.id]===false)?false:true;
-    if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=(p.enabledTasks&&p.enabledTasks[st.id]===false)?false:true;});
-  })));
+  getAllNodes(appData.phases||[]).forEach(n=>{enabledTasks[n.id]=(p.enabledTasks&&p.enabledTasks[n.id]===false)?false:true;});
   (appData.globalTasks||[]).forEach(gt=>{
     enabledTasks[gt.id]=(p.enabledTasks&&p.enabledTasks[gt.id]===false)?false:true;
     if(gt.subtasks)gt.subtasks.forEach(st=>{enabledTasks[st.id]=(p.enabledTasks&&p.enabledTasks[st.id]===false)?false:true;});
@@ -1768,46 +1807,23 @@ function buildColorPicker(){
 }
 function buildTaskSelector(){
   const wrap=document.getElementById('task-selector');wrap.innerHTML='';
-  PHASES.forEach(ph=>{
+  (appData.phases||[]).forEach(ph=>{
+    const leaves=getLeaves(ph.items||[]);
+    const checked=leaves.filter(l=>enabledTasks[l.id]!==false).length;
     const sec=document.createElement('div');sec.className='ts-phase';
-    let total=0,checked=0;
-    ph.groups.forEach(gr=>gr.tasks.forEach(t=>{if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{total++;if(enabledTasks[st.id]!==false)checked++;});}else{total++;if(enabledTasks[t.id]!==false)checked++;}}));
     const hdr=document.createElement('div');hdr.className='ts-phase-header';
     const phCb=document.createElement('input');phCb.type='checkbox';phCb.className='ts-phase-check';
-    if(checked===total)phCb.checked=true;else if(checked>0)phCb.indeterminate=true;
-    hdr.innerHTML=`<span class="ts-phase-name">${ph.num}. ${ph.name}</span><span class="ts-phase-badge">${checked}/${total}</span><span class="ts-chevron">▶</span>`;
+    if(checked===leaves.length&&leaves.length>0)phCb.checked=true;else if(checked>0)phCb.indeterminate=true;
+    hdr.innerHTML=`<span class="ts-phase-name">${ph.num}. ${ph.name}</span><span class="ts-phase-badge">${checked}/${leaves.length}</span><span class="ts-chevron">▶</span>`;
     hdr.insertBefore(phCb,hdr.firstChild);
     const body=document.createElement('div');body.className='ts-phase-body';
-    phCb.addEventListener('change',function(e){e.stopPropagation();ph.groups.forEach(gr=>gr.tasks.forEach(t=>{enabledTasks[t.id]=this.checked;if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=this.checked;});}));buildTaskSelector();});
+    phCb.addEventListener('change',function(e){e.stopPropagation();leaves.forEach(l=>{enabledTasks[l.id]=this.checked;});buildTaskSelector();});
     hdr.addEventListener('click',e=>{if(e.target===phCb)return;body.classList.toggle('open');hdr.classList.toggle('open',body.classList.contains('open'));});
-    ph.groups.forEach(gr=>{
-      if(gr.label){const gl=document.createElement('div');gl.style.cssText='font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:8px 14px 4px 44px';gl.textContent=gr.label;body.appendChild(gl);}
-      gr.tasks.forEach(t=>{
-        const hasSubs=t.subtasks&&t.subtasks.length>0;
-        const tRow=document.createElement('div');tRow.className='ts-task-row';
-        const tCb=document.createElement('input');tCb.type='checkbox';tCb.className='ts-task-check';
-        if(hasSubs){const en=t.subtasks.filter(st=>enabledTasks[st.id]!==false).length;if(en===t.subtasks.length)tCb.checked=true;else if(en>0)tCb.indeterminate=true;}
-        else tCb.checked=enabledTasks[t.id]!==false;
-        const tLbl=document.createElement('span');tLbl.className='ts-task-label';tLbl.textContent=t.label;
-        tRow.appendChild(tCb);tRow.appendChild(tLbl);
-        tCb.addEventListener('change',function(e){e.stopPropagation();enabledTasks[t.id]=this.checked;if(hasSubs)t.subtasks.forEach(st=>{enabledTasks[st.id]=this.checked;});buildTaskSelector();});
-        tRow.addEventListener('click',e=>{if(e.target===tCb)return;tCb.checked=!tCb.checked;tCb.dispatchEvent(new Event('change'));});
-        body.appendChild(tRow);
-        if(hasSubs)t.subtasks.forEach(st=>{
-          const stRow=document.createElement('div');stRow.className='ts-subtask-row';
-          const stCb=document.createElement('input');stCb.type='checkbox';stCb.className='ts-subtask-check';stCb.checked=enabledTasks[st.id]!==false;
-          const stLbl=document.createElement('span');stLbl.className='ts-subtask-label';stLbl.textContent=st.label;
-          stRow.appendChild(stCb);stRow.appendChild(stLbl);
-          stCb.addEventListener('change',function(e){e.stopPropagation();enabledTasks[st.id]=this.checked;buildTaskSelector();});
-          stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
-          body.appendChild(stRow);
-        });
-      });
-    });
-    // Tareas globales de esta fase
+    renderTreeSelector(body,ph.items||[],0);
+    // Tareas globales vinculadas a esta fase
     const phGT=(appData.globalTasks||[]).filter(gt=>gt.phaseId===ph.id);
     if(phGT.length){
-      const glLbl=document.createElement('div');glLbl.style.cssText='font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);padding:8px 14px 4px 44px;opacity:0.85;';glLbl.textContent='⚙ Globales';body.appendChild(glLbl);
+      const glLbl=document.createElement('div');glLbl.style.cssText='font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);padding:8px 14px 4px 28px;opacity:0.85;';glLbl.textContent='⚙ Globales';body.appendChild(glLbl);
       phGT.forEach(gt=>{
         const hasSubs=gt.subtasks&&gt.subtasks.length>0;
         const tRow=document.createElement('div');tRow.className='ts-task-row';
@@ -1831,6 +1847,36 @@ function buildTaskSelector(){
       });
     }
     sec.appendChild(hdr);sec.appendChild(body);wrap.appendChild(sec);
+  });
+}
+function renderTreeSelector(container,items,depth){
+  const pad=28+depth*16;
+  (items||[]).forEach(node=>{
+    const isLeaf=!node.items||!node.items.length;
+    if(isLeaf){
+      const row=document.createElement('div');row.className='ts-task-row';row.style.paddingLeft=pad+'px';
+      const cb=document.createElement('input');cb.type='checkbox';cb.className='ts-task-check';cb.checked=enabledTasks[node.id]!==false;
+      const lbl=document.createElement('span');lbl.className='ts-task-label';lbl.textContent=node.label+(node.qty?' (#)':'');
+      row.appendChild(cb);row.appendChild(lbl);
+      cb.addEventListener('change',function(e){e.stopPropagation();enabledTasks[node.id]=this.checked;buildTaskSelector();});
+      row.addEventListener('click',e=>{if(e.target===cb)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
+      container.appendChild(row);
+    }else{
+      const leaves=getLeaves(node.items);
+      const en=leaves.filter(l=>enabledTasks[l.id]!==false).length;
+      const brRow=document.createElement('div');brRow.className='ts-task-row';brRow.style.paddingLeft=pad+'px';
+      const brCb=document.createElement('input');brCb.type='checkbox';brCb.className='ts-task-check';
+      if(en===leaves.length&&leaves.length>0)brCb.checked=true;else if(en>0)brCb.indeterminate=true;
+      const brLbl=document.createElement('span');brLbl.className='ts-task-label';brLbl.style.fontWeight='600';brLbl.textContent=node.label;
+      const togBtn=document.createElement('span');togBtn.className='ts-chevron';togBtn.style.cssText='margin-left:auto;font-size:10px;';togBtn.textContent='▶';
+      brRow.appendChild(brCb);brRow.appendChild(brLbl);brRow.appendChild(togBtn);
+      const subBody=document.createElement('div');subBody.className='ts-phase-body';
+      renderTreeSelector(subBody,node.items,depth+1);
+      brCb.addEventListener('change',function(e){e.stopPropagation();leaves.forEach(l=>{enabledTasks[l.id]=this.checked;});buildTaskSelector();});
+      togBtn.addEventListener('click',e=>{e.stopPropagation();subBody.classList.toggle('open');togBtn.textContent=subBody.classList.contains('open')?'▼':'▶';});
+      brRow.addEventListener('click',e=>{if(e.target===brCb||e.target===togBtn)return;brCb.checked=!brCb.checked;brCb.dispatchEvent(new Event('change'));});
+      container.appendChild(brRow);container.appendChild(subBody);
+    }
   });
 }
 function saveProject(){
@@ -1871,11 +1917,8 @@ function syncModalFloorCount(){
 }
 function modalFloorPlus(){
   const num=modalFloors.length+1;
-  // Por defecto todas las tareas habilitadas en el proyecto se habilitan en el piso
   const flEn={};
-  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-    if(enabledTasks[t.id]!==false){flEn[t.id]=true;if(t.subtasks)t.subtasks.forEach(st=>{if(enabledTasks[st.id]!==false)flEn[st.id]=true;});}
-  })));
+  getAllNodes(appData.phases||[]).forEach(n=>{if(enabledTasks[n.id]!==false)flEn[n.id]=true;});
   (appData.globalTasks||[]).forEach(gt=>{
     if(enabledTasks[gt.id]!==false){flEn[gt.id]=true;if(gt.subtasks)gt.subtasks.forEach(st=>{if(enabledTasks[st.id]!==false)flEn[st.id]=true;});}
   });
@@ -1906,59 +1949,60 @@ function buildModalFloorSection(){
     hdr.appendChild(nameInp);hdr.appendChild(badge);hdr.appendChild(chev);
     hdr.addEventListener('click',()=>{const b=card.querySelector('.mfl-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
     const body=document.createElement('div');body.className='mfl-body'+(openSet.has(idx)?' open':'');body.dataset.idx=idx;
-    // Construir lista de tareas por fase
-    PHASES.forEach(ph=>{
-      let phHasAny=false;
-      ph.groups.forEach(gr=>gr.tasks.forEach(t=>{if(enabledTasks[t.id]!==false)phHasAny=true;}));
-      if(!phHasAny)return;
+    // Construir lista de tareas por fase (árbol recursivo)
+    (appData.phases||[]).forEach(ph=>{
+      const phLeaves=getLeaves(ph.items||[]);
+      const hasAny=phLeaves.some(l=>enabledTasks[l.id]!==false);
+      if(!hasAny)return;
       const phLbl=document.createElement('div');phLbl.className='mfl-phase-lbl';phLbl.textContent=ph.num+'. '+ph.name;body.appendChild(phLbl);
-      ph.groups.forEach(gr=>{
-        if(gr.label){const gl=document.createElement('div');gl.style.cssText='font-size:10px;color:var(--text3);padding:4px 14px 2px 28px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;';gl.textContent=gr.label;body.appendChild(gl);}
-        gr.tasks.forEach(t=>{
-          if(enabledTasks[t.id]===false)return;
-          const hasSubs=t.subtasks&&t.subtasks.length>0;
-          const eSubs=hasSubs?t.subtasks.filter(st=>enabledTasks[st.id]!==false):[];
-          const tRow=document.createElement('div');tRow.className='ts-task-row';
-          const tCb=document.createElement('input');tCb.type='checkbox';tCb.className='ts-task-check';
-          if(hasSubs){
-            const enSubs=eSubs.filter(st=>fl.enabledTasks[st.id]!==false);
-            tCb.checked=enSubs.length===eSubs.length&&eSubs.length>0;
-            tCb.indeterminate=enSubs.length>0&&enSubs.length<eSubs.length;
-          }else{tCb.checked=fl.enabledTasks[t.id]!==false;}
-          tCb.addEventListener('change',function(e){
-            e.stopPropagation();
-            fl.enabledTasks[t.id]=this.checked;
-            if(hasSubs)eSubs.forEach(st=>{fl.enabledTasks[st.id]=this.checked;});
-            // Actualizar badge sin reconstruir todo
-            const newCount=Object.values(fl.enabledTasks).filter(Boolean).length;
-            const b=document.getElementById('mfl-badge-'+idx);if(b)b.textContent=newCount+' act.';
-            // Si tiene subs, actualizar sus checkboxes
-            if(hasSubs){subRows.forEach((sr,si)=>{sr.querySelector('.ts-subtask-check').checked=this.checked;});}
-          });
-          const tLbl=document.createElement('span');tLbl.className='ts-task-label';tLbl.textContent=t.label;
-          tRow.appendChild(tCb);tRow.appendChild(tLbl);
-          tRow.addEventListener('click',e=>{if(e.target===tCb)return;tCb.checked=!tCb.checked;tCb.dispatchEvent(new Event('change'));});
-          body.appendChild(tRow);
-          // Subtareas
-          const subRows=[];
-          if(hasSubs)eSubs.forEach(st=>{
-            const stRow=document.createElement('div');stRow.className='ts-subtask-row';
-            const stCb=document.createElement('input');stCb.type='checkbox';stCb.className='ts-subtask-check';stCb.checked=fl.enabledTasks[st.id]!==false;
-            stCb.addEventListener('change',function(e){
-              e.stopPropagation();fl.enabledTasks[st.id]=this.checked;
-              const enNow=eSubs.filter(s=>fl.enabledTasks[s.id]!==false).length;
-              tCb.checked=enNow===eSubs.length;tCb.indeterminate=enNow>0&&enNow<eSubs.length;
-              const newCount=Object.values(fl.enabledTasks).filter(Boolean).length;
-              const b=document.getElementById('mfl-badge-'+idx);if(b)b.textContent=newCount+' act.';
-            });
-            stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
-            const stLbl=document.createElement('span');stLbl.className='ts-subtask-label';stLbl.textContent=st.label;
-            stRow.appendChild(stCb);stRow.appendChild(stLbl);body.appendChild(stRow);subRows.push(stRow);
-          });
-        });
-      });
+      renderModalFloorTree(body,ph.items||[],fl,idx,0);
     });
     card.appendChild(hdr);card.appendChild(body);section.appendChild(card);
+  });
+}
+function renderModalFloorTree(container,items,fl,flIdx,depth){
+  const pad=depth*16;
+  (items||[]).forEach(node=>{
+    const isLeaf=!node.items||!node.items.length;
+    if(isLeaf){
+      if(enabledTasks[node.id]===false)return;
+      const row=document.createElement('div');row.className='ts-task-row';row.style.paddingLeft=(14+pad)+'px';
+      const cb=document.createElement('input');cb.type='checkbox';cb.className='ts-task-check';
+      cb.checked=fl.enabledTasks[node.id]!==false;
+      const lbl=document.createElement('span');lbl.className='ts-task-label';lbl.textContent=node.label+(node.qty?' (#)':'');
+      row.appendChild(cb);row.appendChild(lbl);
+      cb.addEventListener('change',function(e){
+        e.stopPropagation();fl.enabledTasks[node.id]=this.checked;
+        const newCount=Object.values(fl.enabledTasks).filter(Boolean).length;
+        const b=document.getElementById('mfl-badge-'+flIdx);if(b)b.textContent=newCount+' act.';
+      });
+      row.addEventListener('click',e=>{if(e.target===cb)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
+      container.appendChild(row);
+    }else{
+      const leaves=getLeaves(node.items);
+      const hasEnabled=leaves.some(l=>enabledTasks[l.id]!==false);
+      if(!hasEnabled)return;
+      // Branch header con checkbox "todos"
+      const brRow=document.createElement('div');brRow.className='ts-task-row';brRow.style.cssText='padding-left:'+(14+pad)+'px;font-weight:600;cursor:pointer;';
+      const brCb=document.createElement('input');brCb.type='checkbox';brCb.className='ts-task-check';
+      const enL=leaves.filter(l=>enabledTasks[l.id]!==false&&fl.enabledTasks[l.id]!==false);
+      const allL=leaves.filter(l=>enabledTasks[l.id]!==false);
+      if(enL.length===allL.length&&allL.length>0)brCb.checked=true;else if(enL.length>0)brCb.indeterminate=true;
+      const brLbl=document.createElement('span');brLbl.className='ts-task-label';brLbl.style.fontWeight='600';brLbl.textContent=node.label;
+      const tog=document.createElement('span');tog.className='ts-chevron';tog.style.cssText='margin-left:auto;font-size:10px;';tog.textContent='▶';
+      brRow.appendChild(brCb);brRow.appendChild(brLbl);brRow.appendChild(tog);
+      const subBody=document.createElement('div');subBody.className='ts-phase-body';
+      renderModalFloorTree(subBody,node.items,fl,flIdx,depth+1);
+      brCb.addEventListener('change',function(e){
+        e.stopPropagation();allL.forEach(l=>{fl.enabledTasks[l.id]=this.checked;});
+        const newCount=Object.values(fl.enabledTasks).filter(Boolean).length;
+        const b=document.getElementById('mfl-badge-'+flIdx);if(b)b.textContent=newCount+' act.';
+        buildModalFloorSection();
+      });
+      tog.addEventListener('click',e=>{e.stopPropagation();subBody.classList.toggle('open');tog.textContent=subBody.classList.contains('open')?'▼':'▶';});
+      brRow.addEventListener('click',e=>{if(e.target===brCb||e.target===tog)return;brCb.checked=!brCb.checked;brCb.dispatchEvent(new Event('change'));});
+      container.appendChild(brRow);container.appendChild(subBody);
+    }
   });
 }
 
@@ -1968,13 +2012,18 @@ function countFloorProgress(fl,p){
   const cl=fl.checklist||{};
   const flEn=fl.enabledTasks||{};
   const projEn=p.enabledTasks||{};
-  // Una tarea aplica si está habilitada en el proyecto Y en el piso
   const ok=id=>projEn[id]!==false&&flEn[id]!==false;
-  PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-    if(!ok(t.id))return;
-    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(!ok(st.id))return;total++;if(cl[t.id]&&cl[t.id][st.id])done++;});}
-    else{total++;if(cl[t.id])done++;}
-  })));
+  function cLeaves(items){
+    (items||[]).forEach(n=>{
+      if(!n.items||!n.items.length){
+        if(!ok(n.id))return;
+        total++;
+        if(n.qty){if(cl[n.id]&&Number(cl[n.id])>0)done++;}
+        else{if(cl[n.id])done++;}
+      }else{cLeaves(n.items);}
+    });
+  }
+  (appData.phases||[]).forEach(ph=>cLeaves(ph.items));
   // Tareas personalizadas del proyecto
   (p.customTasks||[]).forEach(ct=>{
     if(!ok(ct.id))return;
@@ -2175,15 +2224,12 @@ function buildFloorChecklist(body,fl,p){
   const cl=fl.checklist;
   const flEn=fl.enabledTasks||{};
   const projEn=p.enabledTasks||{};
-  // Tarea aplica si está habilitada en proyecto Y en el piso
   const ok=id=>projEn[id]!==false&&flEn[id]!==false;
-  PHASES.forEach(ph=>{
+  (appData.phases||[]).forEach(ph=>{
+    // Contar hojas habilitadas
     let phT=0,phD=0;
-    ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-      if(!ok(t.id))return;
-      if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(!ok(st.id))return;phT++;if(cl[t.id]&&cl[t.id][st.id])phD++;});}
-      else{phT++;if(cl[t.id])phD++;}
-    }));
+    function cph(items){(items||[]).forEach(n=>{if(!n.items||!n.items.length){if(!ok(n.id))return;phT++;if(n.qty){if(cl[n.id]&&Number(cl[n.id])>0)phD++;}else{if(cl[n.id])phD++;}}else cph(n.items);});}
+    cph(ph.items);
     if(phT===0)return;
     const pct=Math.round(phD/phT*100);
     const phCard=document.createElement('div');phCard.className='phase-card';phCard.style.marginBottom='8px';
@@ -2191,76 +2237,13 @@ function buildFloorChecklist(body,fl,p){
     phHdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phD}/${phT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${pct}%;background:${ph.color}"></div></div><span class="phase-mini-pct">${pct}%</span></div><span class="phase-chevron">▶</span>`;
     phHdr.addEventListener('click',()=>{const b=phCard.querySelector('.phase-body');const o=b.classList.toggle('open');phHdr.classList.toggle('open',o);});
     const phBody=document.createElement('div');phBody.className='phase-body';
-    ph.groups.forEach(gr=>{
-      const eTasks=gr.tasks.filter(t=>ok(t.id));if(!eTasks.length)return;
-      const gs=document.createElement('div');gs.className='group-section';
-      if(gr.label){const gl=document.createElement('div');gl.className='group-label';gl.textContent=gr.label;gs.appendChild(gl);}
-      eTasks.forEach(t=>{
-        const hasSubs=t.subtasks&&t.subtasks.length>0;
-        const eSubs=hasSubs?t.subtasks.filter(st=>ok(st.id)):[];
-        if(hasSubs&&!eSubs.length)return;
-        const tRow=document.createElement('div');tRow.className='task-row';
-        if(hasSubs){
-          const dC=eSubs.filter(st=>cl[t.id]&&cl[t.id][st.id]).length;
-          const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';
-          if(dC===eSubs.length&&eSubs.length>0)cb.checked=true;else if(dC>0)cb.indeterminate=true;
-          cb.addEventListener('change',function(e){
-            e.stopPropagation();if(!fl.checklist[t.id])fl.checklist[t.id]={};
-            eSubs.forEach(st=>{fl.checklist[t.id][st.id]=this.checked;});
-            scheduleSave();updateFloorProgress(fl,p);
-            // refresh phase header counts
-            const newD=eSubs.filter(st=>fl.checklist[t.id]&&fl.checklist[t.id][st.id]).length;
-            cb.checked=newD===eSubs.length;cb.indeterminate=newD>0&&newD<eSubs.length;
-            refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p);
-          });
-          const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=t.label;
-          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
-          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
-          tRow.appendChild(cb);tRow.appendChild(lbl);tRow.appendChild(tog);
-          tRow.addEventListener('click',e=>{if(e.target===cb||e.target===tog||e.target.classList.contains('task-comment-btn'))return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
-          const subBody=document.createElement('div');subBody.className='subtasks-body';
-          eSubs.forEach(st=>{
-            const stC=cl[t.id]&&cl[t.id][st.id];
-            const stRow=document.createElement('div');stRow.className='subtask-row';
-            const stCb=document.createElement('input');stCb.type='checkbox';stCb.className='subtask-cb';if(stC)stCb.checked=true;
-            const stLbl=document.createElement('span');stLbl.className='subtask-lbl'+(stC?' done':'');stLbl.textContent=st.label;
-            stCb.addEventListener('change',function(e){
-              e.stopPropagation();if(!fl.checklist[t.id])fl.checklist[t.id]={};
-              fl.checklist[t.id][st.id]=this.checked;
-              stLbl.className='subtask-lbl'+(this.checked?' done':'');
-              const newD=eSubs.filter(s=>fl.checklist[t.id]&&fl.checklist[t.id][s.id]).length;
-              cb.checked=newD===eSubs.length;cb.indeterminate=newD>0&&newD<eSubs.length;
-              scheduleSave();updateFloorProgress(fl,p);refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p);
-            });
-            stRow.addEventListener('click',e=>{if(e.target===stCb||e.target.classList.contains('task-comment-btn'))return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
-            stRow.appendChild(stCb);stRow.appendChild(stLbl);
-            subBody.appendChild(stRow);
-            makeCommentUI(fl,t.id+'_'+st.id,stRow,subBody,true);
-          });
-          gs.appendChild(tRow);
-          makeCommentUI(fl,t.id,tRow,gs,false);
-          gs.appendChild(subBody);
-        }else{
-          const chk=!!cl[t.id];
-          const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';if(chk)cb.checked=true;
-          cb.addEventListener('change',function(e){
-            e.stopPropagation();fl.checklist[t.id]=this.checked;
-            lbl.className='task-lbl'+(this.checked?' done':'');
-            scheduleSave();updateFloorProgress(fl,p);refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p);
-          });
-          const lbl=document.createElement('span');lbl.className='task-lbl'+(chk?' done':'');lbl.textContent=t.label;
-          tRow.appendChild(cb);tRow.appendChild(lbl);
-          tRow.addEventListener('click',e=>{if(e.target===cb||e.target.classList.contains('task-comment-btn'))return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
-          gs.appendChild(tRow);
-          makeCommentUI(fl,t.id,tRow,gs,false);
-        }
-      });
-      phBody.appendChild(gs);
-    });
+    const gs=document.createElement('div');gs.className='group-section';
+    renderTreeChecklist(gs,ph.items||[],fl,p,ph,0,phHdr,phCard);
+    phBody.appendChild(gs);
     phCard.appendChild(phHdr);phCard.appendChild(phBody);body.appendChild(phCard);
   });
   // ── Tareas globales de Parametrización (agrupadas por fase)
-  PHASES.forEach(ph=>{
+  (appData.phases||[]).forEach(ph=>{
     const phGlobal=(appData.globalTasks||[]).filter(gt=>gt.phaseId===ph.id&&ok(gt.id));
     if(!phGlobal.length)return;
     let gtT=0,gtD=0;
@@ -2388,16 +2371,72 @@ function buildFloorChecklist(body,fl,p){
   }
 }
 
+// ── Renderizador recursivo del árbol de checklist de piso ──
+function renderTreeChecklist(container,items,fl,p,ph,depth,phHdr,phCard){
+  const cl=fl.checklist||{};
+  const flEn=fl.enabledTasks||{};
+  const projEn=p.enabledTasks||{};
+  const ok=id=>projEn[id]!==false&&flEn[id]!==false;
+  const pad=16+depth*18;
+  (items||[]).forEach(node=>{
+    const isLeaf=!node.items||!node.items.length;
+    if(isLeaf){
+      if(!ok(node.id))return;
+      if(node.qty){
+        // Nodo con campo de cantidad (#)
+        const row=document.createElement('div');row.className='task-row qty-row';row.style.paddingLeft=pad+'px';
+        const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=node.label;
+        const inp=document.createElement('input');inp.type='number';inp.className='qty-input';inp.min='0';
+        inp.value=cl[node.id]||'';inp.placeholder='0';
+        inp.addEventListener('input',()=>{
+          const v=Math.max(0,parseInt(inp.value)||0);
+          fl.checklist[node.id]=v;inp.value=v||'';
+          scheduleSave();updateFloorProgress(fl,p);
+          refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p);
+        });
+        row.appendChild(lbl);row.appendChild(inp);container.appendChild(row);
+      }else{
+        // Nodo checkbox normal
+        const chk=!!cl[node.id];
+        const row=document.createElement('div');row.className='task-row';row.style.paddingLeft=pad+'px';
+        const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';if(chk)cb.checked=true;
+        const lbl=document.createElement('span');lbl.className='task-lbl'+(chk?' done':'');lbl.textContent=node.label;
+        cb.addEventListener('change',function(e){
+          e.stopPropagation();fl.checklist[node.id]=this.checked;
+          lbl.className='task-lbl'+(this.checked?' done':'');
+          scheduleSave();updateFloorProgress(fl,p);
+          refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p);
+        });
+        row.appendChild(cb);row.appendChild(lbl);
+        row.addEventListener('click',e=>{if(e.target===cb||e.target.classList.contains('task-comment-btn'))return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
+        container.appendChild(row);
+        makeCommentUI(fl,node.id,row,container,depth>0);
+      }
+    }else{
+      // Nodo rama — acordeón colapsable
+      const leaves=getLeaves(node.items);
+      const enabledL=leaves.filter(l=>ok(l.id));
+      if(!enabledL.length)return;
+      const brDiv=document.createElement('div');
+      const brHdr=document.createElement('div');brHdr.className='task-row tree-branch-hdr';brHdr.style.paddingLeft=pad+'px';
+      const chev=document.createElement('span');chev.style.cssText='font-size:11px;font-weight:700;color:var(--text2);min-width:14px;';chev.textContent='▶';
+      const brLbl=document.createElement('span');brLbl.className='task-lbl';brLbl.style.cssText='font-weight:600;font-size:12px;letter-spacing:0.04em;color:var(--text2);text-transform:uppercase;';brLbl.textContent=node.label;
+      brHdr.appendChild(chev);brHdr.appendChild(brLbl);
+      const brBody=document.createElement('div');brBody.className='subtasks-body';
+      brHdr.addEventListener('click',()=>{const o=brBody.classList.toggle('open');chev.textContent=o?'▼':'▶';});
+      renderTreeChecklist(brBody,node.items,fl,p,ph,depth+1,phHdr,phCard);
+      brDiv.appendChild(brHdr);brDiv.appendChild(brBody);container.appendChild(brDiv);
+    }
+  });
+}
 function refreshFloorPhaseHeader(phHdr,phCard,fl,ph,p){
+  if(!phHdr||!ph)return;
   const cl=fl.checklist||{};
   const flEn=fl.enabledTasks||{},projEn=p.enabledTasks||{};
   const ok=id=>projEn[id]!==false&&flEn[id]!==false;
   let phT=0,phD=0;
-  ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
-    if(!ok(t.id))return;
-    if(t.subtasks&&t.subtasks.length){t.subtasks.forEach(st=>{if(!ok(st.id))return;phT++;if(cl[t.id]&&cl[t.id][st.id])phD++;});}
-    else{phT++;if(cl[t.id])phD++;}
-  }));
+  function cLeaves(items){(items||[]).forEach(n=>{if(!n.items||!n.items.length){if(!ok(n.id))return;phT++;if(n.qty){if(cl[n.id]&&Number(cl[n.id])>0)phD++;}else{if(cl[n.id])phD++;}}else cLeaves(n.items);});}
+  cLeaves(ph.items);
   const pct=phT?Math.round(phD/phT*100):0;
   const cnt=phHdr.querySelector('.phase-count');const fill=phHdr.querySelector('.phase-mini-bar-fill');const pctEl=phHdr.querySelector('.phase-mini-pct');
   if(cnt)cnt.textContent=phD+'/'+phT;if(fill)fill.style.width=pct+'%';if(pctEl)pctEl.textContent=pct+'%';
