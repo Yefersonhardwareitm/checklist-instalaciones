@@ -466,6 +466,23 @@ canvas{width:100%!important;height:100%!important;}
 .anim-in-d1{animation-delay:0.05s;}
 .anim-in-d2{animation-delay:0.1s;}
 .anim-in-d3{animation-delay:0.15s;}
+
+/* ═══ PARAMETRIZACIÓN ═══ */
+#tab-param{background:var(--bg);}
+.param-wrap{max-width:1100px;margin:0 auto;padding:0 28px 80px;}
+.param-hero{padding:40px 0 32px;position:relative;overflow:hidden;}
+.param-eyebrow{font-family:'DM Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.param-eyebrow::before{content:'';width:20px;height:1px;background:var(--accent);flex-shrink:0;}
+.param-title{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;line-height:1.1;margin-bottom:8px;background:linear-gradient(140deg,#F0EDE6 30%,rgba(200,240,96,0.75) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.param-sub{font-size:14px;color:var(--text3);margin-bottom:28px;max-width:620px;line-height:1.6;}
+.param-stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+.param-stat{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 18px;display:flex;align-items:center;gap:10px;}
+.param-stat-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text);}
+.param-stat-lbl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.08em;}
+.param-global-lbl{color:var(--accent)!important;}
+.param-predef-badge{font-size:10px;color:var(--text3);font-family:'DM Mono',monospace;background:var(--bg4);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-left:auto;}
+.param-task-row{display:flex;align-items:center;gap:10px;padding:8px 18px 8px 44px;border-bottom:1px solid rgba(255,255,255,0.03);opacity:0.55;}
+.param-task-row:last-of-type{border-bottom:none;}
 </style>
 </head>
 <body>
@@ -501,7 +518,8 @@ canvas{width:100%!important;height:100%!important;}
       <div class="sync-status"><div class="sync-dot" id="sync-dot"></div><span id="sync-text">Sincronizado</span></div>
     </div>
     <div class="topbar-right">
-      <button class="tb-btn" onclick="showChangePw()">Contraseña</button>
+      <button class="tb-btn" onclick="showChangePw()">🔑 Contraseña</button>
+      <button class="tb-btn" id="btn-param" onclick="showParam()">⚙️ Parametrización</button>
       <button class="tb-btn accent" id="btn-new-proj" onclick="openNewProject()">+ Nuevo proyecto</button>
       <button class="tb-btn" onclick="doLogout()">Salir</button>
     </div>
@@ -534,6 +552,19 @@ canvas{width:100%!important;height:100%!important;}
       </div>
       <!-- Cards grid -->
       <div class="home-grid" id="projects-grid"></div>
+    </div>
+  </div>
+
+  <!-- PARAMETRIZACIÓN -->
+  <div id="tab-param" class="hidden">
+    <div class="param-wrap">
+      <div class="param-hero">
+        <div class="param-eyebrow">NAS · TIC</div>
+        <div class="param-title">⚙️ Parametrización</div>
+        <div class="param-sub">Catálogo global de actividades disponibles para todos los proyectos.<br>Las tareas que agregues aquí estarán disponibles al crear o editar cualquier proyecto.</div>
+        <div id="param-stats" class="param-stats-row"></div>
+      </div>
+      <div id="param-container" class="phases-container"></div>
     </div>
   </div>
 
@@ -576,25 +607,12 @@ canvas{width:100%!important;height:100%!important;}
       <div class="pdet-kpis anim-in anim-in-d2" id="pdet-kpis"></div>
       <!-- Inner tabs -->
       <div class="proj-inner-tabs anim-in anim-in-d3">
-        <button class="proj-inner-tab active" onclick="switchProjTab('checklist')">📋 Tareas</button>
-        <button class="proj-inner-tab" onclick="switchProjTab('pisos')">🏢 Pisos</button>
+        <button class="proj-inner-tab active" onclick="switchProjTab('pisos')">🏢 Pisos</button>
         <button class="proj-inner-tab" onclick="switchProjTab('compras')">🛒 Compras</button>
       </div>
     </div>
     <!-- Tab contents -->
     <div class="main">
-
-    <!-- TAREAS TAB -->
-    <div id="proj-tab-checklist">
-      <div id="tareas-header" style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;">
-        <div style="flex:1">
-          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px;">📋 Tareas del proyecto</div>
-          <div style="font-size:12px;color:var(--text3);">Activa/desactiva, renombra o agrega tareas personalizadas. El avance real se registra en <strong style="color:var(--accent)">🏢 Pisos</strong></div>
-        </div>
-        <div id="tareas-count" style="font-family:'DM Mono',monospace;font-size:13px;color:var(--text3);white-space:nowrap;"></div>
-      </div>
-      <div class="phases-container" id="phases-container"></div>
-    </div>
 
     <!-- PISOS TAB -->
     <div id="proj-tab-pisos" class="hidden">
@@ -800,6 +818,7 @@ async function loadFromCloud(){
     if(!appData.projects)appData.projects=[];
     if(!appData.purchases)appData.purchases={};
     if(!appData.floors)appData.floors={};
+    if(!appData.globalTasks)appData.globalTasks=[];
     setSyncStatus('ok');
     localStorage.setItem('nas_backup',JSON.stringify(appData));
   }catch(e){
@@ -862,15 +881,19 @@ function showPwError(msg){const e=document.getElementById('pw-error');e.textCont
 
 // ── MAIN TABS ──
 function switchMainTab(tab){
-  ['dashboard','compare','project'].forEach(t=>{
+  ['dashboard','compare','project','param'].forEach(t=>{
     document.getElementById('tab-'+t).classList.toggle('hidden',t!==tab);
   });
   document.querySelectorAll('.nav-tab').forEach((b,i)=>{
     b.classList.toggle('active',['dashboard','compare'].indexOf(tab)===i);
   });
+  // Resaltar botón Parametrización cuando está activo
+  const pbtn=document.getElementById('btn-param');
+  if(pbtn)pbtn.classList.toggle('accent',tab==='param');
   if(tab==='compare')renderGlobalCompare();
   if(tab==='dashboard')renderDashboard();
-  document.getElementById('btn-new-proj').classList.toggle('hidden',tab==='project');
+  if(tab==='param')renderParam();
+  document.getElementById('btn-new-proj').classList.toggle('hidden',tab==='project'||tab==='param');
 }
 
 // ── DASHBOARD ──
@@ -1039,7 +1062,7 @@ function openProject(id){
       <div class="pdet-kpi-lbl">Estado</div>
     </div>`;
   switchMainTab('project');
-  switchProjTab('checklist');
+  switchProjTab('pisos');
 }
 function editCurrentProject(){if(currentProjectId)openEditProject(currentProjectId);}
 function deleteCurrentProject(){
@@ -1051,15 +1074,130 @@ function deleteCurrentProject(){
 }
 
 function switchProjTab(tab){
-  ['checklist','pisos','compras'].forEach(t=>{
+  ['pisos','compras'].forEach(t=>{
     document.getElementById('proj-tab-'+t).classList.toggle('hidden',t!==tab);
   });
   document.querySelectorAll('.proj-inner-tab').forEach((b,i)=>{
-    b.classList.toggle('active',['checklist','pisos','compras'][i]===tab);
+    b.classList.toggle('active',['pisos','compras'][i]===tab);
   });
-  if(tab==='checklist'){const p=appData.projects.find(x=>x.id===currentProjectId);if(p)renderTaskList(p);}
   if(tab==='pisos')renderFloors();
   if(tab==='compras')renderPurchases();
+}
+
+// ── PARAMETRIZACIÓN ──
+function showParam(){switchMainTab('param');}
+function renderParam(){
+  if(!appData.globalTasks)appData.globalTasks=[];
+  const gt=appData.globalTasks;
+  // Stats
+  const statsEl=document.getElementById('param-stats');
+  const totalPre=PHASES.reduce((s,ph)=>s+ph.groups.reduce((ss,gr)=>ss+gr.tasks.reduce((sss,t)=>sss+(t.subtasks&&t.subtasks.length?t.subtasks.length:1),0),0),0);
+  const totalGlob=gt.reduce((s,t)=>s+(t.subtasks&&t.subtasks.length?t.subtasks.length:1),0);
+  statsEl.innerHTML=`
+    <div class="param-stat"><div><div class="param-stat-val">${PHASES.length}</div><div class="param-stat-lbl">Fases</div></div></div>
+    <div class="param-stat"><div><div class="param-stat-val">${totalPre}</div><div class="param-stat-lbl">Actividades predefinidas</div></div></div>
+    <div class="param-stat"><div><div class="param-stat-val" style="color:var(--accent)">${gt.length}</div><div class="param-stat-lbl param-global-lbl">Tareas globales</div></div></div>`;
+
+  const container=document.getElementById('param-container');
+  // Preservar fases abiertas
+  const openP={};container.querySelectorAll('.phase-body.open').forEach(b=>{openP[b.dataset.pid]=true;});
+  container.innerHTML='';
+
+  PHASES.forEach(ph=>{
+    const phGlobal=gt.filter(t=>t.phaseId===ph.id);
+    const preCount=ph.groups.reduce((s,gr)=>s+gr.tasks.length,0);
+    const card=document.createElement('div');card.className='phase-card';
+    const hdr=document.createElement('div');
+    hdr.className='phase-hdr'+(openP[ph.id]?' open':'');
+    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${preCount} predefinidas${phGlobal.length?' · <span style="color:var(--accent)">'+phGlobal.length+' globales</span>':''}</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
+    const body=document.createElement('div');
+    body.className='phase-body'+(openP[ph.id]?' open':'');body.dataset.pid=ph.id;
+    hdr.addEventListener('click',()=>{const o=body.classList.toggle('open');hdr.classList.toggle('open',o);});
+
+    // ── Tareas predefinidas (solo lectura)
+    ph.groups.forEach(gr=>{
+      const gs=document.createElement('div');gs.className='group-section';
+      if(gr.label){const gl=document.createElement('div');gl.className='group-label';gl.textContent=gr.label;gs.appendChild(gl);}
+      gr.tasks.forEach(t=>{
+        const tRow=document.createElement('div');tRow.className='task-row';tRow.style.cssText='cursor:default;opacity:0.6;';
+        const dot=document.createElement('div');dot.style.cssText=`width:8px;height:8px;border-radius:50%;background:${ph.color};flex-shrink:0;`;
+        const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=t.label;
+        const badge=document.createElement('span');badge.className='param-predef-badge';badge.textContent='predefinida';
+        tRow.appendChild(dot);tRow.appendChild(lbl);
+        if(t.subtasks&&t.subtasks.length){
+          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
+          tRow.appendChild(tog);
+        }
+        tRow.appendChild(badge);gs.appendChild(tRow);
+        if(t.subtasks&&t.subtasks.length){
+          const sb=document.createElement('div');sb.className='subtasks-body';
+          t.subtasks.forEach(st=>{
+            const stRow=document.createElement('div');stRow.className='subtask-row';stRow.style.cursor='default';
+            const stDot=document.createElement('div');stDot.style.cssText=`width:6px;height:6px;border-radius:50%;background:${ph.color};flex-shrink:0;opacity:0.5;`;
+            const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=st.label;
+            stRow.appendChild(stDot);stRow.appendChild(stLbl);sb.appendChild(stRow);
+          });
+          gs.appendChild(sb);
+        }
+      });
+      body.appendChild(gs);
+    });
+
+    // ── Tareas globales personalizadas
+    const glGs=document.createElement('div');glGs.className='group-section';
+    const glLbl=document.createElement('div');glLbl.className='group-label custom-phase-lbl';
+    glLbl.innerHTML='⚙ Tareas globales <span style="font-weight:400;color:var(--text3)">(disponibles en todos los proyectos)</span>';
+    glGs.appendChild(glLbl);
+    if(phGlobal.length){phGlobal.forEach(t=>renderParamTaskRow(glGs,t,ph));}
+    else{const em=document.createElement('div');em.style.cssText='padding:8px 18px 4px 44px;font-size:12px;color:var(--text3);font-style:italic;';em.textContent='Sin tareas globales para esta fase';glGs.appendChild(em);}
+    const addBtn=document.createElement('button');addBtn.className='add-tarea-btn';addBtn.innerHTML='<span style="font-size:16px;line-height:1">+</span> Agregar tarea global a esta fase';
+    addBtn.addEventListener('click',()=>{
+      const lb=prompt('Nombre de la nueva tarea global:');
+      if(!lb||!lb.trim())return;
+      appData.globalTasks.push({id:'gt_'+Date.now(),phaseId:ph.id,label:lb.trim(),subtasks:[]});
+      scheduleSave();renderParam();showToast('✓ Tarea global agregada');
+    });
+    glGs.appendChild(addBtn);
+    body.appendChild(glGs);
+    card.appendChild(hdr);card.appendChild(body);container.appendChild(card);
+  });
+}
+function renderParamTaskRow(container,gt,ph){
+  const tRow=document.createElement('div');tRow.className='task-row';tRow.style.cursor='default';
+  const dot=document.createElement('div');dot.style.cssText='width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;';
+  const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=gt.label;
+  const acts=document.createElement('div');acts.className='tarea-actions';acts.style.opacity='1';
+  const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='✏️';eBtn.title='Editar nombre';
+  eBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',gt.label);if(nl&&nl.trim()){gt.label=nl.trim();scheduleSave();renderParam();}});
+  const asBtn=document.createElement('button');asBtn.className='tarea-act-btn';asBtn.style.fontSize='11px';asBtn.textContent='+sub';asBtn.title='Agregar subtarea';
+  asBtn.addEventListener('click',e=>{e.stopPropagation();const lb=prompt('Nombre de la subtarea:');if(!lb||!lb.trim())return;if(!gt.subtasks)gt.subtasks=[];gt.subtasks.push({id:'gts_'+Date.now(),label:lb.trim()});scheduleSave();renderParam();});
+  const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='🗑️';dBtn.title='Eliminar tarea global';
+  dBtn.addEventListener('click',e=>{e.stopPropagation();if(!confirm('¿Eliminar esta tarea global?\nSe eliminará del catálogo de todos los proyectos.'))return;appData.globalTasks=appData.globalTasks.filter(x=>x.id!==gt.id);scheduleSave();renderParam();showToast('Tarea global eliminada');});
+  acts.appendChild(eBtn);acts.appendChild(asBtn);acts.appendChild(dBtn);
+  tRow.appendChild(dot);tRow.appendChild(lbl);
+  if(gt.subtasks&&gt.subtasks.length){
+    const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+    tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
+    tRow.appendChild(tog);
+  }
+  tRow.appendChild(acts);container.appendChild(tRow);
+  if(gt.subtasks&&gt.subtasks.length){
+    const sb=document.createElement('div');sb.className='subtasks-body';
+    gt.subtasks.forEach(st=>{
+      const stRow=document.createElement('div');stRow.className='subtask-row';stRow.style.cursor='default';
+      const stDot=document.createElement('div');stDot.style.cssText='width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;opacity:0.7;';
+      const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=st.label;
+      const stActs=document.createElement('div');stActs.className='tarea-actions';stActs.style.opacity='1';
+      const stEBtn=document.createElement('button');stEBtn.className='tarea-act-btn';stEBtn.textContent='✏️';
+      stEBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',st.label);if(nl&&nl.trim()){st.label=nl.trim();scheduleSave();renderParam();}});
+      const stDBtn=document.createElement('button');stDBtn.className='tarea-act-btn danger';stDBtn.textContent='🗑️';
+      stDBtn.addEventListener('click',e=>{e.stopPropagation();gt.subtasks=gt.subtasks.filter(x=>x.id!==st.id);scheduleSave();renderParam();});
+      stActs.appendChild(stEBtn);stActs.appendChild(stDBtn);
+      stRow.appendChild(stDot);stRow.appendChild(stLbl);stRow.appendChild(stActs);sb.appendChild(stRow);
+    });
+    container.appendChild(sb);
+  }
 }
 
 // ── CHECKLIST RENDER ──
@@ -1603,6 +1741,7 @@ function openNewProject(){
   document.getElementById('modal-proj-title').textContent='Nuevo proyecto';
   enabledTasks={};modalFloors=[];
   PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{enabledTasks[t.id]=true;if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=true;});})));
+  (appData.globalTasks||[]).forEach(gt=>{enabledTasks[gt.id]=true;if(gt.subtasks)gt.subtasks.forEach(st=>{enabledTasks[st.id]=true;});});
   buildColorPicker();buildTaskSelector();syncModalFloorCount();buildModalFloorSection();openModal('modal-project');
 }
 function openEditProject(id){
@@ -1615,6 +1754,10 @@ function openEditProject(id){
     enabledTasks[t.id]=(p.enabledTasks&&p.enabledTasks[t.id]===false)?false:true;
     if(t.subtasks)t.subtasks.forEach(st=>{enabledTasks[st.id]=(p.enabledTasks&&p.enabledTasks[st.id]===false)?false:true;});
   })));
+  (appData.globalTasks||[]).forEach(gt=>{
+    enabledTasks[gt.id]=(p.enabledTasks&&p.enabledTasks[gt.id]===false)?false:true;
+    if(gt.subtasks)gt.subtasks.forEach(st=>{enabledTasks[st.id]=(p.enabledTasks&&p.enabledTasks[st.id]===false)?false:true;});
+  });
   // Cargar pisos existentes
   modalFloors=(appData.floors[id]||[]).map(fl=>({name:fl.name,enabledTasks:{...(fl.enabledTasks||{})}}));
   buildColorPicker();buildTaskSelector();syncModalFloorCount();buildModalFloorSection();openModal('modal-project');
@@ -1661,6 +1804,32 @@ function buildTaskSelector(){
         });
       });
     });
+    // Tareas globales de esta fase
+    const phGT=(appData.globalTasks||[]).filter(gt=>gt.phaseId===ph.id);
+    if(phGT.length){
+      const glLbl=document.createElement('div');glLbl.style.cssText='font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);padding:8px 14px 4px 44px;opacity:0.85;';glLbl.textContent='⚙ Globales';body.appendChild(glLbl);
+      phGT.forEach(gt=>{
+        const hasSubs=gt.subtasks&&gt.subtasks.length>0;
+        const tRow=document.createElement('div');tRow.className='ts-task-row';
+        const tCb=document.createElement('input');tCb.type='checkbox';tCb.className='ts-task-check';
+        if(hasSubs){const en=gt.subtasks.filter(st=>enabledTasks[st.id]!==false).length;if(en===gt.subtasks.length)tCb.checked=true;else if(en>0)tCb.indeterminate=true;}
+        else tCb.checked=enabledTasks[gt.id]!==false;
+        const tLbl=document.createElement('span');tLbl.className='ts-task-label';tLbl.textContent='⚙ '+gt.label;
+        tRow.appendChild(tCb);tRow.appendChild(tLbl);
+        tCb.addEventListener('change',function(e){e.stopPropagation();enabledTasks[gt.id]=this.checked;if(hasSubs)gt.subtasks.forEach(st=>{enabledTasks[st.id]=this.checked;});buildTaskSelector();});
+        tRow.addEventListener('click',e=>{if(e.target===tCb)return;tCb.checked=!tCb.checked;tCb.dispatchEvent(new Event('change'));});
+        body.appendChild(tRow);
+        if(hasSubs)gt.subtasks.forEach(st=>{
+          const stRow=document.createElement('div');stRow.className='ts-subtask-row';
+          const stCb=document.createElement('input');stCb.type='checkbox';stCb.className='ts-subtask-check';stCb.checked=enabledTasks[st.id]!==false;
+          const stLbl=document.createElement('span');stLbl.className='ts-subtask-label';stLbl.textContent=st.label;
+          stRow.appendChild(stCb);stRow.appendChild(stLbl);
+          stCb.addEventListener('change',function(e){e.stopPropagation();enabledTasks[st.id]=this.checked;buildTaskSelector();});
+          stRow.addEventListener('click',e=>{if(e.target===stCb)return;stCb.checked=!stCb.checked;stCb.dispatchEvent(new Event('change'));});
+          body.appendChild(stRow);
+        });
+      });
+    }
     sec.appendChild(hdr);sec.appendChild(body);wrap.appendChild(sec);
   });
 }
@@ -1707,6 +1876,9 @@ function modalFloorPlus(){
   PHASES.forEach(ph=>ph.groups.forEach(gr=>gr.tasks.forEach(t=>{
     if(enabledTasks[t.id]!==false){flEn[t.id]=true;if(t.subtasks)t.subtasks.forEach(st=>{if(enabledTasks[st.id]!==false)flEn[st.id]=true;});}
   })));
+  (appData.globalTasks||[]).forEach(gt=>{
+    if(enabledTasks[gt.id]!==false){flEn[gt.id]=true;if(gt.subtasks)gt.subtasks.forEach(st=>{if(enabledTasks[st.id]!==false)flEn[st.id]=true;});}
+  });
   modalFloors.push({name:'Piso '+num,enabledTasks:flEn});
   syncModalFloorCount();buildModalFloorSection();
 }
@@ -1808,6 +1980,12 @@ function countFloorProgress(fl,p){
     if(!ok(ct.id))return;
     if(ct.subtasks&&ct.subtasks.length){ct.subtasks.forEach(st=>{if(!ok(st.id))return;total++;if(cl[ct.id]&&cl[ct.id][st.id])done++;});}
     else{total++;if(cl[ct.id])done++;}
+  });
+  // Tareas globales de Parametrización
+  (appData.globalTasks||[]).forEach(gt=>{
+    if(!ok(gt.id))return;
+    if(gt.subtasks&&gt.subtasks.length){gt.subtasks.forEach(st=>{if(!ok(st.id))return;total++;if(cl[gt.id]&&cl[gt.id][st.id])done++;});}
+    else{total++;if(cl[gt.id])done++;}
   });
   return{total,done};
 }
@@ -2081,6 +2259,60 @@ function buildFloorChecklist(body,fl,p){
     });
     phCard.appendChild(phHdr);phCard.appendChild(phBody);body.appendChild(phCard);
   });
+  // ── Tareas globales de Parametrización (agrupadas por fase)
+  PHASES.forEach(ph=>{
+    const phGlobal=(appData.globalTasks||[]).filter(gt=>gt.phaseId===ph.id&&ok(gt.id));
+    if(!phGlobal.length)return;
+    let gtT=0,gtD=0;
+    phGlobal.forEach(gt=>{
+      if(gt.subtasks&&gt.subtasks.length){gt.subtasks.forEach(st=>{if(!ok(st.id))return;gtT++;if(cl[gt.id]&&cl[gt.id][st.id])gtD++;});}
+      else{gtT++;if(cl[gt.id])gtD++;}
+    });
+    const gtPct=gtT?Math.round(gtD/gtT*100):0;
+    const gtCard=document.createElement('div');gtCard.className='phase-card';gtCard.style.marginBottom='8px';
+    const gtHdr=document.createElement('div');gtHdr.className='phase-hdr';
+    gtHdr.innerHTML=`<span class="phase-num">⚙</span><span class="phase-name" style="color:var(--accent)">${ph.name} — Globales</span><span class="phase-count">${gtD}/${gtT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${gtPct}%;background:var(--accent)"></div></div><span class="phase-mini-pct">${gtPct}%</span></div><span class="phase-chevron">▶</span>`;
+    gtHdr.addEventListener('click',()=>{const b=gtCard.querySelector('.phase-body');const o=b.classList.toggle('open');gtHdr.classList.toggle('open',o);});
+    const gtBody=document.createElement('div');gtBody.className='phase-body';
+    phGlobal.forEach(gt=>{
+      const hasSubs=gt.subtasks&&gt.subtasks.length>0;
+      const eSubs=hasSubs?gt.subtasks.filter(st=>ok(st.id)):[];
+      const gtRow=document.createElement('div');gtRow.className='task-row';
+      if(hasSubs){
+        const dC=eSubs.filter(st=>cl[gt.id]&&cl[gt.id][st.id]).length;
+        const cbt=document.createElement('input');cbt.type='checkbox';cbt.className='task-cb';
+        if(dC===eSubs.length&&eSubs.length>0)cbt.checked=true;else if(dC>0)cbt.indeterminate=true;
+        cbt.addEventListener('change',function(e){e.stopPropagation();if(!fl.checklist[gt.id])fl.checklist[gt.id]={};eSubs.forEach(st=>{fl.checklist[gt.id][st.id]=this.checked;});const newD=eSubs.filter(st=>fl.checklist[gt.id]&&fl.checklist[gt.id][st.id]).length;cbt.checked=newD===eSubs.length;cbt.indeterminate=newD>0&&newD<eSubs.length;scheduleSave();updateFloorProgress(fl,p);});
+        const lblt=document.createElement('span');lblt.className='task-lbl';lblt.textContent=gt.label;
+        const togt=document.createElement('button');togt.className='subtask-toggle';togt.textContent='Subtareas ▾';
+        togt.addEventListener('click',e=>{e.stopPropagation();const sb=gtRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');togt.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
+        gtRow.appendChild(cbt);gtRow.appendChild(lblt);gtRow.appendChild(togt);
+        gtRow.addEventListener('click',e=>{if(e.target===cbt||e.target===togt||e.target.classList.contains('task-comment-btn'))return;cbt.checked=!cbt.checked;cbt.dispatchEvent(new Event('change'));});
+        const sbody=document.createElement('div');sbody.className='subtasks-body';
+        eSubs.forEach(st=>{
+          const stC=cl[gt.id]&&cl[gt.id][st.id];
+          const stRow=document.createElement('div');stRow.className='subtask-row';
+          const stCbt=document.createElement('input');stCbt.type='checkbox';stCbt.className='subtask-cb';if(stC)stCbt.checked=true;
+          const stLblt=document.createElement('span');stLblt.className='subtask-lbl'+(stC?' done':'');stLblt.textContent=st.label;
+          stCbt.addEventListener('change',function(e){e.stopPropagation();if(!fl.checklist[gt.id])fl.checklist[gt.id]={};fl.checklist[gt.id][st.id]=this.checked;stLblt.className='subtask-lbl'+(this.checked?' done':'');const newD2=eSubs.filter(s=>fl.checklist[gt.id]&&fl.checklist[gt.id][s.id]).length;cbt.checked=newD2===eSubs.length;cbt.indeterminate=newD2>0&&newD2<eSubs.length;scheduleSave();updateFloorProgress(fl,p);});
+          stRow.addEventListener('click',e=>{if(e.target===stCbt||e.target.classList.contains('task-comment-btn'))return;stCbt.checked=!stCbt.checked;stCbt.dispatchEvent(new Event('change'));});
+          stRow.appendChild(stCbt);stRow.appendChild(stLblt);sbody.appendChild(stRow);
+          makeCommentUI(fl,gt.id+'_'+st.id,stRow,sbody,true);
+        });
+        gtBody.appendChild(gtRow);makeCommentUI(fl,gt.id,gtRow,gtBody,false);gtBody.appendChild(sbody);
+      }else{
+        const chkt=!!cl[gt.id];
+        const cbt2=document.createElement('input');cbt2.type='checkbox';cbt2.className='task-cb';if(chkt)cbt2.checked=true;
+        const lblt2=document.createElement('span');lblt2.className='task-lbl'+(chkt?' done':'');lblt2.textContent=gt.label;
+        cbt2.addEventListener('change',function(e){e.stopPropagation();fl.checklist[gt.id]=this.checked;lblt2.className='task-lbl'+(this.checked?' done':'');scheduleSave();updateFloorProgress(fl,p);});
+        gtRow.appendChild(cbt2);gtRow.appendChild(lblt2);
+        gtRow.addEventListener('click',e=>{if(e.target===cbt2||e.target.classList.contains('task-comment-btn'))return;cbt2.checked=!cbt2.checked;cbt2.dispatchEvent(new Event('change'));});
+        gtBody.appendChild(gtRow);makeCommentUI(fl,gt.id,gtRow,gtBody,false);
+      }
+    });
+    gtCard.appendChild(gtHdr);gtCard.appendChild(gtBody);body.appendChild(gtCard);
+  });
+
   // Tareas personalizadas del proyecto en el piso
   const projCustom=(p.customTasks||[]).filter(ct=>ok(ct.id));
   if(projCustom.length){
