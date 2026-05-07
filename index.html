@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NAS â€” GestiÃ³n de Proyectos</title>
+<title>NAS — Gestión de Proyectos</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -139,7 +139,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .subtask-lbl{font-size:12px;color:var(--text2);}
 .subtask-lbl.done{text-decoration:line-through;color:var(--text3);}
 
-/* â”€â”€ COMPRAS MODULE â”€â”€ */
+/* ── COMPRAS MODULE ── */
 .purchases-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
 .cat-tabs{display:flex;gap:6px;flex-wrap:wrap;}
 .cat-tab{font-size:12px;font-weight:500;padding:6px 14px;border-radius:99px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all 0.15s;font-family:'Inter',sans-serif;}
@@ -274,7 +274,7 @@ canvas{width:100%!important;height:100%!important;}
   .form-row-2,.form-row-3{grid-template-columns:1fr;}
 }
 
-/* â”€â”€ PISOS â”€â”€ */
+/* ── PISOS ── */
 .floors-config-bar{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px 20px;margin-bottom:20px;flex-wrap:wrap;}
 .floors-config-info{flex:1;}
 .floors-config-title{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;margin-bottom:2px;}
@@ -341,7 +341,7 @@ canvas{width:100%!important;height:100%!important;}
 .mfl-body{display:none;border-top:1px solid var(--border);max-height:320px;overflow-y:auto;}
 .mfl-body.open{display:block;}
 .mfl-phase-lbl{font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);padding:8px 14px 2px;background:rgba(255,255,255,0.02);}
-/* â”€â”€â”€ COMENTARIOS DE TAREA â”€â”€â”€ */
+/* ─── COMENTARIOS DE TAREA ─── */
 .task-comment-btn{background:none;border:1px solid transparent;cursor:pointer;padding:3px 8px;border-radius:6px;font-size:12px;color:var(--text3);transition:all 0.15s;flex-shrink:0;margin-left:6px;line-height:1.4;font-family:'Roboto Mono',monospace;}
 .task-comment-btn:hover{background:var(--bg4);color:var(--text2);border-color:var(--border);}
 .task-comment-btn.has-comment{background:#F0B860;color:#0E0F0C;border:1px solid #d49a3a;font-weight:700;padding:3px 10px;box-shadow:0 2px 8px rgba(240,184,96,0.35);}
@@ -374,7 +374,7 @@ canvas{width:100%!important;height:100%!important;}
 .fob-stats{display:flex;justify-content:space-between;font-size:11px;color:var(--text3);font-family:'Roboto Mono',monospace;}
 .fob-pct{font-family:'Inter',sans-serif;font-size:32px;font-weight:800;min-width:70px;text-align:right;}
 
-/* â•â•â• HOME PAGE â•â•â• */
+/* ═══ HOME PAGE ═══ */
 #tab-dashboard{background:var(--bg);}
 .home-wrap{max-width:1380px;margin:0 auto;padding:0 28px 80px;}
 /* Hero */
@@ -398,7 +398,7 @@ canvas{width:100%!important;height:100%!important;}
 .home-sec-title{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:8px;}
 .home-count-badge{font-family:'Roboto Mono',monospace;font-size:10px;color:var(--text3);background:var(--bg3);border:1px solid var(--border);border-radius:99px;padding:2px 10px;}
 
-/* â•â•â• PROJECT CARDS â•â•â• */
+/* ═══ PROJECT CARDS ═══ */
 .home-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
 .hcard{background:var(--bg2);border:1px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;transition:border-color 0.22s,transform 0.22s,box-shadow 0.22s;position:relative;display:flex;flex-direction:column;}
 .hcard:hover{border-color:rgba(255,255,255,0.16);transform:translateY(-5px);box-shadow:0 24px 56px rgba(0,0,0,0.5);}
@@ -438,7 +438,7 @@ canvas{width:100%!important;height:100%!important;}
 .hcard-add-lbl{font-family:'Inter',sans-serif;font-size:14px;font-weight:700;}
 .hcard-add-sub{font-family:'Roboto Mono',monospace;font-size:11px;color:var(--text3);}
 
-/* â•â•â• PROJECT DETAIL HEADER â•â•â• */
+/* ═══ PROJECT DETAIL HEADER ═══ */
 #tab-project{background:var(--bg);}
 #tab-project .main{padding-top:8px;}
 .pdet-banner{height:5px;width:100%;transition:background 0.4s;}
@@ -467,7 +467,7 @@ canvas{width:100%!important;height:100%!important;}
 .anim-in-d2{animation-delay:0.1s;}
 .anim-in-d3{animation-delay:0.15s;}
 
-/* â•â•â• PARAMETRIZACIÃ“N â•â•â• */
+/* ═══ PARAMETRIZACIÓN ═══ */
 #tab-param{background:var(--bg);}
 .param-wrap{max-width:1100px;margin:0 auto;padding:0 28px 80px;}
 .param-hero{padding:40px 0 32px;position:relative;overflow:hidden;}
@@ -483,13 +483,13 @@ canvas{width:100%!important;height:100%!important;}
 .param-predef-badge{font-size:10px;color:var(--text3);font-family:'Roboto Mono',monospace;background:var(--bg4);padding:2px 8px;border-radius:4px;flex-shrink:0;margin-left:auto;}
 .param-task-row{display:flex;align-items:center;gap:10px;padding:8px 18px 8px 44px;border-bottom:1px solid rgba(255,255,255,0.03);opacity:0.55;}
 .param-task-row:last-of-type{border-bottom:none;}
-/* â”€â”€ cantidad (qty) input en checklist de piso â”€â”€ */
+/* ── cantidad (qty) input en checklist de piso ── */
 .qty-input{width:80px;padding:3px 8px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius-sm);color:var(--text);font-family:'Roboto Mono',monospace;font-size:13px;text-align:center;outline:none;transition:border-color 0.15s;}
 .qty-input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(200,240,96,0.18);}
 .qty-input::-webkit-inner-spin-button,.qty-input::-webkit-outer-spin-button{opacity:0.5;}
 .qty-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .qty-row .task-lbl{min-width:0;flex:1;}
-/* branch accordion en checklist Ã¡rbol */
+/* branch accordion en checklist árbol */
 .tree-branch-hdr{background:rgba(255,255,255,0.025);border-radius:6px;margin:3px 0;}
 .tree-branch-hdr:hover{background:rgba(255,255,255,0.045);}
 </style>
@@ -504,39 +504,39 @@ canvas{width:100%!important;height:100%!important;}
 <div id="screen-login">
   <div class="login-bg"></div><div class="login-grid"></div>
   <div class="login-box">
-    <div class="login-logo">NAS Â· TIC</div>
+    <div class="login-logo">NAS · TIC</div>
     <div class="login-title">Bienvenido de nuevo</div>
-    <div class="login-sub">GestiÃ³n de proyectos de instalaciÃ³n</div>
+    <div class="login-sub">Gestión de proyectos de instalación</div>
     <div class="form-row">
-      <label class="field-label">ContraseÃ±a</label>
+      <label class="field-label">Contraseña</label>
       <div class="field-wrap">
-        <input type="password" id="pw-input" class="field-input" placeholder="Ingresa tu contraseÃ±a">
-        <button class="toggle-pw" onclick="togglePw()" type="button">ðŸ‘</button>
+        <input type="password" id="pw-input" class="field-input" placeholder="Ingresa tu contraseña">
+        <button class="toggle-pw" onclick="togglePw()" type="button">👁</button>
       </div>
     </div>
-    <button class="btn-login" onclick="doLogin()">Ingresar â†’</button>
-    <div class="login-error" id="login-error">ContraseÃ±a incorrecta.</div>
-    <div class="login-hint">ContraseÃ±a inicial: <strong>nas2024</strong></div>
+    <button class="btn-login" onclick="doLogin()">Ingresar →</button>
+    <div class="login-error" id="login-error">Contraseña incorrecta.</div>
+    <div class="login-hint">Contraseña inicial: <strong>nas2024</strong></div>
   </div>
 </div>
 
 <div id="screen-app">
   <div class="topbar">
     <div style="display:flex;align-items:center;gap:16px">
-      <div class="topbar-brand">NAS Â· TIC</div>
+      <div class="topbar-brand">NAS · TIC</div>
       <div class="sync-status"><div class="sync-dot" id="sync-dot"></div><span id="sync-text">Sincronizado</span></div>
     </div>
     <div class="topbar-right">
-      <button class="tb-btn" onclick="showChangePw()">ðŸ”‘ ContraseÃ±a</button>
-      <button class="tb-btn" id="btn-param" onclick="showParam()">âš™ï¸ ParametrizaciÃ³n</button>
+      <button class="tb-btn" onclick="showChangePw()">🔑 Contraseña</button>
+      <button class="tb-btn" id="btn-param" onclick="showParam()">⚙️ Parametrización</button>
       <button class="tb-btn accent" id="btn-new-proj" onclick="openNewProject()">+ Nuevo proyecto</button>
       <button class="tb-btn" onclick="doLogout()">Salir</button>
     </div>
   </div>
 
   <div class="nav-tabs">
-    <button class="nav-tab active" onclick="switchMainTab('dashboard')">ðŸ“‹ Proyectos</button>
-    <button class="nav-tab" onclick="switchMainTab('compare')">ðŸ“Š ComparaciÃ³n de precios</button>
+    <button class="nav-tab active" onclick="switchMainTab('dashboard')">📋 Proyectos</button>
+    <button class="nav-tab" onclick="switchMainTab('compare')">📊 Comparación de precios</button>
   </div>
 
   <!-- DASHBOARD HOME -->
@@ -546,8 +546,8 @@ canvas{width:100%!important;height:100%!important;}
       <div class="home-hero">
         <div class="home-hero-glow"></div>
         <div class="home-hero-glow2"></div>
-        <div class="home-eyebrow">NAS Â· TIC</div>
-        <div class="home-title">GestiÃ³n de<br>Proyectos</div>
+        <div class="home-eyebrow">NAS · TIC</div>
+        <div class="home-title">Gestión de<br>Proyectos</div>
         <div class="home-sub">Instalaciones TIC, redes y telecomunicaciones</div>
         <div class="home-stats" id="dash-stats"></div>
       </div>
@@ -564,13 +564,13 @@ canvas{width:100%!important;height:100%!important;}
     </div>
   </div>
 
-  <!-- PARAMETRIZACIÃ“N -->
+  <!-- PARAMETRIZACIÓN -->
   <div id="tab-param" class="hidden">
     <div class="param-wrap">
       <div class="param-hero">
-        <div class="param-eyebrow">NAS Â· TIC</div>
-        <div class="param-title">âš™ï¸ ParametrizaciÃ³n</div>
-        <div class="param-sub">CatÃ¡logo global de actividades disponibles para todos los proyectos.<br>Las tareas que agregues aquÃ­ estarÃ¡n disponibles al crear o editar cualquier proyecto.</div>
+        <div class="param-eyebrow">NAS · TIC</div>
+        <div class="param-title">⚙️ Parametrización</div>
+        <div class="param-sub">Catálogo global de actividades disponibles para todos los proyectos.<br>Las tareas que agregues aquí estarán disponibles al crear o editar cualquier proyecto.</div>
         <div id="param-stats" class="param-stats-row"></div>
       </div>
       <div id="param-container" class="phases-container"></div>
@@ -579,8 +579,8 @@ canvas{width:100%!important;height:100%!important;}
 
   <!-- COMPARE GLOBAL -->
   <div id="tab-compare" class="main hidden">
-    <div class="page-title">ComparaciÃ³n de precios</div>
-    <div class="page-sub">EvoluciÃ³n de precios de Ã­tems entre proyectos</div>
+    <div class="page-title">Comparación de precios</div>
+    <div class="page-sub">Evolución de precios de ítems entre proyectos</div>
     <div id="compare-global-content"></div>
   </div>
 
@@ -592,7 +592,7 @@ canvas{width:100%!important;height:100%!important;}
     <div class="pdet-hdr">
       <!-- Nav -->
       <div class="pdet-nav anim-in">
-        <button class="pdet-back" onclick="showDashboard()">â† Proyectos</button>
+        <button class="pdet-back" onclick="showDashboard()">← Proyectos</button>
         <div class="pdet-bc">
           <span class="pdet-bc-sep">/</span>
           <span class="pdet-bc-cur" id="pdet-bc-name"></span>
@@ -601,23 +601,23 @@ canvas{width:100%!important;height:100%!important;}
       <!-- Title row -->
       <div class="pdet-head anim-in anim-in-d1">
         <div class="pdet-title-group">
-          <div class="pdet-icon" id="pdet-icon">ðŸ—</div>
+          <div class="pdet-icon" id="pdet-icon">🏗</div>
           <div>
             <div class="pdet-name" id="proj-detail-title"></div>
             <div class="pdet-meta" id="proj-detail-sub"></div>
           </div>
         </div>
         <div class="pdet-actions">
-          <button class="tb-btn" onclick="editCurrentProject()">âœï¸ Editar</button>
-          <button class="tb-btn" onclick="deleteCurrentProject()" style="color:var(--red)">ðŸ—‘</button>
+          <button class="tb-btn" onclick="editCurrentProject()">✏️ Editar</button>
+          <button class="tb-btn" onclick="deleteCurrentProject()" style="color:var(--red)">🗑</button>
         </div>
       </div>
       <!-- KPIs -->
       <div class="pdet-kpis anim-in anim-in-d2" id="pdet-kpis"></div>
       <!-- Inner tabs -->
       <div class="proj-inner-tabs anim-in anim-in-d3">
-        <button class="proj-inner-tab active" onclick="switchProjTab('pisos')">ðŸ¢ Pisos</button>
-        <button class="proj-inner-tab" onclick="switchProjTab('compras')">ðŸ›’ Compras</button>
+        <button class="proj-inner-tab active" onclick="switchProjTab('pisos')">🏢 Pisos</button>
+        <button class="proj-inner-tab" onclick="switchProjTab('compras')">🛒 Compras</button>
       </div>
     </div>
     <!-- Tab contents -->
@@ -633,9 +633,9 @@ canvas{width:100%!important;height:100%!important;}
       <div class="purchases-header">
         <div class="cat-tabs">
           <button class="cat-tab active" onclick="filterPurchases('all')">Todas</button>
-          <button class="cat-tab mat" onclick="filterPurchases('Materiales')">ðŸ“¦ Materiales</button>
-          <button class="cat-tab eq" onclick="filterPurchases('Equipos')">ðŸ”Œ Equipos</button>
-          <button class="cat-tab mo" onclick="filterPurchases('Mano de obra')">ðŸ‘· Mano de obra</button>
+          <button class="cat-tab mat" onclick="filterPurchases('Materiales')">📦 Materiales</button>
+          <button class="cat-tab eq" onclick="filterPurchases('Equipos')">🔌 Equipos</button>
+          <button class="cat-tab mo" onclick="filterPurchases('Mano de obra')">👷 Mano de obra</button>
         </div>
         <button class="tb-btn accent" onclick="openNewPurchase()">+ Registrar compra</button>
       </div>
@@ -645,7 +645,7 @@ canvas{width:100%!important;height:100%!important;}
           <table id="purchases-table">
             <thead>
               <tr>
-                <th>Ãtem</th><th>CategorÃ­a</th><th>Cant.</th><th>Unidad</th>
+                <th>Ítem</th><th>Categoría</th><th>Cant.</th><th>Unidad</th>
                 <th>Precio unit.</th><th>Total</th><th>Proveedor</th>
                 <th>OC #</th><th>Factura</th><th>Estado</th><th>Fecha</th><th></th>
               </tr>
@@ -655,7 +655,7 @@ canvas{width:100%!important;height:100%!important;}
         </div>
       </div>
       <div class="compare-section">
-        <div class="compare-title">ComparaciÃ³n con otros proyectos</div>
+        <div class="compare-title">Comparación con otros proyectos</div>
         <div id="proj-compare-content"></div>
       </div>
     </div>
@@ -669,12 +669,12 @@ canvas{width:100%!important;height:100%!important;}
     <div class="modal-title" id="modal-proj-title">Nuevo proyecto</div>
     <div class="modal-sub">Configura el proyecto y selecciona las tareas que aplican</div>
     <div class="form-row"><label class="form-label">Nombre del proyecto</label><input type="text" id="proj-name-input" class="form-input" placeholder="Ej: Edificio Centro Empresarial"></div>
-    <div class="form-row"><label class="form-label">DescripciÃ³n (opcional)</label><input type="text" id="proj-desc-input" class="form-input" placeholder="Ej: Calle 15 #8-42, BogotÃ¡"></div>
+    <div class="form-row"><label class="form-label">Descripción (opcional)</label><input type="text" id="proj-desc-input" class="form-input" placeholder="Ej: Calle 15 #8-42, Bogotá"></div>
     <div class="form-row"><label class="form-label">Color</label><div class="color-row" id="color-picker"></div></div>
     <div class="form-row">
       <label class="form-label">Pisos del proyecto</label>
       <div class="floor-modal-ctrl">
-        <button type="button" class="floors-count-btn" onclick="modalFloorMinus()">âˆ’</button>
+        <button type="button" class="floors-count-btn" onclick="modalFloorMinus()">−</button>
         <span id="modal-floor-count" class="floors-count-val">0</span>
         <button type="button" class="floors-count-btn" onclick="modalFloorPlus()">+</button>
         <span class="floor-modal-label">Agrega cada piso y configura sus actividades</span>
@@ -682,7 +682,7 @@ canvas{width:100%!important;height:100%!important;}
       <div id="modal-floors-section" class="modal-floors-section"></div>
     </div>
     <div class="form-row">
-      <label class="form-label">Tareas activas <span style="color:var(--text3);font-size:10px;text-transform:none;letter-spacing:0">(activa/desactiva segÃºn aplique)</span></label>
+      <label class="form-label">Tareas activas <span style="color:var(--text3);font-size:10px;text-transform:none;letter-spacing:0">(activa/desactiva según aplique)</span></label>
       <div class="task-selector" id="task-selector"></div>
     </div>
     <div class="modal-footer">
@@ -696,14 +696,14 @@ canvas{width:100%!important;height:100%!important;}
 <div id="modal-purchase" class="modal-overlay hidden">
   <div class="modal">
     <div class="modal-title" id="modal-pur-title">Registrar compra</div>
-    <div class="modal-sub">Registra un Ã­tem adquirido para este proyecto</div>
-    <div class="form-row"><label class="form-label">Nombre del Ã­tem</label><input type="text" id="pur-name" class="form-input" placeholder="Ej: Cable UTP Cat6 (caja 305m)"></div>
+    <div class="modal-sub">Registra un ítem adquirido para este proyecto</div>
+    <div class="form-row"><label class="form-label">Nombre del ítem</label><input type="text" id="pur-name" class="form-input" placeholder="Ej: Cable UTP Cat6 (caja 305m)"></div>
     <div class="form-row-2">
-      <div><label class="form-label">CategorÃ­a</label>
+      <div><label class="form-label">Categoría</label>
         <select id="pur-cat" class="form-select">
-          <option value="Materiales">ðŸ“¦ Materiales</option>
-          <option value="Equipos">ðŸ”Œ Equipos</option>
-          <option value="Mano de obra">ðŸ‘· Mano de obra</option>
+          <option value="Materiales">📦 Materiales</option>
+          <option value="Equipos">🔌 Equipos</option>
+          <option value="Mano de obra">👷 Mano de obra</option>
         </select>
       </div>
       <div><label class="form-label">Proveedor</label><input type="text" id="pur-prov" class="form-input" placeholder="Nombre del proveedor"></div>
@@ -714,16 +714,16 @@ canvas{width:100%!important;height:100%!important;}
       <div><label class="form-label">Precio unitario ($)</label><input type="number" id="pur-price" class="form-input" placeholder="0" min="0" step="any"></div>
     </div>
     <div class="form-row-2">
-      <div><label class="form-label">NÃºmero OC</label><input type="text" id="pur-oc" class="form-input" placeholder="OC-001"></div>
-      <div><label class="form-label">NÃºmero de factura</label><input type="text" id="pur-invoice" class="form-input" placeholder="FAC-001"></div>
+      <div><label class="form-label">Número OC</label><input type="text" id="pur-oc" class="form-input" placeholder="OC-001"></div>
+      <div><label class="form-label">Número de factura</label><input type="text" id="pur-invoice" class="form-input" placeholder="FAC-001"></div>
     </div>
     <div class="form-row-2">
       <div><label class="form-label">Estado de entrega</label>
         <select id="pur-status" class="form-select">
-          <option value="Pendiente">â³ Pendiente</option>
-          <option value="Parcial">ðŸ“¦ Entrega parcial</option>
-          <option value="Entregado">âœ… Entregado</option>
-          <option value="Cancelado">âŒ Cancelado</option>
+          <option value="Pendiente">⏳ Pendiente</option>
+          <option value="Parcial">📦 Entrega parcial</option>
+          <option value="Entregado">✅ Entregado</option>
+          <option value="Cancelado">❌ Cancelado</option>
         </select>
       </div>
       <div><label class="form-label">Fecha</label><input type="date" id="pur-date" class="form-input"></div>
@@ -739,10 +739,10 @@ canvas{width:100%!important;height:100%!important;}
 <!-- MODAL PW -->
 <div id="modal-pw" class="modal-overlay hidden">
   <div class="modal" style="max-width:380px">
-    <div class="modal-title">Cambiar contraseÃ±a</div>
-    <div class="modal-sub">Se actualizarÃ¡ en todos los dispositivos</div>
-    <div class="form-row"><label class="form-label">ContraseÃ±a actual</label><input type="password" id="pw-current" class="form-input"></div>
-    <div class="form-row"><label class="form-label">Nueva contraseÃ±a</label><input type="password" id="pw-new" class="form-input"></div>
+    <div class="modal-title">Cambiar contraseña</div>
+    <div class="modal-sub">Se actualizará en todos los dispositivos</div>
+    <div class="form-row"><label class="form-label">Contraseña actual</label><input type="password" id="pw-current" class="form-input"></div>
+    <div class="form-row"><label class="form-label">Nueva contraseña</label><input type="password" id="pw-new" class="form-input"></div>
     <div class="form-row"><label class="form-label">Confirmar</label><input type="password" id="pw-confirm" class="form-input"></div>
     <div class="login-error" id="pw-error" style="display:none;margin:0 0 12px"></div>
     <div class="modal-footer">
@@ -753,8 +753,8 @@ canvas{width:100%!important;height:100%!important;}
 </div>
 
 <div id="ctx-menu" class="ctx-menu hidden">
-  <div class="ctx-item" onclick="ctxEdit()">âœï¸ Editar proyecto</div>
-  <div class="ctx-item danger" onclick="ctxDelete()">ðŸ—‘ Eliminar proyecto</div>
+  <div class="ctx-item" onclick="ctxEdit()">✏️ Editar proyecto</div>
+  <div class="ctx-item danger" onclick="ctxDelete()">🗑 Eliminar proyecto</div>
 </div>
 <div class="toast" id="toast"><div class="toast-dot"></div><span id="toast-msg"></span></div>
 
@@ -764,13 +764,13 @@ const BIN_ID='69f6174eaaba88219762b1e0';
 const API_KEY='$2a$10$wG6u5Kgiue9nTE6dkp5lsOpnNeUDsmMs4M/JLTybqbc21PEZVtdyu';
 const BIN_URL='https://api.jsonbin.io/v3/b/'+BIN_ID;
 
-// â”€â”€ HELPERS PARA DEFAULT_PHASES â”€â”€
+// ── HELPERS PARA DEFAULT_PHASES ──
 const _n=(id,label,items,qty)=>{const o={id,label,items:items||[]};if(qty)o.qty=true;return o;};
 const _SVC=['PUNTOS DE DATOS','CAMARAS','TUBERIA','RACK','DVR NVR','SWITCH','PUNTOS DE VOZ','PUNTOS DE TV','EQUIPOS DE SONIDO','ALARMAS'];
 const _INST4=pfx=>[_n(pfx+'i1','INSTALACION TUBERIA'),_n(pfx+'i2','INSTALACION CABLEADO'),_n(pfx+'i3','INSTALACION TERMINALES'),_n(pfx+'i4','INSTALACION EQUIPOS')];
 
 const DEFAULT_PHASES=[
-  {id:'p1',num:'1',name:'DISEÃ‘O DEL PLANO TIC',color:'#C8F060',
+  {id:'p1',num:'1',name:'DISEÑO DEL PLANO TIC',color:'#C8F060',
    items:_SVC.map((l,i)=>_n('p1_'+i,l))},
   {id:'p2',num:'2',name:'SOLICITUD COTIZACION',color:'#60A8F0',
    items:[
@@ -815,7 +815,7 @@ let currentProjectId=null,editingProjectId=null,ctxProjectId=null,selectedColor=
 let enabledTasks={},editingPurchaseId=null,purchaseFilter='all',modalFloors=[];
 let chartInstance=null;
 
-// â”€â”€ CLOUD â”€â”€
+// ── CLOUD ──
 async function loadFromCloud(){
   showLoading('Cargando datos...');
   try{
@@ -835,7 +835,7 @@ async function loadFromCloud(){
   }catch(e){
     setSyncStatus('error');
     const local=localStorage.getItem('nas_backup');
-    if(local){appData=JSON.parse(local);showToast('Sin conexiÃ³n â€” datos locales');}
+    if(local){appData=JSON.parse(local);showToast('Sin conexión — datos locales');}
   }
   hideLoading();
 }
@@ -846,22 +846,22 @@ async function saveToCloud(){
     const res=await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':API_KEY},body:JSON.stringify(appData)});
     if(!res.ok)throw new Error();
     setSyncStatus('ok');
-  }catch(e){setSyncStatus('error');showToast('Sin conexiÃ³n â€” guardado localmente');}
+  }catch(e){setSyncStatus('error');showToast('Sin conexión — guardado localmente');}
 }
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveToCloud,800);}
 function setSyncStatus(s){
   const dot=document.getElementById('sync-dot'),txt=document.getElementById('sync-text');
   dot.className='sync-dot'+(s==='syncing'?' syncing':s==='error'?' error':'');
-  txt.textContent=s==='syncing'?'Guardando...':s==='error'?'Sin conexiÃ³n':'Sincronizado';
+  txt.textContent=s==='syncing'?'Guardando...':s==='error'?'Sin conexión':'Sincronizado';
 }
 function showLoading(m){document.getElementById('loading-text').textContent=m;document.getElementById('loading-overlay').classList.remove('hidden');}
 function hideLoading(){document.getElementById('loading-overlay').classList.add('hidden');}
 
-// â”€â”€ HELPERS ÃRBOL â”€â”€
+// ── HELPERS ÁRBOL ──
 function getLeaves(items){let r=[];(items||[]).forEach(n=>{if(!n.items||!n.items.length)r.push(n);else r=r.concat(getLeaves(n.items));});return r;}
 function getAllNodes(items){let r=[];(items||[]).forEach(n=>{r.push(n);if(n.items&&n.items.length)r=r.concat(getAllNodes(n.items));});return r;}
 
-// â”€â”€ LOGIN â”€â”€
+// ── LOGIN ──
 function doLogin(){
   const val=document.getElementById('pw-input').value;
   if(val===appData.password){
@@ -880,21 +880,21 @@ document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='E
 function togglePw(){const i=document.getElementById('pw-input');i.type=i.type==='password'?'text':'password';}
 function doLogout(){document.getElementById('screen-app').style.display='none';document.getElementById('screen-login').style.display='flex';}
 
-// â”€â”€ CHANGE PW â”€â”€
+// ── CHANGE PW ──
 function showChangePw(){
   ['pw-current','pw-new','pw-confirm'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pw-error').style.display='none';openModal('modal-pw');
 }
 function changePassword(){
   const cur=document.getElementById('pw-current').value,nw=document.getElementById('pw-new').value,cf=document.getElementById('pw-confirm').value;
-  if(cur!==appData.password){showPwError('ContraseÃ±a actual incorrecta');return;}
-  if(nw.length<4){showPwError('MÃ­nimo 4 caracteres');return;}
-  if(nw!==cf){showPwError('Las contraseÃ±as no coinciden');return;}
-  appData.password=nw;scheduleSave();closeModal('modal-pw');showToast('ContraseÃ±a actualizada');
+  if(cur!==appData.password){showPwError('Contraseña actual incorrecta');return;}
+  if(nw.length<4){showPwError('Mínimo 4 caracteres');return;}
+  if(nw!==cf){showPwError('Las contraseñas no coinciden');return;}
+  appData.password=nw;scheduleSave();closeModal('modal-pw');showToast('Contraseña actualizada');
 }
 function showPwError(msg){const e=document.getElementById('pw-error');e.textContent=msg;e.style.display='block';}
 
-// â”€â”€ MAIN TABS â”€â”€
+// ── MAIN TABS ──
 function switchMainTab(tab){
   ['dashboard','compare','project','param'].forEach(t=>{
     document.getElementById('tab-'+t).classList.toggle('hidden',t!==tab);
@@ -902,7 +902,7 @@ function switchMainTab(tab){
   document.querySelectorAll('.nav-tab').forEach((b,i)=>{
     b.classList.toggle('active',['dashboard','compare'].indexOf(tab)===i);
   });
-  // Resaltar botÃ³n ParametrizaciÃ³n cuando estÃ¡ activo
+  // Resaltar botón Parametrización cuando está activo
   const pbtn=document.getElementById('btn-param');
   if(pbtn)pbtn.classList.toggle('accent',tab==='param');
   if(tab==='compare')renderGlobalCompare();
@@ -911,7 +911,7 @@ function switchMainTab(tab){
   document.getElementById('btn-new-proj').classList.toggle('hidden',tab==='project'||tab==='param');
 }
 
-// â”€â”€ DASHBOARD â”€â”€
+// ── DASHBOARD ──
 function showDashboard(){switchMainTab('dashboard');}
 function renderDashboard(){
   let gDone=0,gTotal=0,totalSpend=0,activeProj=0,completedProj=0;
@@ -932,7 +932,7 @@ function renderDashboard(){
     <div class="hstat" style="--hs-c:var(--accent)">
       <div class="hstat-lbl">Proyectos</div>
       <div class="hstat-val">${appData.projects.length}</div>
-      <div class="hstat-sub">${activeProj} activos Â· ${completedProj} completos</div>
+      <div class="hstat-sub">${activeProj} activos · ${completedProj} completos</div>
     </div>
     <div class="hstat" style="--hs-c:var(--blue)">
       <div class="hstat-lbl">Pisos totales</div>
@@ -945,7 +945,7 @@ function renderDashboard(){
       <div class="hstat-sub">${gDone} de ${gTotal} tareas</div>
     </div>
     <div class="hstat" style="--hs-c:#A060F0">
-      <div class="hstat-lbl">InversiÃ³n total</div>
+      <div class="hstat-lbl">Inversión total</div>
       <div class="hstat-val" style="color:#A060F0">${fmt(totalSpend)}</div>
       <div class="hstat-sub">registrada en compras</div>
     </div>`;
@@ -974,13 +974,13 @@ function renderDashboard(){
       <div class="hcard-body">
         <div class="hcard-head">
           <div class="hcard-left" style="gap:12px;display:flex;align-items:center;">
-            <div class="hcard-icon" style="background:${colDim}">ðŸ—</div>
+            <div class="hcard-icon" style="background:${colDim}">🏗</div>
             <div>
               <div class="hcard-name">${p.name}</div>
-              <div class="hcard-desc">${p.desc||'Sin descripciÃ³n'}</div>
+              <div class="hcard-desc">${p.desc||'Sin descripción'}</div>
             </div>
           </div>
-          <button class="hcard-menu" data-id="${p.id}">â‹®</button>
+          <button class="hcard-menu" data-id="${p.id}">⋮</button>
         </div>
         <div class="hcard-mid">
           <div class="hcard-ring">
@@ -999,7 +999,7 @@ function renderDashboard(){
             <div class="hcard-status ${sc}">${st}</div>
             <div style="font-size:12px;color:var(--text3);font-family:'Roboto Mono',monospace;line-height:1.7">
               <div>${floors.length} piso${floors.length!==1?'s':''}</div>
-              <div>${done}/${total} tareas âœ“</div>
+              <div>${done}/${total} tareas ✓</div>
               <div style="color:var(--blue)">${fmt(spend)}</div>
             </div>
           </div>
@@ -1015,7 +1015,7 @@ function renderDashboard(){
           </div>
           <div class="hcard-stat">
             <div class="hcard-stat-val" style="color:var(--blue)">${fmt(spend)}</div>
-            <div class="hcard-stat-lbl">InversiÃ³n</div>
+            <div class="hcard-stat-lbl">Inversión</div>
           </div>
         </div>
       </div>`;
@@ -1029,7 +1029,7 @@ function renderDashboard(){
   add.onclick=openNewProject;grid.appendChild(add);
 }
 
-// â”€â”€ PROJECT â”€â”€
+// ── PROJECT ──
 function openProject(id){
   currentProjectId=id;
   const p=appData.projects.find(x=>x.id===id);if(!p)return;
@@ -1045,15 +1045,15 @@ function openProject(id){
   const bcName=document.getElementById('pdet-bc-name');
   if(bcName)bcName.textContent=p.name;
   document.getElementById('proj-detail-title').textContent=p.name;
-  document.getElementById('proj-detail-sub').textContent=p.desc||'Sin descripciÃ³n';
+  document.getElementById('proj-detail-sub').textContent=p.desc||'Sin descripción';
   // Icon
   const iconEl=document.getElementById('pdet-icon');
-  if(iconEl){iconEl.style.background=colDim;iconEl.textContent='ðŸ—';}
+  if(iconEl){iconEl.style.background=colDim;iconEl.textContent='🏗';}
   // KPIs
   const floors=appData.floors[id]||[];
   const pr=calcOverallFloorProgress(floors,p);
   const spend=(appData.purchases[id]||[]).reduce((s,i)=>s+i.qty*i.price,0);
-  const stTxt=floors.length===0?'Sin pisos':pr.pct===100?'âœ… Completo':pr.pct>0?'ðŸ”„ En progreso':'â³ Sin avance';
+  const stTxt=floors.length===0?'Sin pisos':pr.pct===100?'✅ Completo':pr.pct>0?'🔄 En progreso':'⏳ Sin avance';
   const kEl=document.getElementById('pdet-kpis');
   if(kEl)kEl.innerHTML=`
     <div class="pdet-kpi">
@@ -1066,11 +1066,11 @@ function openProject(id){
     </div>
     <div class="pdet-kpi">
       <div class="pdet-kpi-val">${pr.done}/${pr.total}</div>
-      <div class="pdet-kpi-lbl">Tareas âœ“</div>
+      <div class="pdet-kpi-lbl">Tareas ✓</div>
     </div>
     <div class="pdet-kpi">
       <div class="pdet-kpi-val" style="color:var(--blue)">${fmt(spend)}</div>
-      <div class="pdet-kpi-lbl">InversiÃ³n</div>
+      <div class="pdet-kpi-lbl">Inversión</div>
     </div>
     <div class="pdet-kpi">
       <div class="pdet-kpi-val" style="font-size:13px;padding-top:2px">${stTxt}</div>
@@ -1082,7 +1082,7 @@ function openProject(id){
 function editCurrentProject(){if(currentProjectId)openEditProject(currentProjectId);}
 function deleteCurrentProject(){
   if(!currentProjectId)return;
-  if(!confirm('Â¿Eliminar este proyecto y todas sus compras?'))return;
+  if(!confirm('¿Eliminar este proyecto y todas sus compras?'))return;
   appData.projects=appData.projects.filter(p=>p.id!==currentProjectId);
   delete appData.checklist[currentProjectId];delete appData.purchases[currentProjectId];delete appData.floors[currentProjectId];
   scheduleSave();showDashboard();renderDashboard();showToast('Proyecto eliminado');
@@ -1099,7 +1099,7 @@ function switchProjTab(tab){
   if(tab==='compras')renderPurchases();
 }
 
-// â”€â”€ DIÃLOGOS PROPIOS (evitan bloqueo de prompt/confirm del navegador) â”€â”€
+// ── DIÁLOGOS PROPIOS (evitan bloqueo de prompt/confirm del navegador) ──
 function paramPrompt(msg,defVal,cb){
   const ov=document.createElement('div');ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;animation:fadeSlideUp 0.18s ease both;';
   const box=document.createElement('div');box.style.cssText='background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:26px 28px;min-width:320px;max-width:460px;width:90vw;box-shadow:0 20px 60px rgba(0,0,0,0.5);';
@@ -1125,7 +1125,7 @@ function paramConfirm(msg,cb){
   const title=document.createElement('div');title.style.cssText='font-size:14px;font-weight:600;color:var(--text);margin-bottom:18px;line-height:1.5;';title.textContent=msg;
   const btnRow=document.createElement('div');btnRow.style.cssText='display:flex;gap:8px;justify-content:flex-end;';
   const noBtn=document.createElement('button');noBtn.textContent='No';noBtn.style.cssText='padding:8px 20px;border:1px solid var(--border2);background:var(--bg3);border-radius:7px;cursor:pointer;color:var(--text2);font-size:13px;font-family:inherit;';
-  const yesBtn=document.createElement('button');yesBtn.textContent='SÃ­, eliminar';yesBtn.style.cssText='padding:8px 20px;border:none;background:var(--red,#F06080);border-radius:7px;cursor:pointer;color:#fff;font-size:13px;font-weight:700;font-family:inherit;';
+  const yesBtn=document.createElement('button');yesBtn.textContent='Sí, eliminar';yesBtn.style.cssText='padding:8px 20px;border:none;background:var(--red,#F06080);border-radius:7px;cursor:pointer;color:#fff;font-size:13px;font-weight:700;font-family:inherit;';
   const close=()=>ov.remove();
   noBtn.onclick=close;
   yesBtn.onclick=()=>{close();cb();};
@@ -1142,7 +1142,7 @@ function paramPromptWithQty(callback){
   inp.style.cssText='width:100%;padding:9px 12px;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-size:14px;outline:none;box-sizing:border-box;font-family:inherit;margin-bottom:12px;';
   const qtyRow=document.createElement('label');qtyRow.style.cssText='display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 0;font-size:13px;color:var(--text2);';
   const qtyCb=document.createElement('input');qtyCb.type='checkbox';qtyCb.style.cssText='width:16px;height:16px;cursor:pointer;accent-color:var(--accent);';
-  const qtyLbl=document.createElement('span');qtyLbl.innerHTML='Campo de cantidad <b>(#)</b> â€” para ingresar un nÃºmero';
+  const qtyLbl=document.createElement('span');qtyLbl.innerHTML='Campo de cantidad <b>(#)</b> — para ingresar un número';
   qtyRow.appendChild(qtyCb);qtyRow.appendChild(qtyLbl);
   const btnRow=document.createElement('div');btnRow.style.cssText='display:flex;gap:8px;justify-content:flex-end;margin-top:16px;';
   const cancelBtn=document.createElement('button');cancelBtn.textContent='Cancelar';cancelBtn.style.cssText='padding:8px 18px;border:1px solid var(--border2);background:var(--bg3);border-radius:7px;cursor:pointer;color:var(--text2);font-size:13px;font-family:inherit;';
@@ -1158,7 +1158,7 @@ function paramPromptWithQty(callback){
   document.body.appendChild(ov);setTimeout(()=>inp.focus(),60);
 }
 
-// â”€â”€ PARAMETRIZACIÃ“N â”€â”€
+// ── PARAMETRIZACIÓN ──
 function showParam(){switchMainTab('param');}
 function renderParam(){
   if(!appData.globalTasks)appData.globalTasks=[];
@@ -1173,7 +1173,7 @@ function renderParam(){
   const openP={};container.querySelectorAll('.phase-body.open').forEach(b=>{openP[b.dataset.pid]=true;});
   container.innerHTML='';
   appData.phases.forEach((ph,phIdx)=>renderParamPhase(container,ph,phIdx,openP));
-  // BotÃ³n agregar fase
+  // Botón agregar fase
   const addPhBtn=document.createElement('button');addPhBtn.className='add-tarea-btn';addPhBtn.style.cssText='margin:14px 0;';
   addPhBtn.innerHTML='<span style="font-size:16px">+</span> Agregar nueva fase';
   addPhBtn.addEventListener('click',()=>{
@@ -1183,23 +1183,23 @@ function renderParam(){
     });
   });
   container.appendChild(addPhBtn);
-  // SecciÃ³n tareas globales (agrupadas por fase)
+  // Sección tareas globales (agrupadas por fase)
   const glSection=document.createElement('div');glSection.style.cssText='margin-top:18px;';
   const glTitle=document.createElement('div');glTitle.style.cssText='font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;padding-left:4px;';
-  glTitle.textContent='âš™ Tareas Globales (disponibles en todos los proyectos)';
+  glTitle.textContent='⚙ Tareas Globales (disponibles en todos los proyectos)';
   glSection.appendChild(glTitle);
   appData.phases.forEach(ph=>{
     const phGlobal=gt.filter(t=>t.phaseId===ph.id);
     const card=document.createElement('div');card.className='phase-card';card.style.marginBottom='8px';
     const hdr=document.createElement('div');hdr.className='phase-hdr'+(openP['gl_'+ph.id]?' open':'');
-    hdr.innerHTML=`<span class="phase-num">âš™</span><span class="phase-name" style="color:var(--accent)">${ph.name}</span><span class="phase-count">${phGlobal.length} globales</span><span class="phase-chevron" style="margin-left:auto">â–¶</span>`;
+    hdr.innerHTML=`<span class="phase-num">⚙</span><span class="phase-name" style="color:var(--accent)">${ph.name}</span><span class="phase-count">${phGlobal.length} globales</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
     const body=document.createElement('div');body.className='phase-body'+(openP['gl_'+ph.id]?' open':'');body.dataset.pid='gl_'+ph.id;
     hdr.addEventListener('click',()=>{const o=body.classList.toggle('open');hdr.classList.toggle('open',o);});
     const glGs=document.createElement('div');glGs.className='group-section';
     if(phGlobal.length){phGlobal.forEach(t=>renderParamTaskRow(glGs,t,ph));}
     else{const em=document.createElement('div');em.style.cssText='padding:8px 18px 4px 44px;font-size:12px;color:var(--text3);font-style:italic;';em.textContent='Sin tareas globales para esta fase';glGs.appendChild(em);}
     const addBtn=document.createElement('button');addBtn.className='add-tarea-btn';addBtn.innerHTML='<span style="font-size:16px;line-height:1">+</span> Agregar tarea global a esta fase';
-    addBtn.addEventListener('click',()=>{paramPrompt('Nombre de la tarea global:','',lb=>{appData.globalTasks.push({id:'gt_'+Date.now(),phaseId:ph.id,label:lb,subtasks:[]});scheduleSave();renderParam();showToast('âœ“ Tarea global agregada');});});
+    addBtn.addEventListener('click',()=>{paramPrompt('Nombre de la tarea global:','',lb=>{appData.globalTasks.push({id:'gt_'+Date.now(),phaseId:ph.id,label:lb,subtasks:[]});scheduleSave();renderParam();showToast('✓ Tarea global agregada');});});
     glGs.appendChild(addBtn);body.appendChild(glGs);card.appendChild(hdr);card.appendChild(body);glSection.appendChild(card);
   });
   container.appendChild(glSection);
@@ -1208,26 +1208,26 @@ function renderParamPhase(container,ph,phIdx,openP){
   const card=document.createElement('div');card.className='phase-card';card.style.marginBottom='10px';
   const totalL=getLeaves(ph.items||[]).length;
   const hdr=document.createElement('div');hdr.className='phase-hdr'+(openP[ph.id]?' open':'');
-  hdr.innerHTML=`<span class="phase-num" style="color:${ph.color||'var(--accent)'}">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${totalL} actividades</span><span class="phase-chevron" style="margin-left:auto">â–¶</span>`;
+  hdr.innerHTML=`<span class="phase-num" style="color:${ph.color||'var(--accent)'}">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${totalL} actividades</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
   const body=document.createElement('div');body.className='phase-body'+(openP[ph.id]?' open':'');body.dataset.pid=ph.id;
   hdr.addEventListener('click',()=>{const o=body.classList.toggle('open');hdr.classList.toggle('open',o);});
   // Acciones de fase
   const actRow=document.createElement('div');actRow.style.cssText='display:flex;gap:8px;padding:10px 12px 6px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--border);margin-bottom:6px;';
-  const editPhBtn=document.createElement('button');editPhBtn.className='tarea-act-btn';editPhBtn.textContent='âœï¸ Renombrar';
+  const editPhBtn=document.createElement('button');editPhBtn.className='tarea-act-btn';editPhBtn.textContent='✏️ Renombrar';
   editPhBtn.addEventListener('click',()=>{paramPrompt('Nombre de la fase:',ph.name,n=>{ph.name=n;scheduleSave();renderParam();});});
   const colorEl=document.createElement('input');colorEl.type='color';colorEl.value=ph.color||'#C8F060';colorEl.style.cssText='width:32px;height:28px;border:1px solid var(--border);background:none;cursor:pointer;border-radius:4px;';
   colorEl.title='Color de fase';colorEl.addEventListener('change',()=>{ph.color=colorEl.value;scheduleSave();renderParam();});
   const numInp=document.createElement('input');numInp.type='text';numInp.value=ph.num;numInp.style.cssText='width:36px;padding:3px 6px;background:var(--bg3);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:inherit;font-size:12px;text-align:center;';
-  numInp.title='NÃºmero de fase';numInp.addEventListener('change',()=>{ph.num=numInp.value.trim()||ph.num;scheduleSave();renderParam();});
-  const delPhBtn=document.createElement('button');delPhBtn.className='tarea-act-btn danger';delPhBtn.textContent='ðŸ—‘ï¸ Eliminar fase';
-  delPhBtn.addEventListener('click',()=>{paramConfirm('Â¿Eliminar la fase "'+ph.name+'" y todas sus actividades?',()=>{appData.phases.splice(phIdx,1);scheduleSave();renderParam();showToast('Fase eliminada');});});
+  numInp.title='Número de fase';numInp.addEventListener('change',()=>{ph.num=numInp.value.trim()||ph.num;scheduleSave();renderParam();});
+  const delPhBtn=document.createElement('button');delPhBtn.className='tarea-act-btn danger';delPhBtn.textContent='🗑️ Eliminar fase';
+  delPhBtn.addEventListener('click',()=>{paramConfirm('¿Eliminar la fase "'+ph.name+'" y todas sus actividades?',()=>{appData.phases.splice(phIdx,1);scheduleSave();renderParam();showToast('Fase eliminada');});});
   actRow.appendChild(document.createTextNode('# '));actRow.appendChild(numInp);actRow.appendChild(editPhBtn);actRow.appendChild(colorEl);actRow.appendChild(delPhBtn);
   body.appendChild(actRow);
-  // Ãrbol de items editable
+  // Árbol de items editable
   const itemsCont=document.createElement('div');itemsCont.className='group-section';
   renderParamItemList(itemsCont,ph.items||[],ph,ph.color||'var(--accent)',0);
   body.appendChild(itemsCont);
-  // BotÃ³n agregar elemento raÃ­z
+  // Botón agregar elemento raíz
   const addRootBtn=document.createElement('button');addRootBtn.className='add-tarea-btn';
   addRootBtn.innerHTML='<span style="font-size:16px">+</span> Agregar elemento a esta fase';
   addRootBtn.addEventListener('click',()=>addParamItem(ph.items,()=>{scheduleSave();renderParam();}));
@@ -1243,18 +1243,18 @@ function renderParamItemList(container,items,ph,color,depth){
     const dot=document.createElement('div');
     dot.style.cssText='width:8px;height:8px;border-radius:50%;flex-shrink:0;'+(isLeaf?'background:'+color+';opacity:0.7;':'border:2px solid '+color+';background:transparent;');
     const lbl=document.createElement('span');lbl.className='task-lbl';
-    lbl.textContent=node.label+(node.qty?' (#)':'')+(isLeaf?'':' â–¸');
+    lbl.textContent=node.label+(node.qty?' (#)':'')+(isLeaf?'':' ▸');
     // Acciones
     const acts=document.createElement('div');acts.className='tarea-actions';acts.style.cssText='opacity:1;flex-shrink:0;';
-    const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='âœï¸';eBtn.title='Editar nombre';
+    const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='✏️';eBtn.title='Editar nombre';
     eBtn.addEventListener('click',e=>{e.stopPropagation();paramPrompt('Nombre:',node.label,nl=>{node.label=nl;scheduleSave();renderParam();});});
     const qBtn=document.createElement('button');qBtn.className='tarea-act-btn';qBtn.style.fontSize='10px';
-    qBtn.textContent=node.qty?'# âœ“':'# -';qBtn.title='Activar/desactivar campo de cantidad (#)';
+    qBtn.textContent=node.qty?'# ✓':'# -';qBtn.title='Activar/desactivar campo de cantidad (#)';
     qBtn.addEventListener('click',e=>{e.stopPropagation();if(node.qty)delete node.qty;else node.qty=true;scheduleSave();renderParam();showToast(node.qty?'Campo # activado':'Campo # desactivado');});
     const asBtn=document.createElement('button');asBtn.className='tarea-act-btn';asBtn.style.fontSize='11px';asBtn.textContent='+sub';asBtn.title='Agregar subelemento';
     asBtn.addEventListener('click',e=>{e.stopPropagation();addParamItem(node.items,()=>{scheduleSave();renderParam();});});
-    const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='ðŸ—‘ï¸';
-    dBtn.addEventListener('click',e=>{e.stopPropagation();paramConfirm('Â¿Eliminar "'+node.label+'" y todos sus subelementos?',()=>{items.splice(nodeIdx,1);scheduleSave();renderParam();});});
+    const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='🗑️';
+    dBtn.addEventListener('click',e=>{e.stopPropagation();paramConfirm('¿Eliminar "'+node.label+'" y todos sus subelementos?',()=>{items.splice(nodeIdx,1);scheduleSave();renderParam();});});
     acts.appendChild(eBtn);acts.appendChild(qBtn);acts.appendChild(asBtn);acts.appendChild(dBtn);
     row.appendChild(dot);row.appendChild(lbl);row.appendChild(acts);container.appendChild(row);
     if(!isLeaf){
@@ -1276,17 +1276,17 @@ function renderParamTaskRow(container,gt,ph){
   const dot=document.createElement('div');dot.style.cssText='width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;';
   const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=gt.label;
   const acts=document.createElement('div');acts.className='tarea-actions';acts.style.opacity='1';
-  const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='âœï¸';eBtn.title='Editar nombre';
+  const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='✏️';eBtn.title='Editar nombre';
   eBtn.addEventListener('click',e=>{e.stopPropagation();paramPrompt('Nuevo nombre:',gt.label,nl=>{gt.label=nl;scheduleSave();renderParam();});});
   const asBtn=document.createElement('button');asBtn.className='tarea-act-btn';asBtn.style.fontSize='11px';asBtn.textContent='+sub';asBtn.title='Agregar subtarea';
   asBtn.addEventListener('click',e=>{e.stopPropagation();paramPrompt('Nombre de la subtarea:','',lb=>{if(!gt.subtasks)gt.subtasks=[];gt.subtasks.push({id:'gts_'+Date.now(),label:lb});scheduleSave();renderParam();});});
-  const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='ðŸ—‘ï¸';dBtn.title='Eliminar tarea global';
-  dBtn.addEventListener('click',e=>{e.stopPropagation();paramConfirm('Â¿Eliminar la tarea global "'+gt.label+'"?',()=>{appData.globalTasks=appData.globalTasks.filter(x=>x.id!==gt.id);scheduleSave();renderParam();showToast('Tarea global eliminada');});});
+  const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='🗑️';dBtn.title='Eliminar tarea global';
+  dBtn.addEventListener('click',e=>{e.stopPropagation();paramConfirm('¿Eliminar la tarea global "'+gt.label+'"?',()=>{appData.globalTasks=appData.globalTasks.filter(x=>x.id!==gt.id);scheduleSave();renderParam();showToast('Tarea global eliminada');});});
   acts.appendChild(eBtn);acts.appendChild(asBtn);acts.appendChild(dBtn);
   tRow.appendChild(dot);tRow.appendChild(lbl);
   if(gt.subtasks&&gt.subtasks.length){
-    const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas â–¾';
-    tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'â–´ Subtareas':'Subtareas â–¾';}});
+    const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+    tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
     tRow.appendChild(tog);
   }
   tRow.appendChild(acts);container.appendChild(tRow);
@@ -1297,10 +1297,10 @@ function renderParamTaskRow(container,gt,ph){
       const stDot=document.createElement('div');stDot.style.cssText='width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;opacity:0.7;';
       const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=st.label;
       const stActs=document.createElement('div');stActs.className='tarea-actions';stActs.style.opacity='1';
-      const stEBtn=document.createElement('button');stEBtn.className='tarea-act-btn';stEBtn.textContent='âœï¸';
+      const stEBtn=document.createElement('button');stEBtn.className='tarea-act-btn';stEBtn.textContent='✏️';
       stEBtn.addEventListener('click',e=>{e.stopPropagation();paramPrompt('Nuevo nombre:',st.label,nl=>{st.label=nl;scheduleSave();renderParam();});});
-      const stDBtn=document.createElement('button');stDBtn.className='tarea-act-btn danger';stDBtn.textContent='ðŸ—‘ï¸';
-      stDBtn.addEventListener('click',e=>{e.stopPropagation();paramConfirm('Â¿Eliminar la subtarea "'+st.label+'"?',()=>{gt.subtasks=gt.subtasks.filter(x=>x.id!==st.id);scheduleSave();renderParam();});});
+      const stDBtn=document.createElement('button');stDBtn.className='tarea-act-btn danger';stDBtn.textContent='🗑️';
+      stDBtn.addEventListener('click',e=>{e.stopPropagation();paramConfirm('¿Eliminar la subtarea "'+st.label+'"?',()=>{gt.subtasks=gt.subtasks.filter(x=>x.id!==st.id);scheduleSave();renderParam();});});
       stActs.appendChild(stEBtn);stActs.appendChild(stDBtn);
       stRow.appendChild(stDot);stRow.appendChild(stLbl);stRow.appendChild(stActs);sb.appendChild(stRow);
     });
@@ -1308,7 +1308,7 @@ function renderParamTaskRow(container,gt,ph){
   }
 }
 
-// â”€â”€ CHECKLIST RENDER â”€â”€
+// ── CHECKLIST RENDER ──
 function countEnabled(proj){
   let total=0,done=0;
   const cl=appData.checklist[proj.id]||{},en=proj.enabledTasks||{};
@@ -1348,7 +1348,7 @@ function renderTaskList(p){
     });
     const card=document.createElement('div');card.className='phase-card';
     const hdr=document.createElement('div');hdr.className='phase-hdr'+(openP[ph.id]?' open':'');
-    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phT} habilitadas</span><span class="phase-chevron" style="margin-left:auto">â–¶</span>`;
+    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phT} habilitadas</span><span class="phase-chevron" style="margin-left:auto">▶</span>`;
     hdr.addEventListener('click',()=>{const b=card.querySelector('.phase-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
     const body=document.createElement('div');body.className='phase-body'+(openP[ph.id]?' open':'');body.dataset.pid=ph.id;
     // Tareas predefinidas del PHASE
@@ -1369,13 +1369,13 @@ function renderTaskList(p){
         const dot=document.createElement('div');dot.style.cssText=`width:8px;height:8px;border-radius:50%;background:${ph.color};flex-shrink:0;`;
         const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=getLabel(t.id,t.label);
         const acts=document.createElement('div');acts.className='tarea-actions';
-        const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='âœï¸';eBtn.title='Renombrar';
+        const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='✏️';eBtn.title='Renombrar';
         eBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',getLabel(t.id,t.label));if(nl&&nl.trim()){if(!p.taskLabels)p.taskLabels={};p.taskLabels[t.id]=nl.trim();scheduleSave();renderTaskList(p);}});
         acts.appendChild(eBtn);
         tRow.appendChild(cb);tRow.appendChild(dot);tRow.appendChild(lbl);
         if(hasSubs){
-          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas â–¾';
-          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'â–´ Subtareas':'Subtareas â–¾';}});
+          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
           tRow.appendChild(tog);
         }
         tRow.appendChild(acts);
@@ -1390,7 +1390,7 @@ function renderTaskList(p){
             const stDot=document.createElement('div');stDot.style.cssText=`width:6px;height:6px;border-radius:50%;background:${ph.color};flex-shrink:0;opacity:0.5;`;
             const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=getLabel(st.id,st.label);
             const stActs=document.createElement('div');stActs.className='tarea-actions';
-            const stEBtn=document.createElement('button');stEBtn.className='tarea-act-btn';stEBtn.textContent='âœï¸';stEBtn.title='Renombrar';
+            const stEBtn=document.createElement('button');stEBtn.className='tarea-act-btn';stEBtn.textContent='✏️';stEBtn.title='Renombrar';
             stEBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',getLabel(st.id,st.label));if(nl&&nl.trim()){if(!p.taskLabels)p.taskLabels={};p.taskLabels[st.id]=nl.trim();scheduleSave();renderTaskList(p);}});
             stActs.appendChild(stEBtn);
             stRow.appendChild(stCb);stRow.appendChild(stDot);stRow.appendChild(stLbl);stRow.appendChild(stActs);
@@ -1409,7 +1409,7 @@ function renderTaskList(p){
       phCustom.forEach(ct=>renderCustomTaskRow(cGs,ct,p,ph));
       body.appendChild(cGs);
     }
-    // BotÃ³n agregar tarea
+    // Botón agregar tarea
     const addBtn=document.createElement('button');addBtn.className='add-tarea-btn';addBtn.innerHTML='<span style="font-size:16px;line-height:1">+</span> Agregar tarea a esta fase';
     addBtn.addEventListener('click',()=>{
       const lb=prompt('Nombre de la nueva tarea:');
@@ -1437,32 +1437,32 @@ function renderCustomTaskRow(container,ct,p,ph){
   const dot=document.createElement('div');dot.style.cssText=`width:8px;height:8px;border-radius:50%;background:${ph.color};flex-shrink:0;`;
   const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=ct.label;
   const acts=document.createElement('div');acts.className='tarea-actions';acts.style.opacity='1';
-  const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='âœï¸';eBtn.title='Editar';
+  const eBtn=document.createElement('button');eBtn.className='tarea-act-btn';eBtn.textContent='✏️';eBtn.title='Editar';
   eBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',ct.label);if(nl&&nl.trim()){ct.label=nl.trim();scheduleSave();renderTaskList(p);}});
   const asBtn=document.createElement('button');asBtn.className='tarea-act-btn';asBtn.style.fontSize='11px';asBtn.textContent='+sub';asBtn.title='Agregar subtarea';
   asBtn.addEventListener('click',e=>{e.stopPropagation();const lb=prompt('Nombre de la subtarea:');if(!lb||!lb.trim())return;if(!ct.subtasks)ct.subtasks=[];ct.subtasks.push({id:'cs_'+Date.now(),label:lb.trim()});scheduleSave();renderTaskList(p);});
-  const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='ðŸ—‘ï¸';dBtn.title='Eliminar';
-  dBtn.addEventListener('click',e=>{e.stopPropagation();if(!confirm('Â¿Eliminar esta tarea personalizada?'))return;p.customTasks=p.customTasks.filter(x=>x.id!==ct.id);scheduleSave();renderTaskList(p);});
-  // BotÃ³n nota de tarea
+  const dBtn=document.createElement('button');dBtn.className='tarea-act-btn danger';dBtn.textContent='🗑️';dBtn.title='Eliminar';
+  dBtn.addEventListener('click',e=>{e.stopPropagation();if(!confirm('¿Eliminar esta tarea personalizada?'))return;p.customTasks=p.customTasks.filter(x=>x.id!==ct.id);scheduleSave();renderTaskList(p);});
+  // Botón nota de tarea
   const noteBtn=document.createElement('button');noteBtn.className='task-comment-btn'+(ct.note?' has-comment':'');
-  noteBtn.textContent=ct.note?'ðŸ’¬ nota':'ðŸ’­';noteBtn.title=ct.note?'Ver nota':'Agregar nota';noteBtn.style.marginRight='2px';
+  noteBtn.textContent=ct.note?'💬 nota':'💭';noteBtn.title=ct.note?'Ver nota':'Agregar nota';noteBtn.style.marginRight='2px';
   noteBtn.addEventListener('click',e=>{e.stopPropagation();noteWrap.classList.toggle('open');if(noteWrap.classList.contains('open'))noteInp.focus();});
   acts.insertBefore(noteBtn,eBtn);
   acts.appendChild(eBtn);acts.appendChild(asBtn);acts.appendChild(dBtn);
   tRow.appendChild(cb);tRow.appendChild(dot);tRow.appendChild(lbl);
   if(ct.subtasks&&ct.subtasks.length){
-    const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas â–¾';
-    tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'â–´ Subtareas':'Subtareas â–¾';}});
+    const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+    tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
     tRow.appendChild(tog);
   }
   tRow.appendChild(acts);
   container.appendChild(tRow);
-  // Ãrea de nota de la tarea personalizada
+  // Área de nota de la tarea personalizada
   const noteWrap=document.createElement('div');noteWrap.className='task-note-wrap comment-wrap'+(ct.note?' open':'');noteWrap.style.paddingLeft='44px';
   const noteInp=document.createElement('input');noteInp.type='text';noteInp.className='task-note-inp';
-  noteInp.placeholder='Nota o descripciÃ³n de esta tarea...';noteInp.value=ct.note||'';
-  noteInp.addEventListener('input',()=>{ct.note=noteInp.value;const hasN=!!noteInp.value.trim();noteBtn.className='task-comment-btn'+(hasN?' has-comment':'');noteBtn.textContent=hasN?'ðŸ’¬ nota':'ðŸ’­';scheduleSave();});
-  const noteMeta=document.createElement('div');noteMeta.className='comment-meta';noteMeta.innerHTML='<span style="color:var(--amber)">ðŸ“ Nota de la tarea</span>';
+  noteInp.placeholder='Nota o descripción de esta tarea...';noteInp.value=ct.note||'';
+  noteInp.addEventListener('input',()=>{ct.note=noteInp.value;const hasN=!!noteInp.value.trim();noteBtn.className='task-comment-btn'+(hasN?' has-comment':'');noteBtn.textContent=hasN?'💬 nota':'💭';scheduleSave();});
+  const noteMeta=document.createElement('div');noteMeta.className='comment-meta';noteMeta.innerHTML='<span style="color:var(--amber)">📝 Nota de la tarea</span>';
   noteWrap.appendChild(noteInp);noteWrap.appendChild(noteMeta);
   container.appendChild(noteWrap);
   if(ct.subtasks&&ct.subtasks.length){
@@ -1472,9 +1472,9 @@ function renderCustomTaskRow(container,ct,p,ph){
       const stDot=document.createElement('div');stDot.style.cssText=`width:6px;height:6px;border-radius:50%;background:${ph.color};flex-shrink:0;opacity:0.5;`;
       const stLbl=document.createElement('span');stLbl.className='subtask-lbl';stLbl.textContent=st.label;
       const stActs=document.createElement('div');stActs.className='tarea-actions';stActs.style.opacity='1';
-      const stEBtn=document.createElement('button');stEBtn.className='tarea-act-btn';stEBtn.textContent='âœï¸';
+      const stEBtn=document.createElement('button');stEBtn.className='tarea-act-btn';stEBtn.textContent='✏️';
       stEBtn.addEventListener('click',e=>{e.stopPropagation();const nl=prompt('Nuevo nombre:',st.label);if(nl&&nl.trim()){st.label=nl.trim();scheduleSave();renderTaskList(p);}});
-      const stDBtn=document.createElement('button');stDBtn.className='tarea-act-btn danger';stDBtn.textContent='ðŸ—‘ï¸';
+      const stDBtn=document.createElement('button');stDBtn.className='tarea-act-btn danger';stDBtn.textContent='🗑️';
       stDBtn.addEventListener('click',e=>{e.stopPropagation();ct.subtasks=ct.subtasks.filter(x=>x.id!==st.id);scheduleSave();renderTaskList(p);});
       stActs.appendChild(stEBtn);stActs.appendChild(stDBtn);
       stRow.appendChild(stDot);stRow.appendChild(stLbl);stRow.appendChild(stActs);
@@ -1504,7 +1504,7 @@ function renderProjectDetail(p){
     const pct=Math.round(phD/phT*100);
     const card=document.createElement('div');card.className='phase-card';
     const hdr=document.createElement('div');hdr.className='phase-hdr'+(openP[ph.id]?' open':'');
-    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phD}/${phT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${pct}%;background:${ph.color}"></div></div><span class="phase-mini-pct">${pct}%</span></div><span class="phase-chevron">â–¶</span>`;
+    hdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phD}/${phT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${pct}%;background:${ph.color}"></div></div><span class="phase-mini-pct">${pct}%</span></div><span class="phase-chevron">▶</span>`;
     hdr.addEventListener('click',()=>{const b=card.querySelector('.phase-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
     const body=document.createElement('div');body.className='phase-body'+(openP[ph.id]?' open':'');body.dataset.pid=ph.id;
     ph.groups.forEach(gr=>{
@@ -1522,8 +1522,8 @@ function renderProjectDetail(p){
           if(dC===eSubs.length&&eSubs.length>0)cb.checked=true;else if(dC>0)cb.indeterminate=true;
           cb.addEventListener('change',function(e){e.stopPropagation();if(!appData.checklist[p.id][t.id])appData.checklist[p.id][t.id]={};eSubs.forEach(st=>{appData.checklist[p.id][t.id][st.id]=this.checked;});renderProjectDetail(p);scheduleSave();});
           const lbl=document.createElement('span');lbl.className='task-lbl';lbl.textContent=t.label;
-          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas â–¾';
-          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'â–´ Subtareas':'Subtareas â–¾';}});
+          const tog=document.createElement('button');tog.className='subtask-toggle';tog.textContent='Subtareas ▾';
+          tog.addEventListener('click',e=>{e.stopPropagation();const sb=tRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');tog.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
           tRow.appendChild(cb);tRow.appendChild(lbl);tRow.appendChild(tog);
           tRow.addEventListener('click',e=>{if(e.target===cb||e.target===tog)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
           const subBody=document.createElement('div');subBody.className='subtasks-body';
@@ -1540,7 +1540,7 @@ function renderProjectDetail(p){
         }else{
           const chk=!!cl[t.id];
           const cb=document.createElement('input');cb.type='checkbox';cb.className='task-cb';if(chk)cb.checked=true;
-          cb.addEventListener('change',function(e){e.stopPropagation();appData.checklist[p.id][t.id]=this.checked;tRow.querySelector('.task-lbl').className='task-lbl'+(this.checked?' done':'');updateGlobalBar(p);scheduleSave();if(this.checked)showToast('âœ“ '+t.label);});
+          cb.addEventListener('change',function(e){e.stopPropagation();appData.checklist[p.id][t.id]=this.checked;tRow.querySelector('.task-lbl').className='task-lbl'+(this.checked?' done':'');updateGlobalBar(p);scheduleSave();if(this.checked)showToast('✓ '+t.label);});
           const lbl=document.createElement('span');lbl.className='task-lbl'+(chk?' done':'');lbl.textContent=t.label;
           tRow.appendChild(cb);tRow.appendChild(lbl);
           tRow.addEventListener('click',e=>{if(e.target===cb)return;cb.checked=!cb.checked;cb.dispatchEvent(new Event('change'));});
@@ -1554,18 +1554,18 @@ function renderProjectDetail(p){
 }
 
 function updateGlobalBar(p){
-  // La barra global ya no se usa â€” el progreso estÃ¡ en la pestaÃ±a Pisos
+  // La barra global ya no se usa — el progreso está en la pestaña Pisos
   const{total,done}=countEnabled(p);
   const el=document.getElementById('tareas-count');
   if(el)el.textContent=done+'/'+total+' tareas habilitadas';
 }
 
-// â”€â”€ PURCHASES â”€â”€
+// ── PURCHASES ──
 function fmt(n){
   if(!n&&n!==0)return'$0';
   return'$'+Number(n).toLocaleString('es-CO',{minimumFractionDigits:0,maximumFractionDigits:0});
 }
-function fmtDate(d){if(!d)return'â€”';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
+function fmtDate(d){if(!d)return'—';const[y,m,day]=d.split('-');return`${day}/${m}/${y}`;}
 function statusBadge(s){const map={Pendiente:'pend',Parcial:'parcial',Entregado:'entregado',Cancelado:'cancelado'};return`<span class="badge badge-${map[s]||'pend'}">${s||'Pendiente'}</span>`;}
 function catBadge(c){const map={Materiales:'mat',Equipos:'eq','Mano de obra':'mo'};return`<span class="badge badge-${map[c]||'mat'}">${c}</span>`;}
 
@@ -1587,14 +1587,14 @@ function renderPurchases(){
   const mos=purs.filter(i=>i.cat==='Mano de obra').reduce((s,i)=>s+i.qty*i.price,0);
   document.getElementById('purchases-summary').innerHTML=`
     <div class="pur-stat"><div class="pur-stat-label">Total proyecto</div><div class="pur-stat-value green">${fmt(mats+eqs+mos)}</div></div>
-    <div class="pur-stat"><div class="pur-stat-label">ðŸ“¦ Materiales</div><div class="pur-stat-value">${fmt(mats)}</div></div>
-    <div class="pur-stat"><div class="pur-stat-label">ðŸ”Œ Equipos</div><div class="pur-stat-value blue">${fmt(eqs)}</div></div>
-    <div class="pur-stat"><div class="pur-stat-label">ðŸ‘· Mano de obra</div><div class="pur-stat-value amber">${fmt(mos)}</div></div>
-    <div class="pur-stat"><div class="pur-stat-label">Ãtems registrados</div><div class="pur-stat-value">${purs.length}</div></div>`;
+    <div class="pur-stat"><div class="pur-stat-label">📦 Materiales</div><div class="pur-stat-value">${fmt(mats)}</div></div>
+    <div class="pur-stat"><div class="pur-stat-label">🔌 Equipos</div><div class="pur-stat-value blue">${fmt(eqs)}</div></div>
+    <div class="pur-stat"><div class="pur-stat-label">👷 Mano de obra</div><div class="pur-stat-value amber">${fmt(mos)}</div></div>
+    <div class="pur-stat"><div class="pur-stat-label">Ítems registrados</div><div class="pur-stat-value">${purs.length}</div></div>`;
 
   // Table
   const tbody=document.getElementById('purchases-tbody');
-  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="12" class="empty-table">No hay compras registradas en esta categorÃ­a</td></tr>`;return;}
+  if(!filtered.length){tbody.innerHTML=`<tr><td colspan="12" class="empty-table">No hay compras registradas en esta categoría</td></tr>`;return;}
   tbody.innerHTML='';
   filtered.forEach(item=>{
     const tr=document.createElement('tr');
@@ -1602,17 +1602,17 @@ function renderPurchases(){
       <td class="bold">${item.name}</td>
       <td>${catBadge(item.cat)}</td>
       <td>${item.qty}</td>
-      <td>${item.unit||'â€”'}</td>
+      <td>${item.unit||'—'}</td>
       <td>${fmt(item.price)}</td>
       <td class="bold">${fmt(item.qty*item.price)}</td>
-      <td>${item.prov||'â€”'}</td>
-      <td><span style="font-family:'Roboto Mono',monospace;font-size:11px">${item.oc||'â€”'}</span></td>
-      <td><span style="font-family:'Roboto Mono',monospace;font-size:11px">${item.invoice||'â€”'}</span></td>
+      <td>${item.prov||'—'}</td>
+      <td><span style="font-family:'Roboto Mono',monospace;font-size:11px">${item.oc||'—'}</span></td>
+      <td><span style="font-family:'Roboto Mono',monospace;font-size:11px">${item.invoice||'—'}</span></td>
       <td>${statusBadge(item.status)}</td>
       <td style="font-size:11px;color:var(--text3)">${fmtDate(item.date)}</td>
       <td>
-        <button class="action-btn" onclick="editPurchase('${item.id}')">âœï¸</button>
-        <button class="action-btn del" onclick="deletePurchase('${item.id}')">ðŸ—‘</button>
+        <button class="action-btn" onclick="editPurchase('${item.id}')">✏️</button>
+        <button class="action-btn del" onclick="deletePurchase('${item.id}')">🗑</button>
       </td>`;
     tbody.appendChild(tr);
   });
@@ -1640,10 +1640,10 @@ function renderProjCompare(p){
   const myItems=[...new Set(allPurs.map(i=>i.name.toLowerCase().trim()))];
   const compareItems=myItems.filter(k=>itemMap[k]&&itemMap[k].entries.filter(e=>e.projId!==p.id).length>0);
 
-  if(!compareItems.length){wrap.innerHTML='<p style="font-size:13px;color:var(--text3)">Los Ã­tems de este proyecto aÃºn no aparecen en otros proyectos para comparar.</p>';return;}
+  if(!compareItems.length){wrap.innerHTML='<p style="font-size:13px;color:var(--text3)">Los ítems de este proyecto aún no aparecen en otros proyectos para comparar.</p>';return;}
 
   // Table
-  let html=`<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>Ãtem</th><th>Este proyecto</th><th>Otros proyectos</th><th>VariaciÃ³n</th></tr></thead><tbody>`;
+  let html=`<div class="compare-table-wrap"><table class="compare-table"><thead><tr><th>Ítem</th><th>Este proyecto</th><th>Otros proyectos</th><th>Variación</th></tr></thead><tbody>`;
   compareItems.forEach(k=>{
     const myEntry=allPurs.find(i=>i.name.toLowerCase().trim()===k);
     const myPrice=myEntry?myEntry.price:0;
@@ -1652,7 +1652,7 @@ function renderProjCompare(p){
     const diff=myPrice-avgOther;
     const pct=avgOther?Math.round(diff/avgOther*100):0;
     const cls=diff>0?'price-up':diff<0?'price-down':'price-same';
-    const arrow=diff>0?'â†‘':diff<0?'â†“':'â†’';
+    const arrow=diff>0?'↑':diff<0?'↓':'→';
     const othersText=others.map(o=>`${o.projName}: ${fmt(o.price)}`).join(' | ');
     html+=`<tr><td class="item-name">${itemMap[k].name}</td><td style="font-family:'Roboto Mono',monospace">${fmt(myPrice)}</td><td style="font-size:11px;color:var(--text3)">${othersText}</td><td class="${cls}" style="font-family:'Roboto Mono',monospace">${arrow} ${Math.abs(pct)}%</td></tr>`;
   });
@@ -1660,7 +1660,7 @@ function renderProjCompare(p){
   wrap.innerHTML=html;
 }
 
-// â”€â”€ GLOBAL COMPARE â”€â”€
+// ── GLOBAL COMPARE ──
 function renderGlobalCompare(){
   const wrap=document.getElementById('compare-global-content');wrap.innerHTML='';
 
@@ -1677,13 +1677,13 @@ function renderGlobalCompare(){
   const multiItems=Object.values(itemMap).filter(i=>i.entries.length>1);
 
   if(!multiItems.length){
-    wrap.innerHTML=`<div class="empty-state"><div class="empty-icon">ðŸ“Š</div><div class="empty-title">Sin datos suficientes</div><p style="font-size:14px">Registra el mismo Ã­tem en varios proyectos para ver la comparaciÃ³n de precios.</p></div>`;
+    wrap.innerHTML=`<div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">Sin datos suficientes</div><p style="font-size:14px">Registra el mismo ítem en varios proyectos para ver la comparación de precios.</p></div>`;
     return;
   }
 
   // Filter controls
   const filterDiv=document.createElement('div');filterDiv.className='compare-section';
-  filterDiv.innerHTML=`<div class="compare-title">EvoluciÃ³n de precios por Ã­tem</div>
+  filterDiv.innerHTML=`<div class="compare-title">Evolución de precios por ítem</div>
   <div class="compare-filter">
     <select id="compare-item-sel" style="min-width:220px">
       ${multiItems.map(i=>`<option value="${i.name.toLowerCase().trim()}">${i.name}</option>`).join('')}
@@ -1697,12 +1697,12 @@ function renderGlobalCompare(){
   const tableDiv=document.createElement('div');tableDiv.className='compare-section';
   tableDiv.innerHTML=`<div class="compare-title">Tabla comparativa completa</div>
   <div class="compare-filter">
-    <input type="text" id="compare-search" placeholder="Buscar Ã­tem..." style="min-width:200px" oninput="filterCompareTable(this.value)">
+    <input type="text" id="compare-search" placeholder="Buscar ítem..." style="min-width:200px" oninput="filterCompareTable(this.value)">
     <select id="compare-cat-filter" onchange="filterCompareTable(document.getElementById('compare-search').value)">
-      <option value="">Todas las categorÃ­as</option>
-      <option value="Materiales">ðŸ“¦ Materiales</option>
-      <option value="Equipos">ðŸ”Œ Equipos</option>
-      <option value="Mano de obra">ðŸ‘· Mano de obra</option>
+      <option value="">Todas las categorías</option>
+      <option value="Materiales">📦 Materiales</option>
+      <option value="Equipos">🔌 Equipos</option>
+      <option value="Mano de obra">👷 Mano de obra</option>
     </select>
   </div>
   <div class="compare-table-wrap" id="full-compare-table"></div>`;
@@ -1753,14 +1753,14 @@ function renderFullCompareTable(items,search,cat){
   if(search)filtered=filtered.filter(i=>i.name.toLowerCase().includes(search.toLowerCase()));
   if(cat)filtered=filtered.filter(i=>i.entries.some(e=>e.cat===cat));
   if(!filtered.length){wrap.innerHTML='<p style="font-size:13px;color:var(--text3);padding:16px">Sin resultados</p>';return;}
-  let html=`<table class="compare-table"><thead><tr><th>Ãtem</th><th>Proyectos</th><th>Precio mÃ­n.</th><th>Precio mÃ¡x.</th><th>VariaciÃ³n</th></tr></thead><tbody>`;
+  let html=`<table class="compare-table"><thead><tr><th>Ítem</th><th>Proyectos</th><th>Precio mín.</th><th>Precio máx.</th><th>Variación</th></tr></thead><tbody>`;
   filtered.forEach(item=>{
     const prices=item.entries.map(e=>e.price);
     const mn=Math.min(...prices),mx=Math.max(...prices);
     const var_pct=mn>0?Math.round((mx-mn)/mn*100):0;
     const cls=var_pct>20?'price-up':var_pct>0?'price-same':'price-down';
     const projs=item.entries.map(e=>`<span style="font-size:11px;color:var(--text3)">${e.projName} (${fmt(e.price)})</span>`).join('<br>');
-    html+=`<tr><td class="item-name">${item.name}</td><td>${projs}</td><td style="font-family:'Roboto Mono',monospace;color:var(--accent)">${fmt(mn)}</td><td style="font-family:'Roboto Mono',monospace;color:var(--amber)">${fmt(mx)}</td><td class="${cls}" style="font-family:'Roboto Mono',monospace">â†‘${var_pct}%</td></tr>`;
+    html+=`<tr><td class="item-name">${item.name}</td><td>${projs}</td><td style="font-family:'Roboto Mono',monospace;color:var(--accent)">${fmt(mn)}</td><td style="font-family:'Roboto Mono',monospace;color:var(--amber)">${fmt(mx)}</td><td class="${cls}" style="font-family:'Roboto Mono',monospace">↑${var_pct}%</td></tr>`;
   });
   html+='</tbody></table>';
   wrap.innerHTML=html;
@@ -1780,7 +1780,7 @@ function filterCompareTable(search){
   renderFullCompareTable(multi,search,cat);
 }
 
-// â”€â”€ PURCHASE MODAL â”€â”€
+// ── PURCHASE MODAL ──
 function openNewPurchase(){
   editingPurchaseId=null;
   document.getElementById('modal-pur-title').textContent='Registrar compra';
@@ -1806,13 +1806,13 @@ function editPurchase(id){
   openModal('modal-purchase');
 }
 function deletePurchase(id){
-  if(!confirm('Â¿Eliminar este Ã­tem?'))return;
+  if(!confirm('¿Eliminar este ítem?'))return;
   appData.purchases[currentProjectId]=(appData.purchases[currentProjectId]||[]).filter(x=>x.id!==id);
-  scheduleSave();renderPurchases();showToast('Ãtem eliminado');
+  scheduleSave();renderPurchases();showToast('Ítem eliminado');
 }
 function savePurchase(){
   const name=document.getElementById('pur-name').value.trim();
-  if(!name){showToast('Ingresa el nombre del Ã­tem');return;}
+  if(!name){showToast('Ingresa el nombre del ítem');return;}
   const item={
     id:editingPurchaseId||'pur_'+Date.now(),
     name,cat:document.getElementById('pur-cat').value,
@@ -1833,10 +1833,10 @@ function savePurchase(){
   }else{
     appData.purchases[currentProjectId].push(item);
   }
-  scheduleSave();closeModal('modal-purchase');renderPurchases();showToast(editingPurchaseId?'Ãtem actualizado':'Ãtem registrado');
+  scheduleSave();closeModal('modal-purchase');renderPurchases();showToast(editingPurchaseId?'Ítem actualizado':'Ítem registrado');
 }
 
-// â”€â”€ PROJECT MODAL â”€â”€
+// ── PROJECT MODAL ──
 function openNewProject(){
   editingProjectId=null;selectedColor=COLORS[0];
   document.getElementById('proj-name-input').value='';document.getElementById('proj-desc-input').value='';
@@ -1874,7 +1874,7 @@ function buildTaskSelector(){
     const hdr=document.createElement('div');hdr.className='ts-phase-header';
     const phCb=document.createElement('input');phCb.type='checkbox';phCb.className='ts-phase-check';
     if(checked===leaves.length&&leaves.length>0)phCb.checked=true;else if(checked>0)phCb.indeterminate=true;
-    hdr.innerHTML=`<span class="ts-phase-name">${ph.num}. ${ph.name}</span><span class="ts-phase-badge">${checked}/${leaves.length}</span><span class="ts-chevron">â–¶</span>`;
+    hdr.innerHTML=`<span class="ts-phase-name">${ph.num}. ${ph.name}</span><span class="ts-phase-badge">${checked}/${leaves.length}</span><span class="ts-chevron">▶</span>`;
     hdr.insertBefore(phCb,hdr.firstChild);
     const body=document.createElement('div');body.className='ts-phase-body';
     phCb.addEventListener('change',function(e){e.stopPropagation();leaves.forEach(l=>{enabledTasks[l.id]=this.checked;});buildTaskSelector();});
@@ -1883,14 +1883,14 @@ function buildTaskSelector(){
     // Tareas globales vinculadas a esta fase
     const phGT=(appData.globalTasks||[]).filter(gt=>gt.phaseId===ph.id);
     if(phGT.length){
-      const glLbl=document.createElement('div');glLbl.style.cssText='font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);padding:8px 14px 4px 28px;opacity:0.85;';glLbl.textContent='âš™ Globales';body.appendChild(glLbl);
+      const glLbl=document.createElement('div');glLbl.style.cssText='font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);padding:8px 14px 4px 28px;opacity:0.85;';glLbl.textContent='⚙ Globales';body.appendChild(glLbl);
       phGT.forEach(gt=>{
         const hasSubs=gt.subtasks&&gt.subtasks.length>0;
         const tRow=document.createElement('div');tRow.className='ts-task-row';
         const tCb=document.createElement('input');tCb.type='checkbox';tCb.className='ts-task-check';
         if(hasSubs){const en=gt.subtasks.filter(st=>enabledTasks[st.id]!==false).length;if(en===gt.subtasks.length)tCb.checked=true;else if(en>0)tCb.indeterminate=true;}
         else tCb.checked=enabledTasks[gt.id]!==false;
-        const tLbl=document.createElement('span');tLbl.className='ts-task-label';tLbl.textContent='âš™ '+gt.label;
+        const tLbl=document.createElement('span');tLbl.className='ts-task-label';tLbl.textContent='⚙ '+gt.label;
         tRow.appendChild(tCb);tRow.appendChild(tLbl);
         tCb.addEventListener('change',function(e){e.stopPropagation();enabledTasks[gt.id]=this.checked;if(hasSubs)gt.subtasks.forEach(st=>{enabledTasks[st.id]=this.checked;});buildTaskSelector();});
         tRow.addEventListener('click',e=>{if(e.target===tCb)return;tCb.checked=!tCb.checked;tCb.dispatchEvent(new Event('change'));});
@@ -1928,12 +1928,12 @@ function renderTreeSelector(container,items,depth){
       const brCb=document.createElement('input');brCb.type='checkbox';brCb.className='ts-task-check';
       if(en===leaves.length&&leaves.length>0)brCb.checked=true;else if(en>0)brCb.indeterminate=true;
       const brLbl=document.createElement('span');brLbl.className='ts-task-label';brLbl.style.fontWeight='600';brLbl.textContent=node.label;
-      const togBtn=document.createElement('span');togBtn.className='ts-chevron';togBtn.style.cssText='margin-left:auto;font-size:10px;';togBtn.textContent='â–¶';
+      const togBtn=document.createElement('span');togBtn.className='ts-chevron';togBtn.style.cssText='margin-left:auto;font-size:10px;';togBtn.textContent='▶';
       brRow.appendChild(brCb);brRow.appendChild(brLbl);brRow.appendChild(togBtn);
       const subBody=document.createElement('div');subBody.className='ts-phase-body';
       renderTreeSelector(subBody,node.items,depth+1);
       brCb.addEventListener('change',function(e){e.stopPropagation();leaves.forEach(l=>{enabledTasks[l.id]=this.checked;});buildTaskSelector();});
-      togBtn.addEventListener('click',e=>{e.stopPropagation();subBody.classList.toggle('open');togBtn.textContent=subBody.classList.contains('open')?'â–¼':'â–¶';});
+      togBtn.addEventListener('click',e=>{e.stopPropagation();subBody.classList.toggle('open');togBtn.textContent=subBody.classList.contains('open')?'▼':'▶';});
       brRow.addEventListener('click',e=>{if(e.target===brCb||e.target===togBtn)return;brCb.checked=!brCb.checked;brCb.dispatchEvent(new Event('change'));});
       container.appendChild(brRow);container.appendChild(subBody);
     }
@@ -1971,7 +1971,7 @@ function calcOverallFloorProgress(floors,p){
   return{done,total,pct:total?Math.round(done/total*100):0};
 }
 
-// â”€â”€ MODAL PISOS â”€â”€
+// ── MODAL PISOS ──
 function syncModalFloorCount(){
   document.getElementById('modal-floor-count').textContent=modalFloors.length;
 }
@@ -2005,11 +2005,11 @@ function buildModalFloorSection(){
     nameInp.addEventListener('input',()=>{fl.name=nameInp.value;});
     nameInp.addEventListener('click',e=>e.stopPropagation());
     const badge=document.createElement('span');badge.className='mfl-badge';badge.id='mfl-badge-'+idx;badge.textContent=enCount+' act.';
-    const chev=document.createElement('span');chev.className='mfl-chevron';chev.textContent='â–¶';
+    const chev=document.createElement('span');chev.className='mfl-chevron';chev.textContent='▶';
     hdr.appendChild(nameInp);hdr.appendChild(badge);hdr.appendChild(chev);
     hdr.addEventListener('click',()=>{const b=card.querySelector('.mfl-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
     const body=document.createElement('div');body.className='mfl-body'+(openSet.has(idx)?' open':'');body.dataset.idx=idx;
-    // Construir lista de tareas por fase (Ã¡rbol recursivo)
+    // Construir lista de tareas por fase (árbol recursivo)
     (appData.phases||[]).forEach(ph=>{
       const phLeaves=getLeaves(ph.items||[]);
       const hasAny=phLeaves.some(l=>enabledTasks[l.id]!==false);
@@ -2049,7 +2049,7 @@ function renderModalFloorTree(container,items,fl,flIdx,depth){
       const allL=leaves.filter(l=>enabledTasks[l.id]!==false);
       if(enL.length===allL.length&&allL.length>0)brCb.checked=true;else if(enL.length>0)brCb.indeterminate=true;
       const brLbl=document.createElement('span');brLbl.className='ts-task-label';brLbl.style.fontWeight='600';brLbl.textContent=node.label;
-      const tog=document.createElement('span');tog.className='ts-chevron';tog.style.cssText='margin-left:auto;font-size:10px;';tog.textContent='â–¶';
+      const tog=document.createElement('span');tog.className='ts-chevron';tog.style.cssText='margin-left:auto;font-size:10px;';tog.textContent='▶';
       brRow.appendChild(brCb);brRow.appendChild(brLbl);brRow.appendChild(tog);
       const subBody=document.createElement('div');subBody.className='ts-phase-body';
       renderModalFloorTree(subBody,node.items,fl,flIdx,depth+1);
@@ -2059,14 +2059,14 @@ function renderModalFloorTree(container,items,fl,flIdx,depth){
         const b=document.getElementById('mfl-badge-'+flIdx);if(b)b.textContent=newCount+' act.';
         buildModalFloorSection();
       });
-      tog.addEventListener('click',e=>{e.stopPropagation();subBody.classList.toggle('open');tog.textContent=subBody.classList.contains('open')?'â–¼':'â–¶';});
+      tog.addEventListener('click',e=>{e.stopPropagation();subBody.classList.toggle('open');tog.textContent=subBody.classList.contains('open')?'▼':'▶';});
       brRow.addEventListener('click',e=>{if(e.target===brCb||e.target===tog)return;brCb.checked=!brCb.checked;brCb.dispatchEvent(new Event('change'));});
       container.appendChild(brRow);container.appendChild(subBody);
     }
   });
 }
 
-// â”€â”€ PISOS â”€â”€
+// ── PISOS ──
 function countFloorProgress(fl,p){
   let total=0,done=0;
   const cl=fl.checklist||{};
@@ -2090,7 +2090,7 @@ function countFloorProgress(fl,p){
     if(ct.subtasks&&ct.subtasks.length){ct.subtasks.forEach(st=>{if(!ok(st.id))return;total++;if(cl[ct.id]&&cl[ct.id][st.id])done++;});}
     else{total++;if(cl[ct.id])done++;}
   });
-  // Tareas globales de ParametrizaciÃ³n
+  // Tareas globales de Parametrización
   (appData.globalTasks||[]).forEach(gt=>{
     if(!ok(gt.id))return;
     if(gt.subtasks&&gt.subtasks.length){gt.subtasks.forEach(st=>{if(!ok(st.id))return;total++;if(cl[gt.id]&&cl[gt.id][st.id])done++;});}
@@ -2137,7 +2137,7 @@ function updateFloorProgress(fl,p){
   if(obFill){obFill.style.width=tp+'%';obFill.style.background=obCol;}
   if(obPct){obPct.textContent=tp+'%';obPct.style.color=obCol;}
   if(obDone)obDone.textContent=td+' completadas';
-  if(obTotal)obTotal.textContent=tt+' tareas Â· '+floors.length+' pisos';
+  if(obTotal)obTotal.textContent=tt+' tareas · '+floors.length+' pisos';
 }
 
 function renderFloors(){
@@ -2152,15 +2152,15 @@ function renderFloors(){
   const container=document.getElementById('floors-container');
   container.innerHTML='';
 
-  // Barra de configuraciÃ³n
+  // Barra de configuración
   const configBar=document.createElement('div');configBar.className='floors-config-bar';
   configBar.innerHTML=`
     <div class="floors-config-info">
-      <div class="floors-config-title">ðŸ¢ Pisos del proyecto</div>
-      <div class="floors-config-sub">Abre cada piso y chuleÃ¡ las actividades que aplican</div>
+      <div class="floors-config-title">🏢 Pisos del proyecto</div>
+      <div class="floors-config-sub">Abre cada piso y chuleá las actividades que aplican</div>
     </div>
     <div class="floors-count-ctrl">
-      <button class="floors-count-btn" onclick="removeFloor()" title="Quitar Ãºltimo piso">âˆ’</button>
+      <button class="floors-count-btn" onclick="removeFloor()" title="Quitar último piso">−</button>
       <span class="floors-count-val">${floors.length}</span>
       <button class="floors-count-btn" onclick="addFloor()" title="Agregar piso">+</button>
     </div>`;
@@ -2168,7 +2168,7 @@ function renderFloors(){
 
   if(!floors.length){
     const em=document.createElement('div');em.className='empty-state';
-    em.innerHTML='<div class="empty-icon">ðŸ¢</div><div class="empty-title">Sin pisos configurados</div><p style="font-size:14px;margin-top:6px">Usa el botÃ³n <strong>+</strong> para agregar los pisos del proyecto</p>';
+    em.innerHTML='<div class="empty-icon">🏢</div><div class="empty-title">Sin pisos configurados</div><p style="font-size:14px;margin-top:6px">Usa el botón <strong>+</strong> para agregar los pisos del proyecto</p>';
     container.appendChild(em);return;
   }
 
@@ -2177,10 +2177,10 @@ function renderFloors(){
   const overallCol=tp===100?'var(--accent)':tp>50?'var(--blue)':'var(--amber)';
   const overallBar=document.createElement('div');overallBar.className='floors-overall-bar';
   overallBar.innerHTML=`
-    <div class="fob-label">ðŸ“Š Avance general del proyecto</div>
+    <div class="fob-label">📊 Avance general del proyecto</div>
     <div class="fob-bar-wrap">
       <div class="fob-bar-track"><div class="fob-bar-fill" id="floors-overall-fill" style="width:${tp}%;background:${overallCol}"></div></div>
-      <div class="fob-stats"><span id="floors-overall-done">${td} completadas</span><span id="floors-overall-total">${tt} tareas Â· ${floors.length} pisos</span></div>
+      <div class="fob-stats"><span id="floors-overall-done">${td} completadas</span><span id="floors-overall-total">${tt} tareas · ${floors.length} pisos</span></div>
     </div>
     <div class="fob-pct" id="floors-overall-pct" style="color:${overallCol}">${tp}%</div>`;
   container.appendChild(overallBar);
@@ -2214,7 +2214,7 @@ function renderFloors(){
     const card=document.createElement('div');card.className='floor-card';card.id='floor-card-'+fl.id;
 
     const hdr=document.createElement('div');hdr.className='floor-hdr'+(openIds[fl.id]?' open':'');
-    hdr.innerHTML=`<span class="floor-badge">Piso ${idx+1}</span><span class="floor-name-disp">${fl.name}</span><span class="floor-task-count">${done}/${total}</span><div class="floor-prog-wrap"><div class="floor-prog-track"><div class="floor-prog-fill" style="width:${pct}%;background:${progCol}"></div></div><span class="floor-prog-pct">${pct}%</span></div><span class="floor-chevron">â–¶</span>`;
+    hdr.innerHTML=`<span class="floor-badge">Piso ${idx+1}</span><span class="floor-name-disp">${fl.name}</span><span class="floor-task-count">${done}/${total}</span><div class="floor-prog-wrap"><div class="floor-prog-track"><div class="floor-prog-fill" style="width:${pct}%;background:${progCol}"></div></div><span class="floor-prog-pct">${pct}%</span></div><span class="floor-chevron">▶</span>`;
     hdr.addEventListener('click',()=>{const b=card.querySelector('.floor-body');const o=b.classList.toggle('open');hdr.classList.toggle('open',o);});
 
     const body=document.createElement('div');body.className='floor-body'+(openIds[fl.id]?' open':'');body.dataset.floorid=fl.id;
@@ -2237,26 +2237,26 @@ function renderFloors(){
   container.appendChild(list);
 }
 
-// â”€â”€ HELPER: botÃ³n de comentario por tarea â”€â”€
+// ── HELPER: botón de comentario por tarea ──
 function makeCommentUI(fl,taskKey,rowEl,appendTo,isSub){
   if(!fl.comments)fl.comments={};
   const txt=fl.comments[taskKey]||'';
   const hasC=!!txt.trim();
-  // BotÃ³n
+  // Botón
   const btn=document.createElement('button');
   btn.className='task-comment-btn'+(hasC?' has-comment':'');
-  btn.textContent=hasC?'ðŸ’¬ nota':'ðŸ’­';
+  btn.textContent=hasC?'💬 nota':'💭';
   btn.title=hasC?'Ver/editar comentario':'Agregar comentario';
-  // Ãrea de comentario
+  // Área de comentario
   const wrap=document.createElement('div');
   wrap.className='comment-wrap'+(isSub?' sub-comment':'');
   const ta=document.createElement('textarea');
   ta.className='comment-textarea';
-  ta.placeholder='ObservaciÃ³n, novedad o comentario...';
+  ta.placeholder='Observación, novedad o comentario...';
   ta.value=txt;ta.rows=2;
   const meta=document.createElement('div');meta.className='comment-meta';
   const lenSpan=document.createElement('span');lenSpan.textContent=txt.length+'/400';
-  meta.innerHTML='<span style="color:var(--amber)">ðŸ’¬ Comentario</span>';
+  meta.innerHTML='<span style="color:var(--amber)">💬 Comentario</span>';
   meta.appendChild(lenSpan);
   wrap.appendChild(ta);wrap.appendChild(meta);
   ta.addEventListener('input',()=>{
@@ -2266,7 +2266,7 @@ function makeCommentUI(fl,taskKey,rowEl,appendTo,isSub){
     lenSpan.textContent=ta.value.length+'/400';
     const hasNow=!!ta.value.trim();
     btn.className='task-comment-btn'+(hasNow?' has-comment':'');
-    btn.textContent=hasNow?'ðŸ’¬ nota':'ðŸ’­';
+    btn.textContent=hasNow?'💬 nota':'💭';
     btn.title=hasNow?'Ver/editar comentario':'Agregar comentario';
     scheduleSave();
   });
@@ -2294,7 +2294,7 @@ function buildFloorChecklist(body,fl,p){
     const pct=Math.round(phD/phT*100);
     const phCard=document.createElement('div');phCard.className='phase-card';phCard.style.marginBottom='8px';
     const phHdr=document.createElement('div');phHdr.className='phase-hdr';
-    phHdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phD}/${phT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${pct}%;background:${ph.color}"></div></div><span class="phase-mini-pct">${pct}%</span></div><span class="phase-chevron">â–¶</span>`;
+    phHdr.innerHTML=`<span class="phase-num">${ph.num}.</span><span class="phase-name">${ph.name}</span><span class="phase-count">${phD}/${phT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${pct}%;background:${ph.color}"></div></div><span class="phase-mini-pct">${pct}%</span></div><span class="phase-chevron">▶</span>`;
     phHdr.addEventListener('click',()=>{const b=phCard.querySelector('.phase-body');const o=b.classList.toggle('open');phHdr.classList.toggle('open',o);});
     const phBody=document.createElement('div');phBody.className='phase-body';
     const gs=document.createElement('div');gs.className='group-section';
@@ -2302,7 +2302,7 @@ function buildFloorChecklist(body,fl,p){
     phBody.appendChild(gs);
     phCard.appendChild(phHdr);phCard.appendChild(phBody);body.appendChild(phCard);
   });
-  // â”€â”€ Tareas globales de ParametrizaciÃ³n (agrupadas por fase)
+  // ── Tareas globales de Parametrización (agrupadas por fase)
   (appData.phases||[]).forEach(ph=>{
     const phGlobal=(appData.globalTasks||[]).filter(gt=>gt.phaseId===ph.id&&ok(gt.id));
     if(!phGlobal.length)return;
@@ -2314,7 +2314,7 @@ function buildFloorChecklist(body,fl,p){
     const gtPct=gtT?Math.round(gtD/gtT*100):0;
     const gtCard=document.createElement('div');gtCard.className='phase-card';gtCard.style.marginBottom='8px';
     const gtHdr=document.createElement('div');gtHdr.className='phase-hdr';
-    gtHdr.innerHTML=`<span class="phase-num">âš™</span><span class="phase-name" style="color:var(--accent)">${ph.name} â€” Globales</span><span class="phase-count">${gtD}/${gtT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${gtPct}%;background:var(--accent)"></div></div><span class="phase-mini-pct">${gtPct}%</span></div><span class="phase-chevron">â–¶</span>`;
+    gtHdr.innerHTML=`<span class="phase-num">⚙</span><span class="phase-name" style="color:var(--accent)">${ph.name} — Globales</span><span class="phase-count">${gtD}/${gtT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${gtPct}%;background:var(--accent)"></div></div><span class="phase-mini-pct">${gtPct}%</span></div><span class="phase-chevron">▶</span>`;
     gtHdr.addEventListener('click',()=>{const b=gtCard.querySelector('.phase-body');const o=b.classList.toggle('open');gtHdr.classList.toggle('open',o);});
     const gtBody=document.createElement('div');gtBody.className='phase-body';
     phGlobal.forEach(gt=>{
@@ -2327,8 +2327,8 @@ function buildFloorChecklist(body,fl,p){
         if(dC===eSubs.length&&eSubs.length>0)cbt.checked=true;else if(dC>0)cbt.indeterminate=true;
         cbt.addEventListener('change',function(e){e.stopPropagation();if(!fl.checklist[gt.id])fl.checklist[gt.id]={};eSubs.forEach(st=>{fl.checklist[gt.id][st.id]=this.checked;});const newD=eSubs.filter(st=>fl.checklist[gt.id]&&fl.checklist[gt.id][st.id]).length;cbt.checked=newD===eSubs.length;cbt.indeterminate=newD>0&&newD<eSubs.length;scheduleSave();updateFloorProgress(fl,p);});
         const lblt=document.createElement('span');lblt.className='task-lbl';lblt.textContent=gt.label;
-        const togt=document.createElement('button');togt.className='subtask-toggle';togt.textContent='Subtareas â–¾';
-        togt.addEventListener('click',e=>{e.stopPropagation();const sb=gtRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');togt.textContent=sb.classList.contains('open')?'â–´ Subtareas':'Subtareas â–¾';}});
+        const togt=document.createElement('button');togt.className='subtask-toggle';togt.textContent='Subtareas ▾';
+        togt.addEventListener('click',e=>{e.stopPropagation();const sb=gtRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');togt.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
         gtRow.appendChild(cbt);gtRow.appendChild(lblt);gtRow.appendChild(togt);
         gtRow.addEventListener('click',e=>{if(e.target===cbt||e.target===togt||e.target.classList.contains('task-comment-btn'))return;cbt.checked=!cbt.checked;cbt.dispatchEvent(new Event('change'));});
         const sbody=document.createElement('div');sbody.className='subtasks-body';
@@ -2367,7 +2367,7 @@ function buildFloorChecklist(body,fl,p){
     const ctPct=ctT?Math.round(ctD/ctT*100):0;
     const ctCard=document.createElement('div');ctCard.className='phase-card';ctCard.style.marginBottom='8px';
     const ctHdr=document.createElement('div');ctHdr.className='phase-hdr';
-    ctHdr.innerHTML=`<span class="phase-num">+</span><span class="phase-name">Personalizadas</span><span class="phase-count">${ctD}/${ctT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${ctPct}%;background:var(--accent)"></div></div><span class="phase-mini-pct">${ctPct}%</span></div><span class="phase-chevron">â–¶</span>`;
+    ctHdr.innerHTML=`<span class="phase-num">+</span><span class="phase-name">Personalizadas</span><span class="phase-count">${ctD}/${ctT}</span><div class="phase-mini-bar-wrap"><div class="phase-mini-bar-track"><div class="phase-mini-bar-fill" style="width:${ctPct}%;background:var(--accent)"></div></div><span class="phase-mini-pct">${ctPct}%</span></div><span class="phase-chevron">▶</span>`;
     ctHdr.addEventListener('click',()=>{const b=ctCard.querySelector('.phase-body');const o=b.classList.toggle('open');ctHdr.classList.toggle('open',o);});
     const ctBody=document.createElement('div');ctBody.className='phase-body';
     projCustom.forEach(ct=>{
@@ -2386,8 +2386,8 @@ function buildFloorChecklist(body,fl,p){
           scheduleSave();updateFloorProgress(fl,p);
         });
         const lblc=document.createElement('span');lblc.className='task-lbl';lblc.textContent=ct.label;
-        const togc=document.createElement('button');togc.className='subtask-toggle';togc.textContent='Subtareas â–¾';
-        togc.addEventListener('click',e=>{e.stopPropagation();const sb=ctRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');togc.textContent=sb.classList.contains('open')?'â–´ Subtareas':'Subtareas â–¾';}});
+        const togc=document.createElement('button');togc.className='subtask-toggle';togc.textContent='Subtareas ▾';
+        togc.addEventListener('click',e=>{e.stopPropagation();const sb=ctRow.nextElementSibling;if(sb&&sb.classList.contains('subtasks-body')){sb.classList.toggle('open');togc.textContent=sb.classList.contains('open')?'▴ Subtareas':'Subtareas ▾';}});
         ctRow.appendChild(cbc);ctRow.appendChild(lblc);ctRow.appendChild(togc);
         ctRow.addEventListener('click',e=>{if(e.target===cbc||e.target===togc||e.target.classList.contains('task-comment-btn'))return;cbc.checked=!cbc.checked;cbc.dispatchEvent(new Event('change'));});
         const sbody2=document.createElement('div');sbody2.className='subtasks-body';
@@ -2431,7 +2431,7 @@ function buildFloorChecklist(body,fl,p){
   }
 }
 
-// â”€â”€ Renderizador recursivo del Ã¡rbol de checklist de piso â”€â”€
+// ── Renderizador recursivo del árbol de checklist de piso ──
 function renderTreeChecklist(container,items,fl,p,ph,depth,phHdr,phCard){
   const cl=fl.checklist||{};
   const flEn=fl.enabledTasks||{};
@@ -2473,17 +2473,17 @@ function renderTreeChecklist(container,items,fl,p,ph,depth,phHdr,phCard){
         makeCommentUI(fl,node.id,row,container,depth>0);
       }
     }else{
-      // Nodo rama â€” acordeÃ³n colapsable
+      // Nodo rama — acordeón colapsable
       const leaves=getLeaves(node.items);
       const enabledL=leaves.filter(l=>ok(l.id));
       if(!enabledL.length)return;
       const brDiv=document.createElement('div');
       const brHdr=document.createElement('div');brHdr.className='task-row tree-branch-hdr';brHdr.style.paddingLeft=pad+'px';
-      const chev=document.createElement('span');chev.style.cssText='font-size:11px;font-weight:700;color:var(--text2);min-width:14px;';chev.textContent='â–¶';
+      const chev=document.createElement('span');chev.style.cssText='font-size:11px;font-weight:700;color:var(--text2);min-width:14px;';chev.textContent='▶';
       const brLbl=document.createElement('span');brLbl.className='task-lbl';brLbl.style.cssText='font-weight:600;font-size:12px;letter-spacing:0.04em;color:var(--text2);text-transform:uppercase;';brLbl.textContent=node.label;
       brHdr.appendChild(chev);brHdr.appendChild(brLbl);
       const brBody=document.createElement('div');brBody.className='subtasks-body';
-      brHdr.addEventListener('click',()=>{const o=brBody.classList.toggle('open');chev.textContent=o?'â–¼':'â–¶';});
+      brHdr.addEventListener('click',()=>{const o=brBody.classList.toggle('open');chev.textContent=o?'▼':'▶';});
       renderTreeChecklist(brBody,node.items,fl,p,ph,depth+1,phHdr,phCard);
       brDiv.appendChild(brHdr);brDiv.appendChild(brBody);container.appendChild(brDiv);
     }
@@ -2518,18 +2518,18 @@ function removeFloor(){
   const last=floors[floors.length-1];
   const p=appData.projects.find(x=>x.id===currentProjectId);
   const{done}=countFloorProgress(last,p||{enabledTasks:{}});
-  if(done>0&&!confirm('El "'+last.name+'" tiene '+done+' tarea(s) completada(s). Â¿Eliminar igualmente?'))return;
+  if(done>0&&!confirm('El "'+last.name+'" tiene '+done+' tarea(s) completada(s). ¿Eliminar igualmente?'))return;
   floors.pop();scheduleSave();renderFloors();showToast('Piso eliminado');
 }
 
-// â”€â”€ CTX MENU â”€â”€
+// ── CTX MENU ──
 function showCtxMenu(e,id){
   ctxProjectId=id;const m=document.getElementById('ctx-menu');m.classList.remove('hidden');
   m.style.left=Math.min(e.clientX,window.innerWidth-160)+'px';m.style.top=Math.min(e.clientY,window.innerHeight-100)+'px';
 }
 function ctxEdit(){hideCtxMenu();openEditProject(ctxProjectId);}
 function ctxDelete(){
-  hideCtxMenu();if(!confirm('Â¿Eliminar este proyecto y todas sus compras?'))return;
+  hideCtxMenu();if(!confirm('¿Eliminar este proyecto y todas sus compras?'))return;
   appData.projects=appData.projects.filter(p=>p.id!==ctxProjectId);
   delete appData.checklist[ctxProjectId];delete appData.purchases[ctxProjectId];
   scheduleSave();renderDashboard();showToast('Proyecto eliminado');
@@ -2537,12 +2537,12 @@ function ctxDelete(){
 function hideCtxMenu(){document.getElementById('ctx-menu').classList.add('hidden');}
 document.addEventListener('click',e=>{if(!e.target.closest('#ctx-menu')&&!e.target.closest('.proj-menu-btn'))hideCtxMenu();});
 
-// â”€â”€ MODALS â”€â”€
+// ── MODALS ──
 function openModal(id){document.getElementById(id).classList.remove('hidden');}
 function closeModal(id){document.getElementById(id).classList.add('hidden');}
 document.querySelectorAll('.modal-overlay').forEach(o=>{o.addEventListener('click',e=>{if(e.target===o)closeModal(o.id);});});
 
-// â”€â”€ TOAST â”€â”€
+// ── TOAST ──
 let toastTimer;
 function showToast(msg){
   const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;
@@ -2553,6 +2553,3 @@ function showToast(msg){
 </script>
 </body>
 </html>
-
-
-
